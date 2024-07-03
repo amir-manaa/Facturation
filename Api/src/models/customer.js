@@ -13,9 +13,17 @@ const Customer = sequilize.define("customer", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  password: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  phone: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 });
 

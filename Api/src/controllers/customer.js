@@ -1,0 +1,128 @@
+const Customer = require("../models/customer");
+
+// fetch Customers
+exports.getCustomers = async (req, res) => {
+  const customers = await Customer.findAll();
+  res.status(200).json({
+    status: "success",
+    length: customers.length,
+    data: {
+      customers,
+    },
+  });
+};
+
+// fetch customer by id
+exports.getCustomer = async (req, res) => {
+  const id = req.params.id;
+  const customer = await Customer.findByPk(id);
+
+  if (!customer) {
+    return res.status(500).json({
+      status: "fail",
+    });
+  } else {
+    return res.status(200).json({
+      status: "success",
+      data: {
+        customer,
+      },
+    });
+  }
+};
+
+// Add new customer
+exports.addCustomer = async (req, res) => {
+  const email = req.body.email;
+  const name = req.body.name;
+  const phone = req.body.phone;
+  const address = req.body.address;
+  const customer = Customer.create({
+    email: email,
+    name: name,
+    phone: phone,
+    address: address,
+  });
+
+  if (customer) {
+    return res.status(200).json({
+      status: "success",
+      data: {
+        customer,
+      },
+    });
+  } else {
+    return res.status(500).json({
+      status: "fail",
+    });
+  }
+};
+
+//delete customer
+exports.deleteCustomer = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(404).json({
+      status: "fail",
+    });
+  }
+
+  const customer = await Customer.destroy({
+    where: {
+      id: id,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    data: {
+      customer,
+    },
+  });
+};
+
+// update customer
+exports.updateCustomer = async (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    return res.status(404).json({
+      status: "fail",
+    });
+  }
+
+  const customer = await Customer.findByPk(id);
+  if (!customer) {
+    return res.status(404).json({
+      status: "fail",
+    });
+  }
+
+  const email = req.body.email;
+  const name = req.body.name;
+  const phone = req.body.phone;
+  const address = req.body.address;
+
+  const updatedCustomer = await Customer.update(
+    {
+      email: email,
+      name: name,
+      phone: phone,
+      address: address,
+    },
+    {
+      where: { id: id },
+    }
+  );
+
+  if (updatedCustomer) {
+    return req.status(200).json({
+      status: "success",
+      data: {
+        updatedCustomer,
+      },
+    });
+  } else {
+    return res.status(404).json({
+      status: "fail",
+    });
+  }
+};
