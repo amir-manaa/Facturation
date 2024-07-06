@@ -18,7 +18,7 @@ exports.getCustomer = async (req, res) => {
   const customer = await Customer.findByPk(id);
 
   if (!customer) {
-    return res.status(500).json({
+    return res.status(404).json({
       status: "fail",
     });
   } else {

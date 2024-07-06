@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 const sequilize = require("../util/db");
 
-const Bill = sequilize.define("bill", {
+const Invoice = sequilize.define("invoice", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -19,6 +19,10 @@ const Bill = sequilize.define("bill", {
     allowNull: false,
     defaultValue: 0.0,
   },
+  status: {
+    type: DataTypes.SMALLINT,
+    allowNull: false,
+  },
 });
 
-module.exports = Bill;
+module.exports = Invoice;

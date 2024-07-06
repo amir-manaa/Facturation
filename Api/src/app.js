@@ -5,26 +5,24 @@ const sequelize = require("./util/db");
 const port = process.env.APP_PORT;
 
 const Customer = require("./models/customer");
-const Bill = require("./models/bill");
+const Invoice = require("./models/invoice");
 
 const customerRouter = require("./routes/customer");
+const invoiceRouter = require("./routes/invoice");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
-Bill.belongsTo(Customer, { constraints: true, onDelete: "CASCADE" });
-Customer.hasMany(Bill);
+Invoice.belongsTo(Customer, { constraints: true, onDelete: "CASCADE" });
+Customer.hasMany(Invoice);
 
 app.use("/api/v1/customer", customerRouter);
+app.use("/api/v1/invoice", invoiceRouter);
 
 sequelize
   // .sync()
-  .sync({ alter: true })
+  .sync({ force: true })
   .then((result) => {
     // console.log(result);
     app.listen(port);
