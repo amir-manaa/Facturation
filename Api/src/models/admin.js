@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 const sequilize = require("../util/db");
 
-const Customer = sequilize.define("customer", {
+const Admin = sequilize.define("admin", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -17,16 +17,8 @@ const Customer = sequilize.define("customer", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  phone: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-  address: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
   password: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });

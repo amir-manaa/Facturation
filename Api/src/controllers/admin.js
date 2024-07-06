@@ -37,13 +37,11 @@ exports.addCustomer = async (req, res) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const address = req.body.address;
-  const password = req.body.password;
   const customer = Customer.create({
     email: email,
     name: name,
     phone: phone,
     address: address,
-    password: password,
   });
 
   if (customer) {
@@ -125,37 +123,6 @@ exports.updateCustomer = async (req, res) => {
   } else {
     return res.status(404).json({
       status: "fail",
-    });
-  }
-};
-
-// update customer password
-exports.updateCustomerPassword = async (req, res) => {
-  const id = req.body.id;
-  const newPassword = req.body.newPassword;
-  const customer = await Customer.findByPk(id);
-
-  if (!customer) {
-    return res.status(404).json({
-      status: "fail",
-    });
-  }
-
-  const updatedCustomerPassword = await Customer.update(
-    { password: newPassword },
-    { where: { id: id } }
-  );
-
-  if (!updatedCustomerPassword) {
-    return res.status(404).json({
-      status: "fail",
-    });
-  } else {
-    return req.status(200).json({
-      status: "success",
-      data: {
-        updatedCustomerPassword,
-      },
     });
   }
 };
