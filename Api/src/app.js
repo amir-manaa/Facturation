@@ -6,6 +6,7 @@ const port = process.env.APP_PORT;
 
 const Customer = require("./models/customer");
 const Invoice = require("./models/invoice");
+const Admin = require("./models/admin");
 
 const customerRouter = require("./routes/customer");
 const invoiceRouter = require("./routes/invoice");

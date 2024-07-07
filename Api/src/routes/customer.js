@@ -13,6 +13,7 @@ router
   .route("/:id")
   .get(customerController.getCustomer)
   .post(customerController.updateCustomer)
+  .patch(customerController.updateCustomerPassword)
   .delete(customerController.deleteCustomer);
 
 module.exports = router;
