@@ -1,23 +1,23 @@
 const Customer = require("../models/customer");
 
-// fetch Customers
-exports.getCustomers = async (req, res) => {
-  const customers = await Customer.findAll();
+// fetch Admins
+exports.getAdmins = async (req, res) => {
+  const admins = await Admin.findAll();
   res.status(200).json({
     status: "success",
-    length: customers.length,
+    length: admins.length,
     data: {
-      customers,
+      admins,
     },
   });
 };
 
-// fetch customer by id
-exports.getCustomer = async (req, res) => {
+// fetch admin by id
+exports.getAdmin = async (req, res) => {
   const id = req.params.id;
-  const customer = await Customer.findByPk(id);
+  const admin = await Admin.findByPk(id);
 
-  if (!customer) {
+  if (!admin) {
     return res.status(404).json({
       status: "fail",
     });
@@ -25,26 +25,26 @@ exports.getCustomer = async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: {
-        customer,
+        admin,
       },
     });
   }
 };
 
-// Add new customer
-exports.addCustomer = async (req, res) => {
+// Add new admin
+exports.addAdmin = async (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
-  const phone = req.body.phone;
-  const address = req.body.address;
-  const customer = Customer.create({
+  const password = req.body.password;
+  const role = req.body.role;
+  const admin = Admin.create({
     email: email,
     name: name,
-    phone: phone,
-    address: address,
+    password: password,
+    role: role,
   });
 
-  if (customer) {
+  if (admin) {
     return res.status(200).json({
       status: "success",
       data: {
@@ -58,8 +58,8 @@ exports.addCustomer = async (req, res) => {
   }
 };
 
-//delete customer
-exports.deleteCustomer = async (req, res) => {
+//delete admin
+exports.deleteAdmin = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -67,7 +67,7 @@ exports.deleteCustomer = async (req, res) => {
     });
   }
 
-  const customer = await Customer.destroy({
+  const admin = await Admin.destroy({
     where: {
       id: id,
     },
@@ -75,13 +75,13 @@ exports.deleteCustomer = async (req, res) => {
   res.status(200).json({
     status: "success",
     data: {
-      customer,
+      admin,
     },
   });
 };
 
-// update customer
-exports.updateCustomer = async (req, res) => {
+// update admin
+exports.updateAdmin = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -89,8 +89,8 @@ exports.updateCustomer = async (req, res) => {
     });
   }
 
-  const customer = await Customer.findByPk(id);
-  if (!customer) {
+  const admin = await Admin.findByPk(id);
+  if (!admin) {
     return res.status(404).json({
       status: "fail",
     });
@@ -98,26 +98,24 @@ exports.updateCustomer = async (req, res) => {
 
   const email = req.body.email;
   const name = req.body.name;
-  const phone = req.body.phone;
-  const address = req.body.address;
+  const role = req.body.role;
 
-  const updatedCustomer = await Customer.update(
+  const updatedAdmin = await Admin.update(
     {
       email: email,
       name: name,
-      phone: phone,
-      address: address,
+      role: role,
     },
     {
       where: { id: id },
     }
   );
 
-  if (updatedCustomer) {
+  if (updatedAdmin) {
     return req.status(200).json({
       status: "success",
       data: {
-        updatedCustomer,
+        updatedAdmin,
       },
     });
   } else {

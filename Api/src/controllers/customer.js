@@ -1,4 +1,5 @@
 const Customer = require("../models/customer");
+const helper = require("../util/helpers");
 
 // fetch Customers
 exports.getCustomers = async (req, res) => {
@@ -37,7 +38,7 @@ exports.addCustomer = async (req, res) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const address = req.body.address;
-  const password = req.body.password;
+  const password = await helper.hashPassword(req.body.password);
   const customer = Customer.create({
     email: email,
     name: name,
@@ -132,7 +133,7 @@ exports.updateCustomer = async (req, res) => {
 // update customer password
 exports.updateCustomerPassword = async (req, res) => {
   const id = req.body.id;
-  const newPassword = req.body.newPassword;
+  const newPassword = await helper.hashPassword(req.body.newPassword);
   const customer = await Customer.findByPk(id);
 
   if (!customer) {

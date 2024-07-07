@@ -21,6 +21,10 @@ const Admin = sequilize.define("admin", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  role: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
-module.exports = Customer;
+module.exports = Admin;
