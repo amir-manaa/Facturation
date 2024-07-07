@@ -1,4 +1,4 @@
-const Invoice = require("../models/invoice");
+const Invoice = require("../../models/invoice/invoice");
 
 // fetch Invoices
 exports.getInvoices = async (req, res) => {
