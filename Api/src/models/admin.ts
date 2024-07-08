@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 
 import { sequelize } from "../utils/db";
+import { adminRole } from '../shared/models';
 
 export const Admin = sequelize.define("admin", {
   id: {
@@ -24,5 +25,6 @@ export const Admin = sequelize.define("admin", {
   role: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    defaultValue: adminRole.admin
   },
 });
