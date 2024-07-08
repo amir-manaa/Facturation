@@ -1,7 +1,7 @@
-const Invoice = require("../../models/invoice/invoice");
+import { Invoice } from "../../models/invoice/invoice";
 
 // fetch Invoices
-exports.getInvoices = async (req, res) => {
+export const getInvoices = async (req, res) => {
   const invoices = await Invoice.findAll();
   res.status(200).json({
     status: "success",
@@ -13,7 +13,7 @@ exports.getInvoices = async (req, res) => {
 };
 
 // fetch invoice by id
-exports.getInvoice = async (req, res) => {
+export const getInvoice = async (req, res) => {
   const id = req.params.id;
   const invoice = await Invoice.findByPk(id);
 
@@ -32,7 +32,7 @@ exports.getInvoice = async (req, res) => {
 };
 
 // Add new invoice
-exports.addInvoice = async (req, res) => {
+export const addInvoice = async (req, res) => {
   const customerId = req.body.id;
 
   const totalNoTax = req.body.totalNoTax;
@@ -61,7 +61,7 @@ exports.addInvoice = async (req, res) => {
 };
 
 //delete invoice
-exports.deleteInvoice = async (req, res) => {
+export const deleteInvoice = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -83,7 +83,7 @@ exports.deleteInvoice = async (req, res) => {
 };
 
 // update invoice
-exports.updateInvoice = async (req, res) => {
+export const updateInvoice = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -100,9 +100,9 @@ exports.updateInvoice = async (req, res) => {
 
   const totalNoTax = req.body.totalNoTax;
   const total = req.body.total;
-  const status = status;
+  const status = req.body.status;
 
-  const updatedInvoice = await Customer.update(
+  const updatedInvoice = await Invoice.update(
     {
       totalNoTax: totalNoTax,
       total: total,

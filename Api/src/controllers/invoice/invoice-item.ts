@@ -1,7 +1,7 @@
-const InvoiceItem = require("../../models/invoice/invoice-item");
+import { InvoiceItem } from "../../models/invoice/invoice-item";
 
 // fetch Invoice items
-exports.getInvoiceItems = async (req, res) => {
+export const getInvoiceItems = async (req, res) => {
   const invoiceItems = await InvoiceItem.findAll();
   res.status(200).json({
     status: "success",
@@ -13,7 +13,7 @@ exports.getInvoiceItems = async (req, res) => {
 };
 
 // fetch invoice item by id
-exports.getInvoiceItem = async (req, res) => {
+export const getInvoiceItem = async (req, res) => {
   const id = req.params.id;
   const invoiceItem = await InvoiceItem.findByPk(id);
 
@@ -32,7 +32,7 @@ exports.getInvoiceItem = async (req, res) => {
 };
 
 // Add new invoice item
-exports.addInvoiceItem = async (req, res) => {
+export const addInvoiceItem = async (req, res) => {
   const invoiceId = req.body.id;
 
   const quantity = req.body.quantity;
@@ -61,7 +61,7 @@ exports.addInvoiceItem = async (req, res) => {
 };
 
 //delete invoice item
-exports.deleteInvoiceItem = async (req, res) => {
+export const deleteInvoiceItem = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -77,13 +77,13 @@ exports.deleteInvoiceItem = async (req, res) => {
   res.status(200).json({
     status: "success",
     data: {
-      InvoiceItem,
+      invoiceItem,
     },
   });
 };
 
 // update invoice item
-exports.updateInvoiceItem = async (req, res) => {
+export const updateInvoiceItem = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({

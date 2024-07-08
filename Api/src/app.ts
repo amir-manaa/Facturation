@@ -1,18 +1,19 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+import express from 'express';
+import bodyParser from 'body-parser';
 
-const sequelize = require("./util/db");
+import { sequelize } from './utils/db';
+
 const port = process.env.APP_PORT;
 
-const Customer = require("./models/customer");
-const Invoice = require("./models/invoice/invoice");
-const Admin = require("./models/admin");
-const InvoiceItem = require("./models/invoice/invoice-item");
+import { Customer } from "./models/customer";
+import { Invoice } from "./models/invoice/invoice";
+import { Admin } from "./models/admin";
+import { InvoiceItem } from "./models/invoice/invoice-item";
 
-const adminRouter = require("./routes/admin");
-const customerRouter = require("./routes/customer");
-const invoiceRouter = require("./routes/invoice/invoice");
-const invoiceItemRouter = require("./routes/invoice/invoice-item");
+import { adminRouter } from "./routes/admin";
+import { customerRouter } from "./routes/customer";
+import { invoiceRouter } from "./routes/invoice/invoice";
+import { invoiceItemRouter } from "./routes/invoice/invoice-item";
 
 const app = express();
 

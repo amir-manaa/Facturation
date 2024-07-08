@@ -1,8 +1,8 @@
-const { DataTypes } = require("sequelize");
+import { DataTypes } from "sequelize";
 
-const sequilize = require("../util/db");
+import { sequelize } from "../utils/db";
 
-const Customer = sequilize.define("customer", {
+export const Customer = sequelize.define("customer", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -30,5 +30,3 @@ const Customer = sequilize.define("customer", {
     allowNull: false,
   },
 });
-
-module.exports = Customer;
