@@ -1,19 +1,19 @@
-const express = require("express");
+import express from "express";
 
-const customerController = require("../controllers/customer");
+import * as customerController from "../controllers/customer";
 
-const router = express.Router();
+const customerRouter = express.Router();
 
-router
+customerRouter
   .route("/")
   .get(customerController.getCustomers)
   .post(customerController.addCustomer);
 
-router
+  customerRouter
   .route("/:id")
   .get(customerController.getCustomer)
   .post(customerController.updateCustomer)
   .patch(customerController.updateCustomerPassword)
   .delete(customerController.deleteCustomer);
 
-module.exports = router;
+export { customerRouter };

@@ -1,7 +1,7 @@
-const Customer = require("../models/customer");
+import { Admin } from "../models/admin";
 
 // fetch Admins
-exports.getAdmins = async (req, res) => {
+export const getAdmins = async (req, res) => {
   const admins = await Admin.findAll();
   res.status(200).json({
     status: "success",
@@ -13,7 +13,7 @@ exports.getAdmins = async (req, res) => {
 };
 
 // fetch admin by id
-exports.getAdmin = async (req, res) => {
+export const getAdmin = async (req, res) => {
   const id = req.params.id;
   const admin = await Admin.findByPk(id);
 
@@ -32,7 +32,7 @@ exports.getAdmin = async (req, res) => {
 };
 
 // Add new admin
-exports.addAdmin = async (req, res) => {
+export const addAdmin = async (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
@@ -48,7 +48,7 @@ exports.addAdmin = async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: {
-        customer,
+        admin,
       },
     });
   } else {
@@ -59,7 +59,7 @@ exports.addAdmin = async (req, res) => {
 };
 
 //delete admin
-exports.deleteAdmin = async (req, res) => {
+export const deleteAdmin = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -81,7 +81,7 @@ exports.deleteAdmin = async (req, res) => {
 };
 
 // update admin
-exports.updateAdmin = async (req, res) => {
+export const updateAdmin = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({

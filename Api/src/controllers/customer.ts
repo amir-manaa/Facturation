@@ -1,8 +1,8 @@
-const Customer = require("../models/customer");
-const helper = require("../util/helpers");
+import { Customer } from "../models/customer";
+import * as helper from "../utils/helpers";
 
 // fetch Customers
-exports.getCustomers = async (req, res) => {
+export const getCustomers = async (req, res) => {
   const customers = await Customer.findAll();
   res.status(200).json({
     status: "success",
@@ -14,7 +14,7 @@ exports.getCustomers = async (req, res) => {
 };
 
 // fetch customer by id
-exports.getCustomer = async (req, res) => {
+export const getCustomer = async (req, res) => {
   const id = req.params.id;
   const customer = await Customer.findByPk(id);
 
@@ -33,7 +33,7 @@ exports.getCustomer = async (req, res) => {
 };
 
 // Add new customer
-exports.addCustomer = async (req, res) => {
+export const addCustomer = async (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
   const phone = req.body.phone;
@@ -62,7 +62,7 @@ exports.addCustomer = async (req, res) => {
 };
 
 //delete customer
-exports.deleteCustomer = async (req, res) => {
+export const deleteCustomer = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -84,7 +84,7 @@ exports.deleteCustomer = async (req, res) => {
 };
 
 // update customer
-exports.updateCustomer = async (req, res) => {
+export const updateCustomer = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -131,7 +131,7 @@ exports.updateCustomer = async (req, res) => {
 };
 
 // update customer password
-exports.updateCustomerPassword = async (req, res) => {
+export const updateCustomerPassword = async (req, res) => {
   const id = req.body.id;
   const newPassword = await helper.hashPassword(req.body.newPassword);
   const customer = await Customer.findByPk(id);
