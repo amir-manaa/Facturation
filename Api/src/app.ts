@@ -21,7 +21,7 @@ import { authCustomerRouter } from './routes/auth/authCustomer';
 import { errorRouter } from './routes/error';
 
 // middleware
-import { isAuthenticateToken } from './middleware/is-auth';
+import { isAuth } from './middleware/is-auth';
 
 const app = express();
 
@@ -36,10 +36,10 @@ Invoice.hasMany(InvoiceItem);
 app.use("/api/v1/dashboard/login", authAdminRouter);
 app.use("/api/v1/login", authCustomerRouter);
 
-app.use("/api/v1/dashboard/admin", isAuthenticateToken, adminRouter);
-app.use("/api/v1/customer", isAuthenticateToken, customerRouter);
-app.use("/api/v1/invoice", isAuthenticateToken, invoiceRouter);
-app.use("/api/v1/invoiceItem", isAuthenticateToken, invoiceItemRouter);
+app.use("/api/v1/dashboard/admin", isAuth, adminRouter);
+app.use("/api/v1/customer", isAuth, customerRouter);
+app.use("/api/v1/invoice", isAuth, invoiceRouter);
+app.use("/api/v1/invoiceItem", isAuth, invoiceItemRouter);
 app.use("/", errorRouter);
 
 sequelize
