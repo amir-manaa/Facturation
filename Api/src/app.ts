@@ -5,17 +5,20 @@ import { sequelize } from './utils/db';
 
 const port = process.env.APP_PORT;
 
+// models
 import { Customer } from "./models/customer";
 import { Invoice } from "./models/invoice/invoice";
 import { Admin } from "./models/admin";
 import { InvoiceItem } from "./models/invoice/invoice-item";
 
+// router
 import { adminRouter } from "./routes/admin";
 import { customerRouter } from "./routes/customer";
 import { invoiceRouter } from "./routes/invoice/invoice";
 import { invoiceItemRouter } from "./routes/invoice/invoice-item";
 import { authAdminRouter } from "./routes/auth/authAdmin";
 import { authCustomerRouter } from './routes/auth/authCustomer';
+import { errorRouter } from './routes/error';
 
 const app = express();
 
@@ -33,6 +36,7 @@ app.use("/api/v1/login", authCustomerRouter);
 app.use("/api/v1/customer", customerRouter);
 app.use("/api/v1/invoice", invoiceRouter);
 app.use("/api/v1/invoiceItem", invoiceItemRouter);
+app.use("/", errorRouter);
 
 sequelize
   // .sync()
