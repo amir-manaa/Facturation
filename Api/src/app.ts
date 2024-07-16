@@ -43,8 +43,8 @@ app.use("/api/v1/invoiceItem", isAuthenticateToken, invoiceItemRouter);
 app.use("/", errorRouter);
 
 sequelize
-  // .sync()
-  .sync({ force: true })
+  .sync()
+  // .sync({ force: true })
   .then((result) => {
     // console.log(result);
     app.listen(port);

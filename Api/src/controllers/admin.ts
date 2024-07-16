@@ -1,6 +1,8 @@
 import { Admin } from "../models/admin";
 import { Request ,Response } from 'express';
-import { hashPassword } from '../utils/helpers';
+import { Security } from '../utils/security';
+
+const security = new Security();
 
 // fetch Admins
 export const getAdmins = async (req: Request, res: Response) => {
@@ -35,29 +37,34 @@ export const getAdmin = async (req, res) => {
 
 // Add new admin
 export const addAdmin = async (req, res) => {
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = req.body.password;
-  const role = req.body.role;
-  const admin = Admin.create({
-    email: email,
-    name: name,
-    password: await hashPassword(password),
-    role: role,
-  });
-
-  if (admin) {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        admin,
-      },
+  try {
+    const email = req.body.email;
+    const name = req.body.name;
+    const password = security.hashPassword(req.body.password);
+    const role = req.body.role;
+    const admin = await Admin.create({
+      email: email,
+      name: name,
+      password: password,
+      role: role,
     });
-  } else {
-    return res.status(500).json({
-      status: "fail",
-    });
+  
+    if (admin) {
+      return res.status(200).json({
+        status: "success",
+        data: {
+          admin,
+        },
+      });
+    } else {
+      return res.status(500).json({
+        status: "fail",
+      });
+    }
+  } catch (err) {
+    console.log(err);
   }
+  
 };
 
 //delete admin

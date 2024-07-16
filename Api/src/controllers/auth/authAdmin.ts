@@ -1,28 +1,37 @@
-import { Admin } from '../../models/admin';
 import { Request ,Response } from 'express';
+import { Admin } from '../../models/admin';
+import { Security } from '../../utils/security';
+
+const security = new Security();
 
 // login Admin
 export const loginAdmin = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { email, password } = req.body 
   const admin = await Admin.findOne({
-    where: {
-      email: email,
-      password: password
-    }
+    where: { email: email }
   });
 
   if (!admin) {
-    return res.status(404).json({
-      status: "fail",
+    return res.status(401).json({
+      status: "Authentication failed",
     });
   }
 
-  res.setHeader('Set-Cookie', 'loggedIn=true; Max-Age=3600; HttpOnly');
+  const isMatchedPassword = await security.matchPassword(password, admin['password']);
+  if (!isMatchedPassword) {
+    return res.status(401).json({
+      status: "Authentication failed",
+    });
+  }
+
+  const token = security.generateAccessToken(email, admin['role']);
+  res.cookie('token', `bearer ${token}`, {httpOnly: true, maxAge: 79200});
+
   res.status(200).json({
     status: "success",
     data: {
-      admin
+      admin,
+      token
     },
   });
 };

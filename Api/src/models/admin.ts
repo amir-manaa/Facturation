@@ -19,12 +19,11 @@ export const Admin = sequelize.define("admin", {
     allowNull: false,
   },
   password: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   role: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: role.admin
   },
 });

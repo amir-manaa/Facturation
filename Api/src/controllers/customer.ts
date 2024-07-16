@@ -1,6 +1,8 @@
 import { Customer } from "../models/customer";
 import { Request ,Response } from 'express';
-import { hashPassword } from '../utils/helpers';
+import { Security } from '../utils/security';
+
+const security = new Security();
 
 // fetch Customers
 export const getCustomers = async (req: Request, res: Response) => {
@@ -39,7 +41,7 @@ export const addCustomer = async (req, res) => {
   const name = req.body.name;
   const phone = req.body.phone;
   const address = req.body.address;
-  const password = await hashPassword(req.body.password);
+  const password = await security.hashPassword(req.body.password);
   const customer = Customer.create({
     email: email,
     name: name,
@@ -134,7 +136,7 @@ export const updateCustomer = async (req, res) => {
 // update customer password
 export const updateCustomerPassword = async (req, res) => {
   const id = req.body.id;
-  const newPassword = await hashPassword(req.body.newPassword);
+  const newPassword = await security.hashPassword(req.body.newPassword);
   const customer = await Customer.findByPk(id);
 
   if (!customer) {
