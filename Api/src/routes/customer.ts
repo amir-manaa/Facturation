@@ -1,8 +1,8 @@
-import express from "express";
+import express, { Router } from "express";
 
 import * as customerController from "../controllers/customer";
 
-const customerRouter = express.Router();
+export const customerRouter: Router = express.Router();
 
 customerRouter
   .route("/")
@@ -15,5 +15,3 @@ customerRouter
   .post(customerController.updateCustomer)
   .patch(customerController.updateCustomerPassword)
   .delete(customerController.deleteCustomer);
-
-export { customerRouter };

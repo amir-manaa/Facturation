@@ -1,8 +1,8 @@
-import express from "express";
+import express, { Router } from "express";
 
 import * as invoiceItemController from "../../controllers/invoice/invoice-item";
 
-const invoiceItemRouter = express.Router();
+export const invoiceItemRouter: Router = express.Router();
 
 invoiceItemRouter
   .route("/")
@@ -14,5 +14,3 @@ invoiceItemRouter
   .get(invoiceItemController.addInvoiceItem)
   .post(invoiceItemController.updateInvoiceItem)
   .delete(invoiceItemController.deleteInvoiceItem);
-
-export { invoiceItemRouter };

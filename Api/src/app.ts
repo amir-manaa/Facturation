@@ -14,6 +14,8 @@ import { adminRouter } from "./routes/admin";
 import { customerRouter } from "./routes/customer";
 import { invoiceRouter } from "./routes/invoice/invoice";
 import { invoiceItemRouter } from "./routes/invoice/invoice-item";
+import { authAdminRouter } from "./routes/auth/authAdmin";
+import { authCustomerRouter } from './routes/auth/authCustomer';
 
 const app = express();
 
@@ -25,7 +27,9 @@ Customer.hasMany(Invoice);
 InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: "CASCADE" });
 Invoice.hasMany(InvoiceItem);
 
-app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/dashboard/login", authAdminRouter);
+app.use("/api/v1/dashboard/admin", adminRouter);
+app.use("/api/v1/login", authCustomerRouter);
 app.use("/api/v1/customer", customerRouter);
 app.use("/api/v1/invoice", invoiceRouter);
 app.use("/api/v1/invoiceItem", invoiceItemRouter);

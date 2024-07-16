@@ -1,7 +1,8 @@
 import { InvoiceItem } from "../../models/invoice/invoice-item";
+import { Request ,Response } from 'express';
 
 // fetch Invoice items
-export const getInvoiceItems = async (req, res) => {
+export const getInvoiceItems = async (req: Request, res: Response) => {
   const invoiceItems = await InvoiceItem.findAll();
   res.status(200).json({
     status: "success",

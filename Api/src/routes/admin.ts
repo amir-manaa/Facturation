@@ -1,8 +1,8 @@
-import express from "express";
+import express, { Router} from "express";
 
 import * as adminController from "../controllers/admin";
 
-const adminRouter = express.Router();
+export const adminRouter: Router = express.Router();
 
 adminRouter.route("/").get(adminController.getAdmins).post(adminController.addAdmin);
 
@@ -11,5 +11,3 @@ adminRouter
   .get(adminController.getAdmin)
   .post(adminController.updateAdmin)
   .delete(adminController.deleteAdmin);
-
-export { adminRouter };

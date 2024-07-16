@@ -1,7 +1,9 @@
 import { Admin } from "../models/admin";
+import { Request ,Response } from 'express';
+import { hashPassword } from '../utils/helpers';
 
 // fetch Admins
-export const getAdmins = async (req, res) => {
+export const getAdmins = async (req: Request, res: Response) => {
   const admins = await Admin.findAll();
   res.status(200).json({
     status: "success",
@@ -40,7 +42,7 @@ export const addAdmin = async (req, res) => {
   const admin = Admin.create({
     email: email,
     name: name,
-    password: password,
+    password: await hashPassword(password),
     role: role,
   });
 
