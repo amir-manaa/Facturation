@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 
 import { sequelize } from "../utils/db";
+import { role } from '../shared/models';
 
 export const Customer = sequelize.define("customer", {
   id: {
@@ -28,5 +29,10 @@ export const Customer = sequelize.define("customer", {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  role: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: role.user
   },
 });
