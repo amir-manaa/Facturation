@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../utils/db";
 import { role } from '../shared/models';
 
-export const Customer = sequelize.define("customer", {
+export const User = sequelize.define("user", {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,

@@ -34,17 +34,17 @@ export const getInvoice = async (req, res) => {
 
 // Add new invoice
 export const addInvoice = async (req, res) => {
-  const customerId = req.body.id;
+  const userId = req.body.id;
 
   const totalNoTax = req.body.totalNoTax;
   const total = req.body.total;
   const status = 0;
 
   const invoice = Invoice.create({
-    totalNoTax: totalNoTax,
-    total: total,
-    status: status,
-    customerId: customerId,
+    totalNoTax,
+    total,
+    status,
+    userId,
   });
 
   if (invoice) {

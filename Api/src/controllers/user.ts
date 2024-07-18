@@ -1,27 +1,27 @@
-import { Customer } from "../models/customer";
+import { User } from "../models/user";
 import { Request ,Response } from 'express';
 import { Security } from '../utils/security';
 
 const security = new Security();
 
-// fetch Customers
-export const getCustomers = async (req: Request, res: Response) => {
-  const customers = await Customer.findAll();
+// fetch Users
+export const getUsers = async (req: Request, res: Response) => {
+  const users = await User.findAll();
   res.status(200).json({
     status: "success",
-    length: customers.length,
+    length: users.length,
     data: {
-      customers,
+      users,
     },
   });
 };
 
-// fetch customer by id
-export const getCustomer = async (req, res) => {
+// fetch user by id
+export const getUser = async (req, res) => {
   const id = req.params.id;
-  const customer = await Customer.findByPk(id);
+  const user = await User.findByPk(id);
 
-  if (!customer) {
+  if (!user) {
     return res.status(404).json({
       status: "fail",
     });
@@ -29,20 +29,20 @@ export const getCustomer = async (req, res) => {
     return res.status(200).json({
       status: "success",
       data: {
-        customer,
+        user,
       },
     });
   }
 };
 
-// Add new customer
-export const addCustomer = async (req, res) => {
+// Add new user
+export const addUser = async (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
   const phone = req.body.phone;
   const address = req.body.address;
   const password = await security.hashPassword(req.body.password);
-  const customer = Customer.create({
+  const user = User.create({
     email: email,
     name: name,
     phone: phone,
@@ -50,11 +50,11 @@ export const addCustomer = async (req, res) => {
     password: password,
   });
 
-  if (customer) {
+  if (user) {
     return res.status(200).json({
       status: "success",
       data: {
-        customer,
+        user,
       },
     });
   } else {
@@ -64,8 +64,8 @@ export const addCustomer = async (req, res) => {
   }
 };
 
-//delete customer
-export const deleteCustomer = async (req, res) => {
+//delete user
+export const deleteUser = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -73,7 +73,7 @@ export const deleteCustomer = async (req, res) => {
     });
   }
 
-  const customer = await Customer.destroy({
+  const user = await User.destroy({
     where: {
       id: id,
     },
@@ -81,13 +81,13 @@ export const deleteCustomer = async (req, res) => {
   res.status(200).json({
     status: "success",
     data: {
-      customer,
+      user,
     },
   });
 };
 
-// update customer
-export const updateCustomer = async (req, res) => {
+// update user
+export const updateUser = async (req, res) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -95,8 +95,8 @@ export const updateCustomer = async (req, res) => {
     });
   }
 
-  const customer = await Customer.findByPk(id);
-  if (!customer) {
+  const user = await User.findByPk(id);
+  if (!user) {
     return res.status(404).json({
       status: "fail",
     });
@@ -107,7 +107,7 @@ export const updateCustomer = async (req, res) => {
   const phone = req.body.phone;
   const address = req.body.address;
 
-  const updatedCustomer = await Customer.update(
+  const updatedUser = await User.update(
     {
       email: email,
       name: name,
@@ -119,11 +119,11 @@ export const updateCustomer = async (req, res) => {
     }
   );
 
-  if (updatedCustomer) {
+  if (updatedUser) {
     return req.status(200).json({
       status: "success",
       data: {
-        updatedCustomer,
+        user,
       },
     });
   } else {
@@ -133,24 +133,24 @@ export const updateCustomer = async (req, res) => {
   }
 };
 
-// update customer password
-export const updateCustomerPassword = async (req, res) => {
+// update user password
+export const updateUserPassword = async (req, res) => {
   const id = req.body.id;
   const newPassword = await security.hashPassword(req.body.newPassword);
-  const customer = await Customer.findByPk(id);
+  const user = await User.findByPk(id);
 
-  if (!customer) {
+  if (!user) {
     return res.status(404).json({
       status: "fail",
     });
   }
 
-  const updatedCustomerPassword = await Customer.update(
+  const updatedUserPassword = await User.update(
     { password: newPassword },
     { where: { id: id } }
   );
 
-  if (!updatedCustomerPassword) {
+  if (!updatedUserPassword) {
     return res.status(404).json({
       status: "fail",
     });
@@ -158,7 +158,7 @@ export const updateCustomerPassword = async (req, res) => {
     return req.status(200).json({
       status: "success",
       data: {
-        updatedCustomerPassword,
+        user,
       },
     });
   }
