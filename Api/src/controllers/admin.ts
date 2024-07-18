@@ -7,10 +7,12 @@ const security = new Security();
 // fetch Admins
 export const getAdmins = async (req: Request, res: Response) => {
   const admins = await Admin.findAll();
+
   res.status(200).json({
     status: "success",
     length: admins.length,
     data: {
+      role: res['user'],
       admins,
     },
   });

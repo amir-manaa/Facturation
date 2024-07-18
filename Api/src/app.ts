@@ -20,11 +20,12 @@ import { authAdminRouter } from "./routes/auth/authAdmin";
 import { authCustomerRouter } from './routes/auth/authCustomer';
 import { errorRouter } from './routes/error';
 
-// middleware
+
 import { isAuth } from './middleware/is-auth';
 
 const app = express();
 
+// middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
 Invoice.belongsTo(Customer, { constraints: true, onDelete: "CASCADE" });
@@ -33,13 +34,21 @@ Customer.hasMany(Invoice);
 InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: "CASCADE" });
 Invoice.hasMany(InvoiceItem);
 
+// Dashboard
 app.use("/api/v1/dashboard/login", authAdminRouter);
+app.use("/api/v1/dashboard/admin", isAuth, adminRouter);
+
+// Authentification
 app.use("/api/v1/login", authCustomerRouter);
 
-app.use("/api/v1/dashboard/admin", isAuth, adminRouter);
+// Customer
 app.use("/api/v1/customer", isAuth, customerRouter);
+
+// Invoice
 app.use("/api/v1/invoice", isAuth, invoiceRouter);
 app.use("/api/v1/invoiceItem", isAuth, invoiceItemRouter);
+
+
 app.use("/", errorRouter);
 
 sequelize

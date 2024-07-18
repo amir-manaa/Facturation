@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-export const isAuth = (req: Request, res: Response, next) => {
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
 
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(' ')[1];
@@ -13,7 +13,10 @@ export const isAuth = (req: Request, res: Response, next) => {
     if (err)
       return res.status(403).send("Could not verify token");
 
-    req['user'] = authData;
+    console.log('jwt.authData jwt.authData jwt.authData', authData.role)
+
+    req['role'] = authData.role;
+    
     next();
   })
 }
