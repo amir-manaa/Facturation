@@ -1,27 +1,27 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import { sequelize } from './utils/db';
+import { sequelize } from '@utils/db';
 
 const port = process.env.APP_PORT;
 
 // models
-import { User } from "./models/user";
-import { Invoice } from "./models/invoice/invoice";
-import { Admin } from "./models/admin";
-import { InvoiceItem } from "./models/invoice/invoice-item";
+import { User } from "@models/user";
+import { Invoice } from "@models/invoice/invoice";
+import { Admin } from "@models/admin";
+import { InvoiceItem } from "@models/invoice/invoice-item";
 
 // router
-import { adminRouter } from "./routes/admin";
-import { userRouter } from "./routes/user";
-import { invoiceRouter } from "./routes/invoice/invoice";
-import { invoiceItemRouter } from "./routes/invoice/invoice-item";
-import { authAdminRouter } from "./routes/auth/authAdmin";
-import { authUserRouter } from './routes/auth/authUser';
-import { errorRouter } from './routes/error';
+import { adminRouter } from "@routes/admin";
+import { userRouter } from "@routes/user";
+import { invoiceRouter } from "@routes/invoice/invoice";
+import { invoiceItemRouter } from "@routes/invoice/invoice-item";
+import { authAdminRouter } from "@routes/auth/authAdmin";
+import { authUserRouter } from '@routes/auth/authUser';
+import { errorRouter } from '@routes/error';
 
 
-import { isAuth } from './middleware/is-auth';
+import { isAuth } from '@middleware/is-auth';
 
 const app = express();
 
@@ -52,8 +52,8 @@ app.use("/api/v1/invoiceItem", isAuth, invoiceItemRouter);
 app.use("/", errorRouter);
 
 sequelize
-  // .sync()
-  .sync({ force: true })
+  .sync()
+  // .sync({ force: true })
   .then((result) => {
     // console.log(result);
     app.listen(port);

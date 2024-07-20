@@ -1,6 +1,6 @@
-import { Admin } from "../models/admin";
+import { Admin } from "@models/admin";
 import { Request ,Response } from 'express';
-import { Security } from '../utils/security';
+import { Security } from '@utils/security';
 
 const security = new Security();
 
@@ -42,7 +42,7 @@ export const addAdmin = async (req, res) => {
   try {
     const email = req.body.email;
     const name = req.body.name;
-    const password = security.hashPassword(req.body.password);
+    const password = await security.hashPassword(req.body.password);
     const role = req.body.role;
     const admin = await Admin.create({
       email: email,
@@ -64,7 +64,7 @@ export const addAdmin = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
   
 };

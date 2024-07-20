@@ -1,6 +1,6 @@
-import { User } from "../models/user";
 import { Request ,Response } from 'express';
-import { Security } from '../utils/security';
+import { User } from "@models/user";
+import { Security } from '@utils/security';
 
 const security = new Security();
 

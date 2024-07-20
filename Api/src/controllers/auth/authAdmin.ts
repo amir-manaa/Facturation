@@ -1,6 +1,6 @@
 import { Request ,Response } from 'express';
-import { Admin } from '../../models/admin';
-import { Security } from '../../utils/security';
+import { Admin } from '@models/admin';
+import { Security } from '@utils/security';
 
 const security = new Security();
 

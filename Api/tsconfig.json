@@ -1,5 +1,19 @@
 {
+  "ts-node": {
+        // Do not forget to `npm i -D tsconfig-paths`
+        "require": ["tsconfig-paths/register"]
+    },
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+        "@controllers/*": ["src/controllers/*"],
+        "@middleware/*": ["src/middleware/*"],
+        "@models/*": ["src/models/*"],
+        "@routes/*": ["src/routes/*"],
+        "@utils/*": ["src/utils/*"],
+        "@shared/*": ["src/shared/*"],
+        "*": ["node_modules/*"]
+    },
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es2021",

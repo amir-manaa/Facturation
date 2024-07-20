@@ -1,4 +1,4 @@
-import { InvoiceItem } from "../../models/invoice/invoice-item";
+import { InvoiceItem } from "@models/invoice/invoice-item";
 import { Request ,Response } from 'express';
 
 // fetch Invoice items

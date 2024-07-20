@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 
-import { sequelize } from "../utils/db";
-import { role } from '../shared/models';
+import { sequelize } from "@utils/db";
+import { role } from '@shared/models';
 
 export const User = sequelize.define("user", {
   id: {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f ./src/env/.env.dev nodemon --exec 'ts-node' src/app.ts"
+    "start": "env-cmd -f ./src/env/.env.dev nodemon --exec 'ts-node' ./src/app.ts"
   },
   "author": "",
   "license": "ISC",
@@ -13,7 +13,8 @@
     "@types/express": "^4.17.21",
     "env-cmd": "^10.1.0",
     "nodemon": "^3.1.4",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0"
   },
   "dependencies": {
     "-": "^0.0.1",
