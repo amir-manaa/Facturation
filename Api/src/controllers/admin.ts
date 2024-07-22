@@ -1,18 +1,19 @@
-import { Admin } from "@models/admin";
 import { Request ,Response } from 'express';
+import { Model } from 'sequelize';
+import { Admin } from "@models/admin";
 import { Security } from '@utils/security';
+import { IAdmin } from '@shared/models';
 
 const security = new Security();
 
 // fetch Admins
 export const getAdmins = async (req: Request, res: Response) => {
-  const admins = await Admin.findAll();
+  const admins: Model<IAdmin>[] = await Admin.findAll();
 
   res.status(200).json({
     status: "success",
     length: admins.length,
     data: {
-      role: res['user'],
       admins,
     },
   });
@@ -21,7 +22,7 @@ export const getAdmins = async (req: Request, res: Response) => {
 // fetch admin by id
 export const getAdmin = async (req, res) => {
   const id = req.params.id;
-  const admin = await Admin.findByPk(id);
+  const admin: Model<IAdmin> = await Admin.findByPk(id);
 
   if (!admin) {
     return res.status(404).json({

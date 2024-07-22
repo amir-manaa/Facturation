@@ -1,13 +1,15 @@
 import { Request ,Response } from 'express';
+import { Model } from 'sequelize';
 import { Admin } from '@models/admin';
 import { Security } from '@utils/security';
+import { IAdmin } from '@shared/models'
 
 const security = new Security();
 
 // login Admin
 export const loginAdmin = async (req: Request, res: Response) => {
   const { email, password } = req.body 
-  const admin = await Admin.findOne({
+  const admin: Model<IAdmin> = await Admin.scope('withPassword').findOne({
     where: { email: email }
   });
 
@@ -24,7 +26,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     });
   }
 
-  const token = security.generateAccessToken(email, admin['role']);
+  const token = security.generateAccessToken(admin.dataValues.id, admin.dataValues.role);
   res.cookie('token', `bearer ${token}`, {httpOnly: true, maxAge: 79200});
 
   res.status(200).json({

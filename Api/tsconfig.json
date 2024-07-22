@@ -9,7 +9,8 @@
         "@controllers/*": ["src/controllers/*"],
         "@middleware/*": ["src/middleware/*"],
         "@models/*": ["src/models/*"],
-        "@routes/*": ["src/routes/*"],
+        "@route/*": ["src/routes/*"],
+        "@routes": ["src/routes/index"],
         "@utils/*": ["src/utils/*"],
         "@shared/*": ["src/shared/*"],
         "*": ["node_modules/*"]
