@@ -20,7 +20,7 @@ export const getAdmins = async (req: Request, res: Response) => {
 };
 
 // fetch admin by id
-export const getAdmin = async (req, res) => {
+export const getAdmin = async (req: Request, res: Response) => {
   const id = req.params.id;
   const admin: Model<IAdmin> = await Admin.findByPk(id);
 
@@ -28,42 +28,42 @@ export const getAdmin = async (req, res) => {
     return res.status(404).json({
       status: "fail",
     });
-  } else {
-    return res.status(200).json({
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      admin,
+    },
+  });
+  
+};
+
+// Add new admin
+export const addAdmin = async (req: Request, res: Response) => {
+  try {
+    const { email, name, password, role } = req.body;
+    let cryptedPwd = await security.hashPassword(password);
+    const admin: Model<IAdmin> = await Admin.create({
+      email: email,
+      name: name,
+      password: cryptedPwd,
+      role: role,
+    });
+  
+    if (!admin) {
+      return res.status(500).json({
+        status: "fail",
+      });
+    } 
+    
+    res.status(200).json({
       status: "success",
       data: {
         admin,
       },
     });
-  }
-};
-
-// Add new admin
-export const addAdmin = async (req, res) => {
-  try {
-    const email = req.body.email;
-    const name = req.body.name;
-    const password = await security.hashPassword(req.body.password);
-    const role = req.body.role;
-    const admin = await Admin.create({
-      email: email,
-      name: name,
-      password: password,
-      role: role,
-    });
-  
-    if (admin) {
-      return res.status(200).json({
-        status: "success",
-        data: {
-          admin,
-        },
-      });
-    } else {
-      return res.status(500).json({
-        status: "fail",
-      });
-    }
+    
   } catch (err) {
     console.log(err.message);
   }
@@ -71,7 +71,7 @@ export const addAdmin = async (req, res) => {
 };
 
 //delete admin
-export const deleteAdmin = async (req, res) => {
+export const deleteAdmin = async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -80,10 +80,9 @@ export const deleteAdmin = async (req, res) => {
   }
 
   const admin = await Admin.destroy({
-    where: {
-      id: id,
-    },
+    where: { id: id },
   });
+
   res.status(200).json({
     status: "success",
     data: {
@@ -93,7 +92,7 @@ export const deleteAdmin = async (req, res) => {
 };
 
 // update admin
-export const updateAdmin = async (req, res) => {
+export const updateAdmin = async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -101,16 +100,14 @@ export const updateAdmin = async (req, res) => {
     });
   }
 
-  const admin = await Admin.findByPk(id);
+  const admin: Model<IAdmin> = await Admin.findByPk(id);
   if (!admin) {
     return res.status(404).json({
       status: "fail",
     });
   }
 
-  const email = req.body.email;
-  const name = req.body.name;
-  const role = req.body.role;
+  const { email, name, role } = req.body;
 
   const updatedAdmin = await Admin.update(
     {
@@ -118,21 +115,19 @@ export const updateAdmin = async (req, res) => {
       name: name,
       role: role,
     },
-    {
-      where: { id: id },
-    }
+    { where: { id: id } }
   );
 
   if (updatedAdmin) {
-    return req.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: {
         updatedAdmin,
       },
     });
-  } else {
-    return res.status(404).json({
+  }
+
+    res.status(404).json({
       status: "fail",
     });
-  }
 };
