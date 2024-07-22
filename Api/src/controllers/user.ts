@@ -1,25 +1,25 @@
 import { Request ,Response } from 'express';
+import { Model } from 'sequelize';
 import { User } from "@models/user";
 import { Security } from '@utils/security';
+import { IUser } from '@shared/models';
 
 const security = new Security();
 
 // fetch Users
 export const getUsers = async (req: Request, res: Response) => {
-  const users = await User.findAll();
+  const users: Model<IUser>[] = await User.findAll();
   res.status(200).json({
     status: "success",
     length: users.length,
-    data: {
-      users,
-    },
+    data: users
   });
 };
 
 // fetch user by id
-export const getUser = async (req, res) => {
+export const getUser = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const user = await User.findByPk(id);
+  const user: Model<IUser> = await User.findByPk(id);
 
   if (!user) {
     return res.status(404).json({
@@ -28,44 +28,39 @@ export const getUser = async (req, res) => {
   } else {
     return res.status(200).json({
       status: "success",
-      data: {
-        user,
-      },
+      data: user
     });
   }
 };
 
 // Add new user
-export const addUser = async (req, res) => {
-  const email = req.body.email;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const address = req.body.address;
-  const password = await security.hashPassword(req.body.password);
-  const user = User.create({
+export const addUser = async (req: Request, res: Response) => {
+  
+  const { email, name, phone, address, password } = req.body;
+  let cryptedPwd = await security.hashPassword(password);
+
+  const user: Promise<Model<IUser>> = User.create({
     email: email,
     name: name,
     phone: phone,
     address: address,
-    password: password,
+    password: cryptedPwd,
   });
 
   if (user) {
     return res.status(200).json({
       status: "success",
-      data: {
-        user,
-      },
-    });
-  } else {
-    return res.status(500).json({
-      status: "fail",
+      data: user
     });
   }
+
+  res.status(500).json({
+    status: "fail",
+  });
 };
 
 //delete user
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -78,16 +73,15 @@ export const deleteUser = async (req, res) => {
       id: id,
     },
   });
+
   res.status(200).json({
     status: "success",
-    data: {
-      user,
-    },
+    data: user
   });
 };
 
 // update user
-export const updateUser = async (req, res) => {
+export const updateUser = async (req: Request, res: Response) => {
   const id = req.params.id;
   if (!id) {
     return res.status(404).json({
@@ -95,18 +89,14 @@ export const updateUser = async (req, res) => {
     });
   }
 
-  const user = await User.findByPk(id);
+  const user: Model<IUser> = await User.findByPk(id);
   if (!user) {
     return res.status(404).json({
       status: "fail",
     });
   }
 
-  const email = req.body.email;
-  const name = req.body.name;
-  const phone = req.body.phone;
-  const address = req.body.address;
-
+  const { email, name, phone, address } = req.body;
   const updatedUser = await User.update(
     {
       email: email,
@@ -120,24 +110,22 @@ export const updateUser = async (req, res) => {
   );
 
   if (updatedUser) {
-    return req.status(200).json({
+    return res.status(200).json({
       status: "success",
-      data: {
-        user,
-      },
+      data: user
     });
-  } else {
-    return res.status(404).json({
-      status: "fail",
-    });
-  }
+  } 
+
+  res.status(404).json({
+    status: "fail",
+  });
 };
 
 // update user password
-export const updateUserPassword = async (req, res) => {
+export const updateUserPassword = async (req: Request, res: Response) => {
   const id = req.body.id;
   const newPassword = await security.hashPassword(req.body.newPassword);
-  const user = await User.findByPk(id);
+  const user: Model<IUser> = await User.findByPk(id);
 
   if (!user) {
     return res.status(404).json({
@@ -154,12 +142,10 @@ export const updateUserPassword = async (req, res) => {
     return res.status(404).json({
       status: "fail",
     });
-  } else {
-    return req.status(200).json({
-      status: "success",
-      data: {
-        user,
-      },
-    });
   }
+
+  res.status(200).json({
+    status: "success",
+    data: user
+  });
 };

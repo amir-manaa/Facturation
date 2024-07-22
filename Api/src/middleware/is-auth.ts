@@ -12,10 +12,6 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
     if (err)
       return res.status(403).send("Could not verify token");
-
-    console.log('jwt.authData jwt.authData jwt.authData', authData.role)
-
-    req['role'] = authData.role;
     
     next();
   })

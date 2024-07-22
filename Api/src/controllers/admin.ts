@@ -13,9 +13,7 @@ export const getAdmins = async (req: Request, res: Response) => {
   res.status(200).json({
     status: "success",
     length: admins.length,
-    data: {
-      admins,
-    },
+    data: admins
   });
 };
 
@@ -32,9 +30,7 @@ export const getAdmin = async (req: Request, res: Response) => {
 
   res.status(200).json({
     status: "success",
-    data: {
-      admin,
-    },
+    data: admin
   });
   
 };
@@ -59,9 +55,7 @@ export const addAdmin = async (req: Request, res: Response) => {
     
     res.status(200).json({
       status: "success",
-      data: {
-        admin,
-      },
+      data: admin
     });
     
   } catch (err) {
@@ -85,9 +79,7 @@ export const deleteAdmin = async (req: Request, res: Response) => {
 
   res.status(200).json({
     status: "success",
-    data: {
-      admin,
-    },
+    data: admin
   });
 };
 
@@ -118,16 +110,14 @@ export const updateAdmin = async (req: Request, res: Response) => {
     { where: { id: id } }
   );
 
-  if (updatedAdmin) {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        updatedAdmin,
-      },
+  if (!updatedAdmin) {
+    return res.status(404).json({
+      status: "fail",
     });
   }
 
-    res.status(404).json({
-      status: "fail",
-    });
+  res.status(200).json({
+    status: "success",
+    data: updatedAdmin
+  });
 };
