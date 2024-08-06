@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 
 import { sequelize } from "@utils/db";
-import { role } from '@shared/models';
+import { Role } from '@enums/role.enum';
 
 export const User = sequelize.define("user", {
     id: {
@@ -33,7 +33,7 @@ export const User = sequelize.define("user", {
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: role.user
+      defaultValue: Role.user
     },
   },
   {

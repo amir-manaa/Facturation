@@ -12,7 +12,8 @@
         "@route/*": ["src/routes/*"],
         "@routes": ["src/routes/index"],
         "@utils/*": ["src/utils/*"],
-        "@shared/*": ["src/shared/*"],
+        "@interfaces/*": ["src/shared/interfaces/index"],
+        "@enums/*": ["src/shared/enums/*"],
         "*": ["node_modules/*"]
     },
     "module": "commonjs",

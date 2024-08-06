@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { HttpException } from '../exceptions/exception';
-import { HttpStatusCode } from '@shared/models';
+import { HttpStatusCode } from '@interfaces/';
 
 export const errorHandlerMiddleware = (error: HttpException, resuest: Request, response: Response, next: NextFunction) => {
   const status = error.status ?? 500;

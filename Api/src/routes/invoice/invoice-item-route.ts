@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 
-import * as invoiceItemController from "@controllers/invoice/invoice-item";
+import * as invoiceItemController from "@controllers/invoice/invoice-item-controller";
 
 export const invoiceItemRouter: Router = express.Router();
 

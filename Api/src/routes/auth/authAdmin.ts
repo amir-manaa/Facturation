@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 
-import * as loginAdminController from "@controllers/auth/authAdmin";
+import * as loginAdminController from "@controllers/auth/authAdmin-controller";
 
 export const authAdminRouter: Router = express.Router();
 

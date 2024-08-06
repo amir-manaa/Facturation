@@ -2,7 +2,7 @@ import { Request ,Response } from 'express';
 import { Model } from 'sequelize';
 import { Admin } from '@models/admin';
 import { Security } from '@utils/security';
-import { IAdmin } from '@shared/models'
+import { IAdmin } from '@interfaces/'
 
 const security = new Security();
 
