@@ -15,7 +15,7 @@ import { InvoiceItem } from "@models/invoice/invoice-item";
 import * as routes from '@routes';
 
 // middleware
-import { isAuth } from '@middleware/is-auth';
+import { isAuth } from '@middleware/is-auth.middleware';
 
 const app = express();
 
