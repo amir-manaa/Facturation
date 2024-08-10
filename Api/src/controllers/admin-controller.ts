@@ -4,8 +4,6 @@ import { Admin } from "@models/admin";
 import { Security } from '@utils/security';
 import { IAdmin } from '@interfaces/';
 
-const security = new Security();
-
 // fetch Admins
 export const getAdmins = async (req: Request, res: Response) => {
   const admins: Model<IAdmin>[] = await Admin.findAll();
@@ -39,7 +37,7 @@ export const getAdmin = async (req: Request, res: Response) => {
 export const addAdmin = async (req: Request, res: Response) => {
   try {
     const { email, name, password, role } = req.body;
-    let cryptedPwd = await security.hashPassword(password);
+    let cryptedPwd = await Security.hashPassword(password);
     const admin: Model<IAdmin> = await Admin.create({
       email: email,
       name: name,

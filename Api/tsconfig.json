@@ -14,7 +14,8 @@
         "@utils/*": ["src/utils/*"],
         "@interfaces/*": ["src/shared/interfaces/index"],
         "@enums/*": ["src/shared/enums/*"],
-        "@constants/*": ["src/constants/*"],
+        "@constants": ["src/constants/constant"],
+        "@exceptions": ["src/exceptions/exception"],
         "*": ["node_modules/*"]
     },
     "module": "commonjs",

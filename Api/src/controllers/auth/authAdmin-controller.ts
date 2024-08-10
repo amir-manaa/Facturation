@@ -2,9 +2,7 @@ import { Request ,Response } from 'express';
 import { Model } from 'sequelize';
 import { Admin } from '@models/admin';
 import { Security } from '@utils/security';
-import { IAdmin } from '@interfaces/'
-
-const security = new Security();
+import { IAdmin } from '@interfaces/';
 
 // login Admin
 export const loginAdmin = async (req: Request, res: Response) => {
@@ -19,14 +17,14 @@ export const loginAdmin = async (req: Request, res: Response) => {
     });
   }
 
-  const isMatchedPassword = await security.matchPassword(password, admin['password']);
+  const isMatchedPassword = await Security.matchPassword(password, admin['password']);
   if (!isMatchedPassword) {
     return res.status(401).json({
       status: "Authentication failed",
     });
   }
 
-  const token = security.generateAccessToken(admin.dataValues.id, admin.dataValues.role);
+  const token = Security.generateAccessToken(admin.dataValues.id, admin.dataValues.role);
   res.cookie('token', `bearer ${token}`, {httpOnly: true, maxAge: 79200});
 
   res.status(200).json({

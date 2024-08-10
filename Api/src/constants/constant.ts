@@ -1,6 +1,6 @@
 export const HTTP_RESPONSE_CODE = {
   SUCCESS_200:      200,
-  CREATED_200:      201,
+  CREATED_201:      201,
   BAD_REQUEST_400:  400,
   UNAUTHORIZED_401: 401,
   FORBIDDEN_403:    403,
@@ -21,6 +21,7 @@ export const enum HttpStatusCode {
 export const APP_ERROR_MESSAGE = {
   serverError_500:    "Something went wrong, try again later",
   createdUser_201:    "User created successfully",
+  userAlreadyExists:  "User already exists",
   userAuthenticated:  "User Authenticated successfully",
   userReturned:       "User Returned successfully",
   usersReturned:      "Users Returned successfully",

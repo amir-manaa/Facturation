@@ -4,8 +4,6 @@ import { User } from "@models/user";
 import { Security } from '@utils/security';
 import { IUser } from '@interfaces/';
 
-const security = new Security();
-
 // fetch Users
 export const getUsers = async (req: Request, res: Response) => {
   const users: Model<IUser>[] = await User.findAll();
@@ -37,7 +35,7 @@ export const getUser = async (req: Request, res: Response) => {
 export const addUser = async (req: Request, res: Response) => {
   
   const { email, name, phone, address, password } = req.body;
-  let cryptedPwd = await security.hashPassword(password);
+  let cryptedPwd = await Security.hashPassword(password);
 
   const user: Promise<Model<IUser>> = User.create({
     email: email,
@@ -124,7 +122,7 @@ export const updateUser = async (req: Request, res: Response) => {
 // update user password
 export const updateUserPassword = async (req: Request, res: Response) => {
   const id = req.body.id;
-  const newPassword = await security.hashPassword(req.body.newPassword);
+  const newPassword = await Security.hashPassword(req.body.newPassword);
   const user: Model<IUser> = await User.findByPk(id);
 
   if (!user) {
