@@ -27,6 +27,17 @@ export class InvoiceService {
     return invoice
   }
 
+  private static async getInvoicesByUser(userId: string): Promise<Model<IInvoice>[]> {
+    if (!userId) {
+      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
+    }
+    const invoices = await Invoice.findAll({ where: { userId: Number(userId) }});
+    if (!invoices) {
+      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+    }
+    return invoices;
+  }
+
   private static async getInvoices(): Promise<Model<IInvoice>[]> {
     const invoices = await Invoice.findAll();
     if (!invoices) {
