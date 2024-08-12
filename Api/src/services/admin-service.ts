@@ -14,7 +14,7 @@ export class AdminService {
     return user ? true : false;
   }
 
-  static async create(props: Partial<IAdmin>): Promise<Model<IAdmin>> {
+  static async create(props: Omit<IAdmin, "id">): Promise<Model<IAdmin>> {
     const { email, name, password, role } = props;
     const userExists = await this.checkIfAdminExists(email);
     if (userExists) {
@@ -30,7 +30,7 @@ export class AdminService {
     return createdUser;
   }
 
-  static async authticateAdmin(props: Partial<IAdmin>) {
+  static async authticateAdmin(props: Pick<IAdmin, "email" | "password">) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {
@@ -90,7 +90,7 @@ export class AdminService {
     return deletedAdmin;
   }
 
-  static async updateAdmin(id: string, props: Partial<IAdmin>): Promise<[number]> {
+  static async updateAdmin(id: string, props: Omit<IAdmin, "id" | "password">): Promise<[number]> {
     const admin = await Admin.findByPk(Number(id));
     if (!admin) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);

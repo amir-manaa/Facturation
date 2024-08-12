@@ -23,7 +23,7 @@ export class UserController {
 
   private async createUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IUser>;
+      const reqBody = req.body as Omit<IUser, "id">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -61,7 +61,7 @@ export class UserController {
 
   private async getUserByEmail(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IUser>;
+      const reqBody = req.body as IUser;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -83,7 +83,7 @@ export class UserController {
 
   private async authticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IUser>;
+      const reqBody = req.body as Pick<IUser, "email" | "password">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -138,7 +138,7 @@ export class UserController {
 
   private async updateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IUser>;
+      const reqBody = req.body as Omit<IUser, "id">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })

@@ -1,7 +1,7 @@
-import { Role } from '@interfaces/';
+import { Role } from '@enums/role.enum';
 
 export interface IAdmin {
-  id: string;
+  id: number;
   email: string;
   name: string;
   password: string;

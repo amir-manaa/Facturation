@@ -23,7 +23,7 @@ export class AdminController {
 
   private async createAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IAdmin>;
+      const reqBody = req.body as Omit<IAdmin, "id">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -61,7 +61,7 @@ export class AdminController {
 
   private async getAdminByEmail(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IAdmin>;
+      const reqBody = req.body as IAdmin;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -83,7 +83,7 @@ export class AdminController {
 
   private async authticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IAdmin>;
+      const reqBody = req.body as Pick<IAdmin, "email" | "password">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
@@ -138,7 +138,7 @@ export class AdminController {
 
   private async updateAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const reqBody = req.body as Partial<IAdmin>;
+      const reqBody = req.body as Omit<IAdmin, "id" | "password">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
