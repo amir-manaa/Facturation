@@ -13,7 +13,7 @@ export class UserService {
     return user ? true : false;
   }
 
-  static async create(props: IUser): Promise<Model<IUser>> {
+  static async create(props: Partial<IUser>): Promise<Model<IUser>> {
     const { email, name, phone, address, password } = props;
     const userExists = await this.checkIfUserExists(email);
     if (userExists) {
@@ -30,7 +30,7 @@ export class UserService {
     return createdUser;
   }
 
-  static async authticateUser(props: IUser) {
+  static async authticateUser(props: Partial<IUser>) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {
@@ -55,7 +55,10 @@ export class UserService {
   }
 
   static async getUserById(id: string): Promise<Model<IUser>> {
-    const user = await User.findByPk(id);
+    if (!id) {
+      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
+    }
+    const user = await User.findByPk(Number(id));
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -87,7 +90,7 @@ export class UserService {
     return deletedUser;
   }
 
-  static async updateUser(id: string, props: IUser): Promise<[number]> {
+  static async updateUser(id: string, props: Partial<IUser>): Promise<[number]> {
     const user = await User.findByPk(Number(id));
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);

@@ -25,7 +25,10 @@ export const APP_ERROR_MESSAGE = {
   userAuthenticated:  "User Authenticated successfully",
   userReturned:       "User Returned successfully",
   usersReturned:      "Users Returned successfully",
+  usersDeleted:       "Users Deleted successfully",
   userDoesntExist:    "ser does not exist",
   invalidCredentials: "Invalid user email or password",
-  invalidEmail:       "Enter a valid email address"
+  invalidEmail:       "Enter a valid email address",
+  invalidPassword:    "Password length must be greater than 5",
+  emptyReqBody:       "The request body cannot be empty"
 }

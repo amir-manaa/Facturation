@@ -6,6 +6,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+        "@services/*": ["src/services/*"],
         "@controllers/*": ["src/controllers/*"],
         "@middleware/*": ["src/middleware/*"],
         "@models/*": ["src/models/*"],
