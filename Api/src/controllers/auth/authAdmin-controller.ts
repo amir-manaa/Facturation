@@ -24,7 +24,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     });
   }
 
-  const token = Security.generateAccessToken(admin.dataValues.id, admin.dataValues.role);
+  const token = Security.generateAccessToken(admin.dataValues.email, admin.dataValues.role);
   res.cookie('token', `bearer ${token}`, {httpOnly: true, maxAge: 79200});
 
   res.status(200).json({
