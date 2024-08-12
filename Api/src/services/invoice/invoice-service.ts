@@ -1,7 +1,6 @@
 import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
-import { RequestValidator } from '@utils/request-validator';
 import { Invoice } from "@models/invoice/invoice";
 import { IInvoice } from "@interfaces/*";
 
