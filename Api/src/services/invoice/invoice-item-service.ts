@@ -4,9 +4,9 @@ import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
 import { InvoiceItem } from "@models/invoice/invoice-item";
 import { IInvoiceItem } from "@interfaces/*";
 
-export class InvoiceService {
+export class InvoiceItemService {
 
-  private static async create(props: Omit<IInvoiceItem, "id">): Promise<Model<IInvoiceItem>> {
+  static async create(props: Omit<IInvoiceItem, "id">): Promise<Model<IInvoiceItem>> {
     const { quantity, description, cost, invoiceId } = props;
     const createdInvoice = await InvoiceItem.create({
       quantity,
@@ -17,7 +17,7 @@ export class InvoiceService {
     return createdInvoice;
   }
 
-  private static async getInvoiceItemById(id: string): Promise<Model<IInvoiceItem>> {
+  static async getInvoiceItemById(id: string): Promise<Model<IInvoiceItem>> {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
@@ -28,7 +28,7 @@ export class InvoiceService {
     return invoiceItem;
   }
 
-  private static async getInvoiceItems(invoiceId: string): Promise<Model<IInvoiceItem>[]> {
+  static async getInvoiceItems(invoiceId: string): Promise<Model<IInvoiceItem>[]> {
     const invoiceItems = await InvoiceItem.findAll({ where : { invoiceId: Number(invoiceId) }});
     if (!invoiceItems) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist)
@@ -36,7 +36,7 @@ export class InvoiceService {
     return invoiceItems;
   }
 
-  private static async deleteInvoiceItem(invoiceItemId: string): Promise<number> {
+  static async deleteInvoiceItem(invoiceItemId: string): Promise<number> {
     const id = Number(invoiceItemId);
     const invoiceItem = InvoiceItem.findOne({ where: { id }});
     if (!invoiceItem) {
@@ -46,8 +46,8 @@ export class InvoiceService {
     return deletedInvoiceItem;
   }
 
-  private static async updateInvoiceItem(invoiceId: string, props: Omit<IInvoiceItem, "id" | "invoiceId">): Promise<[number]> {
-    const id = Number(invoiceId);
+  static async updateInvoiceItem(invoiceItemId: string, props: Omit<IInvoiceItem, "id" | "invoiceId">): Promise<[number]> {
+    const id = Number(invoiceItemId);
     const invoice = await InvoiceItem.findByPk(id);
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);

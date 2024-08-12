@@ -1,4 +1,5 @@
 import { Invoice } from "@models/invoice/invoice";
+import { User } from "@models/user";
 import { Request ,Response } from 'express';
 
 // fetch Invoices
@@ -16,7 +17,12 @@ export const getInvoices = async (req: Request, res: Response) => {
 // fetch invoice by id
 export const getInvoice = async (req, res) => {
   const id = req.params.id;
-  const invoice = await Invoice.findByPk(id);
+  const invoice = await Invoice.findByPk(id, {
+    include: [{
+      model: User,
+      required: true
+    }]
+  });
 
   if (!invoice) {
     return res.status(404).json({

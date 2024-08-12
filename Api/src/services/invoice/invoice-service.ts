@@ -2,11 +2,12 @@ import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
 import { Invoice } from "@models/invoice/invoice";
+import { InvoiceItem } from '@models/invoice/invoice-item';
 import { IInvoice } from "@interfaces/*";
 
 export class InvoiceService {
 
-  private static async create(props: Omit<IInvoice, "id">): Promise<Model<IInvoice>> {
+  static async create(props: Omit<IInvoice, "id">): Promise<Model<IInvoice>> {
     const { totalNoTax, total, status } = props;
     const createdInvoice = await Invoice.create({
       totalNoTax,
@@ -16,18 +17,23 @@ export class InvoiceService {
     return createdInvoice;
   }
 
-  private static async getInvoiceById(id: string): Promise<Model<IInvoice>> {
+  static async getInvoiceById(id: string): Promise<Model<IInvoice>> {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const invoice = await Invoice.findByPk(Number(id));
+    const invoice = await Invoice.findByPk(Number(id), {
+      include: [{
+      model: InvoiceItem,
+      required: false
+       }]
+    });
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
     return invoice
   }
 
-  private static async getInvoicesByUser(userId: string): Promise<Model<IInvoice>[]> {
+  static async getInvoicesByUser(userId: string): Promise<Model<IInvoice>[]> {
     if (!userId) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
@@ -38,7 +44,7 @@ export class InvoiceService {
     return invoices;
   }
 
-  private static async getInvoices(): Promise<Model<IInvoice>[]> {
+  static async getInvoices(): Promise<Model<IInvoice>[]> {
     const invoices = await Invoice.findAll();
     if (!invoices) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist)
@@ -46,7 +52,7 @@ export class InvoiceService {
     return invoices;
   }
 
-  private static async deleteInvoice(id: string): Promise<number> {
+  static async deleteInvoice(id: string): Promise<number> {
     const invoice = Invoice.findOne({ where: { id: Number(id) }});
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
@@ -55,7 +61,7 @@ export class InvoiceService {
     return deletedInvoice;
   }
 
-  private static async updateInvoice(id: string, props: Omit<IInvoice, "id">): Promise<[number]> {
+  static async updateInvoice(id: string, props: Omit<IInvoice, "id">): Promise<[number]> {
     const invoice = await Invoice.findByPk(Number(id));
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
