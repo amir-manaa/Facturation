@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 
 export class Security {
 
-  static generateAccessToken(id: number, role: number): string {
-    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+  static generateAccessToken(email: string, role: number): string {
+    return jwt.sign({ email, role }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE,
     });
   }

@@ -46,7 +46,7 @@ export class InvoiceService {
     return invoices;
   }
 
-  static async deleteInvoice(id: string): Promise<number> {
+  private static async deleteInvoice(id: string): Promise<number> {
     const invoice = Invoice.findOne({ where: { id: Number(id) }});
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
@@ -55,7 +55,7 @@ export class InvoiceService {
     return deletedInvoice;
   }
 
-  static async updateInvoice(id: string, props: Omit<IInvoice, "id">): Promise<[number]> {
+  private static async updateInvoice(id: string, props: Omit<IInvoice, "id">): Promise<[number]> {
     const invoice = await Invoice.findByPk(Number(id));
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
