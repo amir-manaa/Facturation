@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "env-cmd -f ./src/env/.env.dev nodemon --exec 'ts-node' ./src/app.ts"
+    "start": "env-cmd -f ./src/env/.env.dev nodemon --exec 'ts-node' ./src/index.ts"
   },
   "author": "",
   "license": "ISC",

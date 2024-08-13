@@ -1,57 +1,54 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { sequelize } from '@utils';
+import { errorHandlerMiddleware, get404Middleware } from '@middleware';
 
-import { sequelize } from '@utils/db';
+export class App {
 
-const port = process.env.APP_PORT;
+  #app: express.Express;
+  #port: number;
 
-// models
-import { User } from "@models/user";
-import { Invoice } from "@models/invoice/invoice";
-import { Admin } from "@models/admin";
-import { InvoiceItem } from "@models/invoice/invoice-item";
+  constructor(controllers: unknown, port: number) {
+    this.#app = express();
+    this.#coreMiddlewares();
+    this.#port = port;
+    this.#connectDB();
+    this.#initControllers(controllers);
+    this.#initialErrorHandling();
+    this.#notFoundMiddleware();
+  }
 
-// router
-import * as routes from '@routes';
+  #coreMiddlewares() {
+    this.#app.use(bodyParser.urlencoded({ extended: false }));
+  }
 
-// middleware
-import { isAuth } from '@middleware/is-auth.middleware';
+  #connectDB() {
+    sequelize
+      .sync()
+      // .sync({ force: true })
+      .then((result) => {
+        console.log("DB connected successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-const app = express();
+  #initControllers(controllers: any) {
+    for (const controller of controllers) {
+      this.#app.use('/', controller.routers)
+    }
+  }
 
-// middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+  #initialErrorHandling() {
+    this.#app.use(errorHandlerMiddleware);
+  }
 
-Invoice.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
-User.hasMany(Invoice);
+  #notFoundMiddleware() {
+    this.#app.use(get404Middleware);
+  }
 
-InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: "CASCADE" });
-Invoice.hasMany(InvoiceItem);
-
-// Dashboard
-app.use("/api/v1/dashboard/login", routes.authAdminRouter);
-app.use("/api/v1/dashboard/admin", isAuth, routes.adminRouter);
-
-// Authentification
-app.use("/api/v1/login", routes.authUserRouter);
-
-// User
-app.use("/api/v1/user", isAuth, routes.userRouter);
-
-// Invoice
-app.use("/api/v1/invoice", isAuth, routes.invoiceRouter);
-app.use("/api/v1/invoiceItem", isAuth, routes.invoiceItemRouter);
-
-
-app.use("/", routes.errorRouter);
-
-sequelize
-  .sync()
-  // .sync({ force: true })
-  .then((result) => {
-    // console.log(result);
-    app.listen(port);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+   listen() {
+    this.#app.listen(this.#port);
+  }
+}

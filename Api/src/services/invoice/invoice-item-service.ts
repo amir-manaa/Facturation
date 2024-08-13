@@ -1,8 +1,8 @@
 import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
-import { InvoiceItem } from "@models/invoice/invoice-item";
-import { IInvoiceItem } from "@interfaces/*";
+import { InvoiceItem } from "@models";
+import { IInvoiceItem } from "@interfaces";
 
 export class InvoiceItemService {
 
@@ -21,7 +21,7 @@ export class InvoiceItemService {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const invoiceItem = await InvoiceItem.findByPk(Number(id));
+    const invoiceItem = await InvoiceItem.findByPk(parseInt(id));
     if (!invoiceItem) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -29,7 +29,7 @@ export class InvoiceItemService {
   }
 
   static async getInvoiceItems(invoiceId: string): Promise<Model<IInvoiceItem>[]> {
-    const invoiceItems = await InvoiceItem.findAll({ where : { invoiceId: Number(invoiceId) }});
+    const invoiceItems = await InvoiceItem.findAll({ where : { invoiceId: parseInt(invoiceId) }});
     if (!invoiceItems) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist)
     }
@@ -37,7 +37,7 @@ export class InvoiceItemService {
   }
 
   static async deleteInvoiceItem(invoiceItemId: string): Promise<number> {
-    const id = Number(invoiceItemId);
+    const id = parseInt(invoiceItemId);
     const invoiceItem = InvoiceItem.findOne({ where: { id }});
     if (!invoiceItem) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
@@ -47,7 +47,7 @@ export class InvoiceItemService {
   }
 
   static async updateInvoiceItem(invoiceItemId: string, props: Omit<IInvoiceItem, "id" | "invoiceId">): Promise<[number]> {
-    const id = Number(invoiceItemId);
+    const id = parseInt(invoiceItemId);
     const invoice = await InvoiceItem.findByPk(id);
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
@@ -57,7 +57,7 @@ export class InvoiceItemService {
       quantity,
       description,
       cost
-    }, { where: { id : Number(id) }});
+    }, { where: { id }});
     if (!updateInvoiceItem) {
       throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.serverError_500);
     }

@@ -1,4 +1,4 @@
-import { Role } from "@enums/role.enum";
+import { Role } from "@enums";
 import { APP_ERROR_MESSAGE } from '@constants';
 
 interface IError {

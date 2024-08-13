@@ -26,7 +26,7 @@ export const APP_ERROR_MESSAGE = {
   userReturned:       "User Returned successfully",
   usersReturned:      "Users Returned successfully",
   usersDeleted:       "Users Deleted successfully",
-  userDoesntExist:    "ser does not exist",
+  userDoesntExist:    "Users does not exist",
   invalidCredentials: "Invalid user email or password",
   invalidEmail:       "Enter a valid email address",
   invalidPassword:    "Password length must be greater than 5",

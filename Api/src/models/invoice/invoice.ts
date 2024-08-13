@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
-
-import { sequelize } from "@utils/db";
+import { sequelize } from "@utils";
 
 export const Invoice = sequelize.define("invoice", {
   id: {

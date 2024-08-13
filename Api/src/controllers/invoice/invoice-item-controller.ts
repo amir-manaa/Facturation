@@ -1,129 +1,121 @@
-import { InvoiceItem } from "@models/invoice/invoice-item";
-import { Request ,Response } from 'express';
+import * as express from "express";
+import { RequestValidator } from "@utils";
+import { InvoiceItemService } from "@services";
+import { IInvoiceItem } from "@interfaces";
+import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from "@constants";
+import { isAuth } from "@middleware";
 
-// fetch Invoice items
-export const getInvoiceItems = async (req: Request, res: Response) => {
-  const invoiceItems = await InvoiceItem.findAll();
-  res.status(200).json({
-    status: "success",
-    length: invoiceItems.length,
-    data: {
-      invoiceItems,
-    },
-  });
-};
-
-// fetch invoice item by id
-export const getInvoiceItem = async (req, res) => {
-  const id = req.params.id;
-  const invoiceItem = await InvoiceItem.findByPk(id);
-
-  if (!invoiceItem) {
-    return res.status(404).json({
-      status: "fail",
-    });
-  } else {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        invoiceItem,
-      },
-    });
-  }
-};
-
-// Add new invoice item
-export const addInvoiceItem = async (req, res) => {
-  const invoiceId = req.body.id;
-
-  const quantity = req.body.quantity;
-  const description = req.body.description;
-  const cost = req.body.cost;
-
-  const invoiceItem = InvoiceItem.create({
-    quantity: quantity,
-    description: description,
-    cost: cost,
-    invoiceId: invoiceId,
-  });
-
-  if (invoiceItem) {
-    return res.status(200).json({
-      status: "success",
-      data: {
-        invoiceItem,
-      },
-    });
-  } else {
-    return res.status(500).json({
-      status: "fail",
-    });
-  }
-};
-
-//delete invoice item
-export const deleteInvoiceItem = async (req, res) => {
-  const id = req.params.id;
-  if (!id) {
-    return res.status(404).json({
-      status: "fail",
-    });
+export class InvoiceItemController {
+  #path = "/api/v1/invoice-items";
+  #router = express.Router()
+  constructor() {
+    this.initRoutes()
   }
 
-  const invoiceItem = await InvoiceItem.destroy({
-    where: {
-      id: id,
-    },
-  });
-  res.status(200).json({
-    status: "success",
-    data: {
-      invoiceItem,
-    },
-  });
-};
-
-// update invoice item
-export const updateInvoiceItem = async (req, res) => {
-  const id = req.params.id;
-  if (!id) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  private initRoutes() {
+    this.#router.post(this.#path, isAuth, this.#createInvoiceItem);
+    this.#router.get(`${this.#path}/:id`, isAuth, this.#getInvoiceItemById);
+    this.#router.get(`${this.#path}/:invoiceId`, isAuth, this.#getInvoiceItems);
+    this.#router.delete(`${this.#path}/:invoiceItemId`, isAuth, this.#deleteInvoiceItem);
+    this.#router.put(`${this.#path}/:id`, isAuth, this.#updateInvoiceItem);
   }
 
-  const invoice = await InvoiceItem.findByPk(id);
-  if (!invoice) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  get routers() {
+    return this.#router;
   }
 
-  const quantity = req.body.quantity;
-  const description = req.body.description;
-  const cost = req.body.cost;
-
-  const updatedInvoice = await InvoiceItem.update(
-    {
-      quantity: quantity,
-      description: description,
-      cost: cost,
-    },
-    {
-      where: { id: id },
+  async #createInvoiceItem(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Omit<IInvoiceItem, "id">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const invoice = await InvoiceItemService.create(reqBody);
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { invoice }
+        )
+      )
+    } catch (error) {
+      next(error);
     }
-  );
-
-  if (updatedInvoice) {
-    return req.status(200).json({
-      status: "success",
-      data: {
-        updatedInvoice,
-      },
-    });
-  } else {
-    return res.status(404).json({
-      status: "fail",
-    });
   }
-};
+
+  async #getInvoiceItemById(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const invoiceItemId = req.params.id;
+      const invoiceItem = await InvoiceItemService.getInvoiceItemById(invoiceItemId);
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { invoiceItem }
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #getInvoiceItems(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const invoiceId = req.params.invoiceId;
+      const invoices = await InvoiceItemService.getInvoiceItems(invoiceId);
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { invoices }
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #deleteInvoiceItem(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const invoiceItemId = req.params.invoiceItemId;
+      const invoices = await InvoiceItemService.deleteInvoiceItem(invoiceItemId);
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { invoices }
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #updateInvoiceItem(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Omit<IInvoiceItem, "id">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+
+      const invoiceItemId = req.params.invoiceItemId;
+      const updatedInvoideItem = await InvoiceItemService.updateInvoiceItem(invoiceItemId, reqBody);
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { updatedInvoideItem }
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+}

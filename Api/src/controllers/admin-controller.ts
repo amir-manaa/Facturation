@@ -1,121 +1,165 @@
-import { Request ,Response } from 'express';
-import { Model } from 'sequelize';
-import { Admin } from "@models/admin";
-import { Security } from '@utils/security';
-import { IAdmin } from '@interfaces/';
+import * as express from "express";
+import { RequestValidator } from "@utils";
+import { AdminService } from "@services"
+import { IAdmin } from "@interfaces";
+import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from "@constants";
+import { isAuth } from "@middleware";
 
-// fetch Admins
-export const getAdmins = async (req: Request, res: Response) => {
-  const admins: Model<IAdmin>[] = await Admin.findAll();
-
-  res.status(200).json({
-    status: "success",
-    length: admins.length,
-    data: admins
-  });
-};
-
-// fetch admin by id
-export const getAdmin = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const admin: Model<IAdmin> = await Admin.findByPk(id);
-
-  if (!admin) {
-    return res.status(404).json({
-      status: "fail",
-    });
+export class AdminController {
+  #path = "/api/v1/admins";
+  #router = express.Router();
+  constructor() {
+    this.initRoutes();
   }
 
-  res.status(200).json({
-    status: "success",
-    data: admin
-  });
-  
-};
-
-// Add new admin
-export const addAdmin = async (req: Request, res: Response) => {
-  try {
-    const { email, name, password, role } = req.body;
-    let cryptedPwd = await Security.hashPassword(password);
-    const admin: Model<IAdmin> = await Admin.create({
-      email: email,
-      name: name,
-      password: cryptedPwd,
-      role: role,
-    });
-  
-    if (!admin) {
-      return res.status(500).json({
-        status: "fail",
-      });
-    } 
-    
-    res.status(200).json({
-      status: "success",
-      data: admin
-    });
-    
-  } catch (err) {
-    console.log(err.message);
-  }
-  
-};
-
-//delete admin
-export const deleteAdmin = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  if (!id) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  initRoutes() {
+    this.#router.post(this.#path, isAuth, this.#createAdmin);
+    this.#router.get(this.#path, isAuth, this.#getAdmins);
+    this.#router.get(this.#path, isAuth, this.#getAdminByEmail);
+    this.#router.post(this.#path, this.#authticateUser);
+    this.#router.get(`${this.#path}/:id`, isAuth, this.#getAdminById);
+    this.#router.delete(`${this.#path}/:id`, isAuth, this.#deleteAdmin);
+    this.#router.put(`${this.#path}/:id`, isAuth, this.#updateAdmin);
   }
 
-  const admin = await Admin.destroy({
-    where: { id: id },
-  });
-
-  res.status(200).json({
-    status: "success",
-    data: admin
-  });
-};
-
-// update admin
-export const updateAdmin = async (req: Request, res: Response) => {
-  const id = req.params.id;
-  if (!id) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  get routers() {
+    return this.#router;
   }
 
-  const admin: Model<IAdmin> = await Admin.findByPk(id);
-  if (!admin) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  async #createAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Omit<IAdmin, "id">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const admin = await AdminService.create(reqBody);
+      const userToJson = admin.toJSON();
+      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.CREATED_201,
+          APP_ERROR_MESSAGE.createdUser_201,
+          { userToJson }
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
   }
 
-  const { email, name, role } = req.body;
-
-  const updatedAdmin = await Admin.update(
-    {
-      email: email,
-      name: name,
-      role: role,
-    },
-    { where: { id: id } }
-  );
-
-  if (!updatedAdmin) {
-    return res.status(404).json({
-      status: "fail",
-    });
+  async #getAdmins(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const admins = await AdminService.getAdmins();
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.usersReturned,
+          admins
+        )
+      )
+    } catch (error) {
+      next(error)
+    }
   }
 
-  res.status(200).json({
-    status: "success",
-    data: updatedAdmin
-  });
-};
+  async #getAdminByEmail(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as IAdmin;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const email: string = req.body.email;
+      const admin = await AdminService.getAdminByEmail(email);
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.userReturned,
+          admin
+        )
+      )
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async #authticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Pick<IAdmin, "email" | "password">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const adminAuth = await AdminService.authticateAdmin(reqBody);
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.userAuthenticated,
+          adminAuth
+        )
+      )
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async #getAdminById(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const id = req.params.id;
+      const admin = await AdminService.getAdminById(id);
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.userReturned,
+          admin
+        )
+      )
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async #deleteAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const id = req.params.id;
+      const admin = await AdminService.deleteAdmin(id);
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.usersDeleted,
+          admin
+        )
+      )
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #updateAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Omit<IAdmin, "id" | "password">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const id = req.params.id;
+      const admin = AdminService.updateAdmin(id, reqBody);
+      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        RequestValidator.createAPIResponse(
+          true,
+          HTTP_RESPONSE_CODE.SUCCESS_200,
+          APP_ERROR_MESSAGE.userReturned,
+          admin
+        )
+      )
+    } catch(error) {
+      next(error)
+    }
+  }
+}

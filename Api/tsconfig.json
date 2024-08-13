@@ -6,18 +6,16 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-        "@services/*": ["src/services/*"],
-        "@controllers/*": ["src/controllers/*"],
-        "@middleware/*": ["src/middleware/*"],
-        "@models/*": ["src/models/*"],
-        "@route/*": ["src/routes/*"],
-        "@routes": ["src/routes/index"],
-        "@utils/*": ["src/utils/*"],
-        "@interfaces/*": ["src/shared/interfaces/index"],
-        "@enums/*": ["src/shared/enums/*"],
-        "@constants": ["src/constants/constant"],
-        "@exceptions": ["src/exceptions/exception"],
-        "*": ["node_modules/*"]
+      "@controllers": ["src/controllers"],
+      "@middleware": ["src/middleware"],
+      "@exceptions": ["src/exceptions/exception"],
+      "@interfaces": ["src/shared/interfaces"],
+      "@constants": ["src/constants/constant"],
+      "@services": ["src/services"],
+      "@models": ["src/models"],
+      "@utils": ["src/utils"],
+      "@enums": ["src/shared/enums"],
+      "*": ["node_modules/*"]
     },
     "module": "commonjs",
     "esModuleInterop": true,

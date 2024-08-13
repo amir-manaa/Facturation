@@ -1,10 +1,9 @@
 import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
-import { Security } from '@utils/security';
-import { RequestValidator } from '@utils/request-validator';
-import { Admin } from "@models/admin";
-import { IAdmin } from "@interfaces/*";
+import { Security, RequestValidator } from '@utils';
+import { Admin } from "@models";
+import { IAdmin } from "@interfaces";
 
 
 export class AdminService {
@@ -58,7 +57,7 @@ export class AdminService {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const admin = await Admin.findByPk(Number(id));
+    const admin = await Admin.findByPk(parseInt(id));
     if (!admin) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -82,16 +81,16 @@ export class AdminService {
   }
 
   static async deleteAdmin(id: string): Promise<number> {
-    const admin = Admin.findOne({ where: { id: Number(id) }});
+    const admin = Admin.findOne({ where: { id: parseInt(id) }});
     if (!admin) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
-    const deletedAdmin = Admin.destroy({ where: { id: Number(id) }});
+    const deletedAdmin = Admin.destroy({ where: { id: parseInt(id) }});
     return deletedAdmin;
   }
 
   static async updateAdmin(id: string, props: Omit<IAdmin, "id" | "password">): Promise<[number]> {
-    const admin = await Admin.findByPk(Number(id));
+    const admin = await Admin.findByPk(parseInt(id));
     if (!admin) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -100,7 +99,7 @@ export class AdminService {
       email,
       name,
       role
-    }, { where: { id : Number(id) }});
+    }, { where: { id : parseInt(id) }});
     if (!updateAdmin) {
       throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.serverError_500);
     }

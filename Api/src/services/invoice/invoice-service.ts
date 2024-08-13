@@ -1,9 +1,8 @@
 import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
-import { Invoice } from "@models/invoice/invoice";
-import { InvoiceItem } from '@models/invoice/invoice-item';
-import { IInvoice } from "@interfaces/*";
+import { Invoice, InvoiceItem } from "@models";
+import { IInvoice } from "@interfaces";
 
 export class InvoiceService {
 
@@ -21,7 +20,7 @@ export class InvoiceService {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const invoice = await Invoice.findByPk(Number(id), {
+    const invoice = await Invoice.findByPk(parseInt(id), {
       include: [{
       model: InvoiceItem,
       required: false
@@ -37,7 +36,7 @@ export class InvoiceService {
     if (!userId) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const invoices = await Invoice.findAll({ where: { userId: Number(userId) }});
+    const invoices = await Invoice.findAll({ where: { userId: parseInt(userId) }});
     if (!invoices) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -53,16 +52,16 @@ export class InvoiceService {
   }
 
   static async deleteInvoice(id: string): Promise<number> {
-    const invoice = Invoice.findOne({ where: { id: Number(id) }});
+    const invoice = Invoice.findOne({ where: { id: parseInt(id) }});
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
-    const deletedInvoice = Invoice.destroy({ where: { id: Number(id) }});
+    const deletedInvoice = Invoice.destroy({ where: { id: parseInt(id) }});
     return deletedInvoice;
   }
 
   static async updateInvoice(id: string, props: Omit<IInvoice, "id">): Promise<[number]> {
-    const invoice = await Invoice.findByPk(Number(id));
+    const invoice = await Invoice.findByPk(parseInt(id));
     if (!invoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -71,7 +70,7 @@ export class InvoiceService {
       totalNoTax,
       total,
       status
-    }, { where: { id : Number(id) }});
+    }, { where: { id : parseInt(id) }});
     if (!updateInvoice) {
       throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.serverError_500);
     }

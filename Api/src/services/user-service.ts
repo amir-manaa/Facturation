@@ -1,10 +1,9 @@
 import { Model } from 'sequelize';
 import { HttpException } from '@exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '@constants';
-import { Security } from '@utils/security';
-import { RequestValidator } from '@utils/request-validator';
-import { User } from "@models/user";
-import { IUser } from '@interfaces/*';
+import { Security, RequestValidator } from '@utils';
+import { User } from "@models";
+import { IUser } from '@interfaces';
 
 export class UserService {
 
@@ -58,7 +57,7 @@ export class UserService {
     if (!id) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
     }
-    const user = await User.findByPk(Number(id));
+    const user = await User.findByPk(parseInt(id));
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -82,16 +81,16 @@ export class UserService {
   }
 
   static async deleteUser(id: string): Promise<number> {
-    const user = User.findOne({ where: { id: Number(id) }});
+    const user = User.findOne({ where: { id: parseInt(id) }});
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
-    const deletedUser = User.destroy({ where: { id: Number(id) }});
+    const deletedUser = User.destroy({ where: { id: parseInt(id) }});
     return deletedUser;
   }
 
   static async updateUser(id: string, props: Omit<IUser, "id">): Promise<[number]> {
-    const user = await User.findByPk(Number(id));
+    const user = await User.findByPk(parseInt(id));
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
@@ -103,7 +102,7 @@ export class UserService {
       address,
       password,
       role
-    }, { where: { id : Number(id) }});
+    }, { where: { id : parseInt(id) }});
     if (!updateUser) {
       throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.serverError_500);
     }
