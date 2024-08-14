@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { Invoice, User, InvoiceItem } from '@models';
 import { sequelize } from '@utils';
 import { errorHandlerMiddleware, get404Middleware } from '@middleware';
 
@@ -12,17 +13,26 @@ export class App {
     this.#app = express();
     this.#coreMiddlewares();
     this.#port = port;
+    this.#DbAssociation();
     this.#connectDB();
     this.#initControllers(controllers);
     this.#initialErrorHandling();
     this.#notFoundMiddleware();
   }
 
-  #coreMiddlewares() {
+  #coreMiddlewares(): void {
     this.#app.use(bodyParser.urlencoded({ extended: false }));
   }
 
-  #connectDB() {
+  #DbAssociation(): void {
+    Invoice.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+    User.hasMany(Invoice);
+
+    InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: "CASCADE" });
+    Invoice.hasMany(InvoiceItem);
+  }
+
+  #connectDB(): void {
     sequelize
       .sync()
       // .sync({ force: true })
@@ -34,21 +44,21 @@ export class App {
       });
   }
 
-  #initControllers(controllers: any) {
+  #initControllers(controllers: any): void {
     for (const controller of controllers) {
       this.#app.use('/', controller.routers)
     }
   }
 
-  #initialErrorHandling() {
+  #initialErrorHandling(): void {
     this.#app.use(errorHandlerMiddleware);
   }
 
-  #notFoundMiddleware() {
+  #notFoundMiddleware(): void {
     this.#app.use(get404Middleware);
   }
 
-   listen() {
+   listen(): void {
     this.#app.listen(this.#port);
   }
 }
