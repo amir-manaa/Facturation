@@ -29,7 +29,7 @@ export class UserService {
     return createdUser;
   }
 
-  static async authticateUser(props: Pick<IUser, "email" | "password">) {
+  static async authenticateUser(props: Pick<IUser, "email" | "password">) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {

@@ -9,10 +9,11 @@ export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   if (token == null)  
     return res.sendStatus(401);
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, authData) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
     if (err)
       return res.status(403).send("Could not verify token");
     
+    req["role"] = decodedToken.role;
     next();
   })
 }

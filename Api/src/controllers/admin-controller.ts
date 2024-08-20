@@ -3,7 +3,7 @@ import { RequestValidator } from "@utils";
 import { AdminService } from "@services"
 import { IAdmin } from "@interfaces";
 import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from "@constants";
-import { isAuth } from "@middleware";
+import { isAuth, isAdmin } from "@middleware";
 
 export class AdminController {
   #path = "/api/v1";
@@ -13,13 +13,13 @@ export class AdminController {
   }
 
   initRoutes() {
-    this.#router.get(`${this.#path}/admin/:id`, isAuth, this.#getAdminById);
-    this.#router.get(`${this.#path}/admin`, isAuth, this.#getAdminByEmail);
-    this.#router.get(`${this.#path}/admins`, isAuth, this.#getAdmins);
-    this.#router.post(`${this.#path}/admin`, isAuth, this.#createAdmin);
-    this.#router.post(`${this.#path}/admin/auth`, this.#authticateUser);
-    this.#router.put(`${this.#path}/admin/:id`, isAuth, this.#updateAdmin);
-    this.#router.delete(`${this.#path}/admin/:id`, isAuth, this.#deleteAdmin);
+    this.#router.get(`${this.#path}/admin/:id`, isAuth, isAdmin, this.#getAdminById);
+    this.#router.get(`${this.#path}/admin`, isAuth, isAdmin, this.#getAdminByEmail);
+    this.#router.get(`${this.#path}/admins`, isAuth, isAdmin, this.#getAdmins);
+    this.#router.post(`${this.#path}/admin`, isAuth, isAdmin, this.#createAdmin);
+    this.#router.post(`${this.#path}/admin/auth`, this.#authenticateAdmin);
+    this.#router.put(`${this.#path}/admin/:id`, isAuth, isAdmin, this.#updateAdmin);
+    this.#router.delete(`${this.#path}/admin/:id`, isAuth, isAdmin, this.#deleteAdmin);
   }
 
   get routers() {
@@ -103,14 +103,14 @@ export class AdminController {
     }
   }
 
-  async #authticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async #authenticateAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
       const reqBody = req.body as Pick<IAdmin, "email" | "password">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
       }
-      const adminAuth = await AdminService.authticateAdmin(reqBody);
+      const adminAuth = await AdminService.authenticateAdmin(reqBody);
       return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
         RequestValidator.createAPIResponse(
           true,

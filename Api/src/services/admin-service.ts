@@ -29,7 +29,7 @@ export class AdminService {
     return createdUser;
   }
 
-  static async authticateAdmin(props: Pick<IAdmin, "email" | "password">) {
+  static async authenticateAdmin(props: Pick<IAdmin, "email" | "password">) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {

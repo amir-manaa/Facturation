@@ -30,5 +30,6 @@ export const APP_ERROR_MESSAGE = {
   invalidCredentials: "Invalid user email or password",
   invalidEmail:       "Enter a valid email address",
   invalidPassword:    "Password length must be greater than 5",
-  emptyReqBody:       "The request body cannot be empty"
+  emptyReqBody:       "The request body cannot be empty",
+  accessDenied:       "Access denied"
 }

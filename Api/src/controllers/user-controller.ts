@@ -17,7 +17,7 @@ export class UserController {
     this.#router.get(`${this.#path}/user`, isAuth, this.#getUserByEmail);
     this.#router.get(`${this.#path}/users`, isAuth, this.#getUsers);
     this.#router.post(`${this.#path}/user`, isAuth, this.#createUser);
-    this.#router.post(`${this.#path}/auth`, this.#authticateUser);
+    this.#router.post(`${this.#path}/auth`, this.#authenticateUser);
     this.#router.put(`${this.#path}/user/:id`, isAuth, this.#updateUser);
     this.#router.delete(`${this.#path}/user/:id`, isAuth, this.#deleteUser);
   }
@@ -103,14 +103,14 @@ export class UserController {
     }
   }
 
-  async #authticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async #authenticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
       const reqBody = req.body as Pick<IUser, "email" | "password">;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
       }
-      const userAuth = await UserService.authticateUser(reqBody);
+      const userAuth = await UserService.authenticateUser(reqBody);
       return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
         RequestValidator.createAPIResponse(
           true,
