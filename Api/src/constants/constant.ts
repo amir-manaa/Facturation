@@ -20,6 +20,7 @@ export const enum HttpStatusCode {
 
 export const APP_ERROR_MESSAGE = {
   serverError_500:    "Something went wrong, try again later",
+  pageNotFound:       "Page not found",
   createdUser_201:    "User created successfully",
   userAlreadyExists:  "User already exists",
   userAuthenticated:  "User Authenticated successfully",
