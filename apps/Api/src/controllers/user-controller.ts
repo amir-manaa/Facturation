@@ -13,17 +13,40 @@ export class UserController {
   }
 
   initRoutes() {
+    this.#router.post(`${this.#path}/user/auth`, this.#authenticateUser);
     this.#router.get(`${this.#path}/user/:id`, isAuth, this.#getUserById);
     this.#router.get(`${this.#path}/user`, isAuth, this.#getUserByEmail);
-    this.#router.get(`${this.#path}/users`, isAuth, this.#getUsers);
+    this.#router.get(`${this.#path}/users`, this.#getUsers);
     this.#router.post(`${this.#path}/user`, isAuth, this.#createUser);
-    this.#router.post(`${this.#path}/auth`, this.#authenticateUser);
     this.#router.put(`${this.#path}/user/:id`, isAuth, this.#updateUser);
     this.#router.delete(`${this.#path}/user/:id`, isAuth, this.#deleteUser);
   }
 
   get routers() {
     return this.#router;
+  }
+
+  async #authenticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      const reqBody = req.body as Pick<IUser, "email" | "password">;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+      }
+      const userAuth = await UserService.authenticateUser(reqBody);
+      res.cookie('accessToken', userAuth, { maxAge: 900000, httpOnly: false});
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.userAuthenticated,
+            userAuth
+          )
+        )
+    } catch (error) {
+      next(error)
+    }
   }
 
   async #getUserById(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -100,27 +123,6 @@ export class UserController {
       )
     } catch (error) {
       next(error);
-    }
-  }
-
-  async #authenticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const reqBody = req.body as Pick<IUser, "email" | "password">;
-      const error = RequestValidator.validUserRequest(reqBody);
-      if (Object.keys(error).length) {
-        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
-      }
-      const userAuth = await UserService.authenticateUser(reqBody);
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.userAuthenticated,
-          userAuth
-        )
-      )
-    } catch (error) {
-      next(error)
     }
   }
 

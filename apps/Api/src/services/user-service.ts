@@ -29,7 +29,7 @@ export class UserService {
     return createdUser;
   }
 
-  static async authenticateUser(props: Pick<IUser, "email" | "password">) {
+  static async authenticateUser(props: {email: string; password: string}) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {
@@ -41,16 +41,14 @@ export class UserService {
     if (!user) {
       throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
     }
-    const validatePassword = await Security.matchPassword(password, user['password']);
-    if (!validatePassword) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.invalidCredentials);
-    }
-    const isMatchedPassword = await Security.matchPassword(password, user['password']);
+    const isMatchedPassword = await Security.matchPassword(password, user.dataValues.password);
     if (!isMatchedPassword) {
       throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.invalidCredentials);
     }
-    const accessToken = Security.generateAccessToken(email, user['role']);
-    return {...user.toJSON(), accessToken}
+    const accessToken = Security.generateAccessToken(email, user.dataValues.role);
+    delete user.dataValues.password;
+    // return {...user.toJSON(), accessToken}
+    return {user, accessToken}
   }
 
   static async getUserById(id: string): Promise<Model<IUser>> {

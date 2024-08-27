@@ -25,7 +25,7 @@ export class RequestValidator {
       if (key === "email" && !this.isEmail(value as string)) {
         error.email = APP_ERROR_MESSAGE.invalidEmail;
       }
-      if (key === "password" && (value as string).length < 8) {
+      if (key === "password" && (value as string).length < 5) {
         error.password = APP_ERROR_MESSAGE.invalidPassword;
       }
 
