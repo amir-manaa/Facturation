@@ -1,5 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import cookieParser from "cookie-parser";
 import { Invoice, User, InvoiceItem } from './models';
 import { sequelize } from './utils';
 import { errorHandlerMiddleware, get404Middleware } from './middleware';
@@ -21,7 +23,11 @@ export class App {
   }
 
   #coreMiddlewares(): void {
+    this.#app.use(cors());
+    this.#app.disable("x-powered-by"); //Reduce fingerprinting
+    this.#app.use(cookieParser());
     this.#app.use(bodyParser.urlencoded({ extended: false }));
+    this.#app.use(express.json());
   }
 
   #DbAssociation(): void {

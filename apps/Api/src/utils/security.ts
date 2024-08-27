@@ -13,7 +13,7 @@ export class Security {
     return bcrypt.hash(password, 10);
   };
 
-  static matchPassword(password: string, userPassword: string): Promise<boolean> {
-    return bcrypt.compare(password, userPassword);
+  static async matchPassword(password: string, userPassword: string): Promise<boolean> {
+    return await bcrypt.compare(password, userPassword);
   }
 }
