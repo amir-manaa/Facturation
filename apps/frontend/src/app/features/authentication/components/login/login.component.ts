@@ -20,10 +20,10 @@ import { ILoginForm } from '@models';
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private activateRoute = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly activateRoute = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.initLoginForm();
@@ -38,7 +38,11 @@ export class LoginComponent implements OnInit {
     const password = this.form['password'].value;
     this.authService.login(email, password)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.router.navigate(['/home']));
+      .subscribe({
+        complete: () => {
+          this.router.navigate(['/home'])
+        },
+      })
   }
 
   get form() {
@@ -58,5 +62,5 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/home']);
       return;
     }
-  }  
+  }
 }

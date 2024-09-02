@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { map, Observable, Subject } from 'rxjs';
+import { Injectable, inject, afterNextRender, Injector, afterRender, signal } from '@angular/core';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { IUser, IApiResponse } from '@models';
@@ -9,12 +9,23 @@ import { IUser, IApiResponse } from '@models';
 })
 export class AuthService {
 
-  private router = inject(Router);
-  private http = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly injector = inject(Injector);
+  private readonly isUserLoggedIn = signal<null | string>(null);
 
   private readonly localStorageKeyName = 'fact_currentUser_development';
-  private currentUserSubject = new Subject<IUser>();
+  private readonly currentUserSubject = new BehaviorSubject<IUser | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+  
+  constructor() {
+    afterNextRender({
+      earlyRead: () => {
+        const accessToken = localStorage.getItem(this.localStorageKeyName) as string;
+        this.isUserLoggedIn.set(JSON.parse(accessToken));
+      }
+    });
+  }
   
   login(email: string, password: string): Observable<IUser> {
     return this.http.post<IApiResponse>('http://localhost:4400/api/v1/user/auth', {
@@ -25,8 +36,13 @@ export class AuthService {
         const user = response.data.user;
         const accessToken = response.data.accessToken;
         if (user && accessToken) {
-          localStorage.setItem(this.localStorageKeyName, JSON.stringify(accessToken));
-          this.currentUserSubject.next(user)
+          afterRender({
+            write: () => {
+              localStorage.setItem(this.localStorageKeyName, JSON.stringify(accessToken))
+            }
+          },{injector: this.injector});
+          this.isUserLoggedIn.set(JSON.stringify(accessToken));
+          this.currentUserSubject.next(user);
         }
         return user;
       })
@@ -34,17 +50,25 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.localStorageKeyName);
-    this.router.navigate(['/home']);
+    afterNextRender({
+      write: () => {
+        localStorage.removeItem(this.localStorageKeyName);
+        this.isUserLoggedIn.set(null);
+        this.router.navigate(['/home']);
+      }
+    },{injector: this.injector});
+    
+    
     return;
   }
 
-  get isUserLoggedIn(): boolean {
-    return this.getAccessToken() != null;
-  }
-
-  getAccessToken(): string {
-    const accessToken = localStorage.getItem(this.localStorageKeyName) as string;
-    return JSON.parse(accessToken);
+  get islogged(): string | null {
+    afterNextRender({
+      earlyRead: () => {
+        const accessToken = localStorage.getItem(this.localStorageKeyName) as string;
+        this.isUserLoggedIn.set(JSON.parse(accessToken));
+      }
+    },{injector: this.injector});
+    return this.isUserLoggedIn();
   }
 }
