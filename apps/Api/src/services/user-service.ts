@@ -48,7 +48,7 @@ export class UserService {
     const accessToken = Security.generateAccessToken(email, user.dataValues.role);
     delete user.dataValues.password;
     // return {...user.toJSON(), accessToken}
-    return {user, accessToken}
+    return {user: user.dataValues, accessToken}
   }
 
   static async getUserById(id: string): Promise<Model<IUser>> {

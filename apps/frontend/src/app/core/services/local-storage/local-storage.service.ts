@@ -1,4 +1,4 @@
-import { Injectable, inject, Injector, afterNextRender, signal } from '@angular/core';
+import { Injectable, inject, Injector, afterNextRender } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -6,40 +6,41 @@ import { Injectable, inject, Injector, afterNextRender, signal } from '@angular/
 export class LocalStorageService {
 
   private readonly injector = inject(Injector);
-  private readonly currentUser = signal<null | string>(null);
-  
-  async getItem(key: string) {
-    await afterNextRender({
-      earlyRead: () => {
-        const accessToken = localStorage.getItem(key) as string;
-        this.currentUser.set(JSON.parse(accessToken));
-      }
-    },{injector: this.injector});
+
+  getItem(key: string) {
+    return new Promise((resolve, reject) => {
+      afterNextRender({
+        earlyRead: () => {
+          const apiResponse = localStorage.getItem(key) as string;
+          resolve(JSON.parse(apiResponse));
+        }
+      })
+    })
   }
 
   setItem(key: string, value: string): Promise<boolean> {
     return new Promise((resolve) => {
-      const action = afterNextRender({
+      localStorage.setItem(key, JSON.stringify(value));
+      resolve(true);
+      /*afterNextRender({
         write: () => {
           localStorage.setItem(key, JSON.stringify(value));
+          resolve(true);
         }
-      },{injector: this.injector});
-      if (action) {
-        resolve(true);
-      }
+      },{injector: this.injector});*/
     });
   }
 
   removeItem(key: string): Promise<boolean> {
     return new Promise((resolve) => {
-      const action = afterNextRender({
+      localStorage.removeItem(key);
+      resolve(true);
+      /*afterNextRender({
         write: () => {
           localStorage.removeItem(key);
+          resolve(true);
         }
-      },{injector: this.injector});
-      if (action) {
-        resolve(true);
-      }
+      },{injector: this.injector});*/
     });
   }
 }

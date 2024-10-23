@@ -5,7 +5,7 @@ import { AuthService } from '@services';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { IUser } from '@models';
+import { IApiResponse, IUser } from '@models';
 
 @Component({
   selector: 'app-nx-welcome',
@@ -16,8 +16,8 @@ import { IUser } from '@models';
       <p-menubar [model]="navItems" />
     </div>
     <div>
-      <pre> 
-      email : {{ (this.currentUser$ | async)?.email }}
+      <pre>
+      email : {{ (this.currentUser$ | async)?.data?.user?.email }}
       </pre>
     </div>
   `,
@@ -28,12 +28,13 @@ export class NxWelcomeComponent implements OnInit {
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  currentUser$: Observable<IUser | null> = this.authService.currentUser$
+  currentUser$: Observable<IApiResponse | null> = this.authService.currentUser$
   navItems: MenuItem[] | undefined;
 
  ngOnInit(): void {
+  this.checkLoggedUser();
   this.initNavItems();
- } 
+ }
 
  private initNavItems() {
   this.navItems = [
@@ -49,7 +50,9 @@ export class NxWelcomeComponent implements OnInit {
   this.authService.logout().then(() => {
     console.log('logout 1');
     this.router.navigate(['/login']);
-    console.log('logout 2');
   });
+ }
+
+ async checkLoggedUser() {
  }
 }

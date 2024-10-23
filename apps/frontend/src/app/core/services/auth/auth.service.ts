@@ -1,6 +1,5 @@
 import { Injectable, inject, afterNextRender, Injector, signal } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { IUser, IApiResponse } from '@models';
 import { LocalStorageService } from '@services';
@@ -10,27 +9,15 @@ import { LocalStorageService } from '@services';
 })
 export class AuthService {
 
-  private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
-  private readonly injector = inject(Injector);
-  private readonly isUserLoggedIn = signal<null | string>(null);
   private readonly localStorageService = inject(LocalStorageService);
-
   private readonly localStorageKeyName = 'fact_currentUser_development';
-  private readonly currentUserSubject = new BehaviorSubject<IUser | null>(null);
+
+  private readonly currentUserSubject = new BehaviorSubject<IApiResponse | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-  
-  constructor() {
-    afterNextRender({
-      earlyRead: () => {
-        const accessToken = localStorage.getItem(this.localStorageKeyName) as string;
-        this.isUserLoggedIn.set(JSON.parse(accessToken));
-      }
-    });
-  }
-  
+
   login(email: string, password: string): Observable<IUser> {
-    return this.http.post<IApiResponse>('http://localhost:4400/api/v1/user/auth', {
+    return this.http.post<IApiResponse>('/api/v1/user/auth', {
       'email': email,
       'password': password
     }).pipe(
@@ -41,8 +28,7 @@ export class AuthService {
           this.localStorageService
             .setItem(this.localStorageKeyName, JSON.stringify(accessToken))
             .then(() => {
-              this.isUserLoggedIn.set(JSON.stringify(accessToken));
-              this.currentUserSubject.next(user);
+              this.currentUserSubject.next(response);
             });
         }
         return user;
@@ -51,17 +37,17 @@ export class AuthService {
   }
 
   logout(): Promise<boolean> {
-    this.isUserLoggedIn.set(null);
+    this.currentUserSubject.next(null);
     return this.localStorageService.removeItem(this.localStorageKeyName);
   }
 
-  async islogged(): Promise<any> {
-    await afterNextRender({
-      earlyRead: () => {
-        const accessToken = localStorage.getItem(this.localStorageKeyName) as string;
-        this.isUserLoggedIn.set(JSON.parse(accessToken));
-      }
-    },{injector: this.injector});
-    return this.isUserLoggedIn();
+  isUserLoggedIn(): boolean {
+    return this.getCurrentUser() !== null;
+  }
+  getCurrentUser(): boolean {
+    this.localStorageService.getItem(this.localStorageKeyName)
+      .then(res => this.currentUserSubject.next(res as IApiResponse))
+      .catch(() => this.currentUserSubject.next(null));
+    return this.currentUserSubject.value !== null;
   }
 }
