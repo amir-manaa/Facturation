@@ -4,7 +4,7 @@ export interface IApiResponse {
   success: boolean,
     code: number,
     message: string,
-    data: { 
+    data: {
       user: IUser;
       accessToken: string
     }

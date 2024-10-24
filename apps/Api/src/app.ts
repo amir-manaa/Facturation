@@ -23,7 +23,13 @@ export class App {
   }
 
   #coreMiddlewares(): void {
-    this.#app.use(cors());
+    const corsOptions = {
+      origin: 'http://localhost:4400/',
+      methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
+      allowedHeaders: 'Content-Type,Authorization'
+    };
+
+    this.#app.use(cors(corsOptions));
     this.#app.disable("x-powered-by"); //Reduce fingerprinting
     this.#app.use(cookieParser());
     this.#app.use(bodyParser.urlencoded({ extended: false }));
