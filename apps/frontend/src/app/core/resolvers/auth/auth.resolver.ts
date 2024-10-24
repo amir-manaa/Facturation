@@ -3,5 +3,7 @@ import { ResolveFn } from '@angular/router';
 import { AuthService } from '@services';
 
 export const authResolver: ResolveFn<boolean> = (route, state) => {
-  return inject(AuthService).isUserLoggedIn;
+  const authService = inject(AuthService);
+  authService.getCurrentUser();
+  return authService.isUserLoggedIn();
 };

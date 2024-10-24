@@ -27,7 +27,7 @@
       "path": "./tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "ath": "./tsconfig.spec.json"
     }
   ],
   "extends": "../../tsconfig.base.json",
