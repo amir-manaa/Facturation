@@ -4,6 +4,5 @@ import { AuthService } from '@services';
 
 export const authResolver: ResolveFn<boolean> = (route, state) => {
   const authService = inject(AuthService);
-  authService.getCurrentUser();
-  return authService.isUserLoggedIn();
+  return !authService.isUserLoggedIn();
 };

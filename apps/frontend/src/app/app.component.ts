@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, inject, PLATFORM_ID, Signal, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
@@ -13,7 +13,7 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 export class AppComponent {
 
   private readonly platform = inject(PLATFORM_ID);
-  readonly isBrower = signal<boolean>(isPlatformBrowser(this.platform));
+  readonly onBrowser: Signal<boolean> = signal<boolean>(isPlatformBrowser(this.platform));
 
   title = 'frontend';
 }

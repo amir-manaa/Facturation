@@ -47,10 +47,8 @@ export class NxWelcomeComponent implements OnInit {
  }
 
  private logout() {
-  this.authService.logout().then(() => {
-    console.log('logout 1');
-    this.router.navigate(['/login']);
-  });
+  this.authService.logout();
+   this.router.navigate(['/login']);
  }
 
  async checkLoggedUser() {

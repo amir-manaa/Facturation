@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   }
 
   private initLoginForm() {
-    //this.redirectIfLogged();
+    this.redirectIfLogged();
     this.loginForm = new FormGroup<ILoginForm>({
       email: new FormControl<string>('', {nonNullable: true}),
       password: new FormControl<string>('', {nonNullable: true})
@@ -58,7 +58,8 @@ export class LoginComponent implements OnInit {
   }
 
   private redirectIfLogged() {
-    if (this.activateRoute.snapshot.data['isAuth'] === true) {
+    const isAuth = this.activateRoute.snapshot.data['isAuth'];
+    if (!isAuth) {
       this.router.navigateByUrl('/home');
       return;
     }

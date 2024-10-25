@@ -1,14 +1,16 @@
-import { Injectable, inject, afterNextRender, Injector, signal } from '@angular/core';
+import { Injectable, inject, afterNextRender, Injector, signal, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IUser, IApiResponse } from '@models';
 import { LocalStorageService } from '@services';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private readonly platform = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
   private readonly localStorageService = inject(LocalStorageService);
   private readonly localStorageKeyName = 'fact_currentUser_development';
@@ -26,7 +28,7 @@ export class AuthService {
         const accessToken = response.data.accessToken;
         if (user && accessToken) {
           this.localStorageService
-            .setItem(this.localStorageKeyName, JSON.stringify(accessToken))
+            .setItem(this.localStorageKeyName, JSON.stringify({...user, accessToken}))
             .then(() => {
               this.currentUserSubject.next(response);
             });
@@ -36,18 +38,16 @@ export class AuthService {
     )
   }
 
-  logout(): Promise<boolean> {
+  logout(): void {
     this.currentUserSubject.next(null);
-    return this.localStorageService.removeItem(this.localStorageKeyName);
+    this.localStorageService.removeItem(this.localStorageKeyName);
   }
 
   isUserLoggedIn(): boolean {
     return this.getCurrentUser() !== null;
   }
-  getCurrentUser(): boolean {
-    this.localStorageService.getItem(this.localStorageKeyName)
-      .then(res => this.currentUserSubject.next(res as IApiResponse))
-      .catch(() => this.currentUserSubject.next(null));
-    return this.currentUserSubject.value !== null;
+
+  getCurrentUser(): any {
+    return this.localStorageService.getItem(this.localStorageKeyName);
   }
 }

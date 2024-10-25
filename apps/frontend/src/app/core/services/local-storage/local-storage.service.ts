@@ -1,46 +1,29 @@
-import { Injectable, inject, Injector, afterNextRender } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, Signal, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
 
-  private readonly injector = inject(Injector);
+  private readonly platform = inject(PLATFORM_ID);
+  private readonly onBrowser: Signal<boolean> = signal<boolean>(isPlatformBrowser(this.platform));
 
-  getItem(key: string) {
-    return new Promise((resolve, reject) => {
-      afterNextRender({
-        earlyRead: () => {
-          const apiResponse = localStorage.getItem(key) as string;
-          resolve(JSON.parse(apiResponse));
-        }
-      })
-    })
+  getItem(key: string): string | null {
+    if (this.onBrowser()) {
+      return localStorage.getItem(key) as string;
+    }
+    return null;
   }
 
   setItem(key: string, value: string): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       localStorage.setItem(key, JSON.stringify(value));
       resolve(true);
-      /*afterNextRender({
-        write: () => {
-          localStorage.setItem(key, JSON.stringify(value));
-          resolve(true);
-        }
-      },{injector: this.injector});*/
-    });
+    })
   }
 
-  removeItem(key: string): Promise<boolean> {
-    return new Promise((resolve) => {
-      localStorage.removeItem(key);
-      resolve(true);
-      /*afterNextRender({
-        write: () => {
-          localStorage.removeItem(key);
-          resolve(true);
-        }
-      },{injector: this.injector});*/
-    });
+  removeItem(key: string): void {
+    localStorage.removeItem(key);
   }
 }
