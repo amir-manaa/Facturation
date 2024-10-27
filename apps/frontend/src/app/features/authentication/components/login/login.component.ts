@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '@services';
 import { ILoginForm } from '@models';
 import { validator } from 'sequelize/types/utils/validator-extras';
@@ -13,7 +11,7 @@ import { validator } from 'sequelize/types/utils/validator-extras';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, CardModule, ReactiveFormsModule, InputTextModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -37,13 +35,13 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const email = this.form['email'].value;
-    const password = this.form['password'].value;
+    const email: string = this.form['email'].value;
+    const password: string = this.form['password'].value;
     this.authService.login(email, password)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         complete: () => {
-          this.router.navigate(['/home'])
+          this.router.navigateByUrl('/')
         },
       })
   }
@@ -60,10 +58,10 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  private redirectIfLogged(): void {
+  private redirectIfLogged() {
     const isAuth = this.activateRoute.snapshot.data['isAuth'];
     if (!isAuth) {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/');
       return;
     }
   }
