@@ -1,5 +1,9 @@
 @if (onBrowser()) {
-  <main role="main">
-    <router-outlet></router-outlet>
+  <ui-header></ui-header>
+  <ui-sidebar></ui-sidebar>
+  <main role="main" class="p-4 sm:ml-64">
+    <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+      <router-outlet></router-outlet>
+    </div>
   </main>
 }
