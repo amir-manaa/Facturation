@@ -1,13 +1,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 import { Invoice, User, InvoiceItem } from './models';
 import { sequelize } from './utils';
 import { errorHandlerMiddleware, get404Middleware } from './middleware';
 
 export class App {
-
   #app: express.Express;
   #port: number;
 
@@ -26,21 +25,21 @@ export class App {
     const corsOptions = {
       origin: 'http://localhost:4400/',
       methods: 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
-      allowedHeaders: 'Content-Type,Authorization'
+      allowedHeaders: 'Content-Type,Authorization',
     };
 
     this.#app.use(cors(corsOptions));
-    this.#app.disable("x-powered-by"); //Reduce fingerprinting
+    this.#app.disable('x-powered-by'); //Reduce fingerprinting
     this.#app.use(cookieParser());
     this.#app.use(bodyParser.urlencoded({ extended: false }));
     this.#app.use(express.json());
   }
 
   #DbAssociation(): void {
-    Invoice.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+    Invoice.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
     User.hasMany(Invoice);
 
-    InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: "CASCADE" });
+    InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: 'CASCADE' });
     Invoice.hasMany(InvoiceItem);
   }
 
@@ -49,7 +48,7 @@ export class App {
       .sync()
       // .sync({ force: true })
       .then((result) => {
-        console.log("DB connected successfully");
+        console.log('DB connected successfully');
       })
       .catch((error) => {
         console.log(error);
@@ -58,7 +57,7 @@ export class App {
 
   #initControllers(controllers: any): void {
     for (const controller of controllers) {
-      this.#app.use('/', controller.routers)
+      this.#app.use('/', controller.routers);
     }
   }
 
@@ -70,7 +69,7 @@ export class App {
     this.#app.use(get404Middleware);
   }
 
-   listen(): void {
+  listen(): void {
     this.#app.listen(this.#port);
   }
 }

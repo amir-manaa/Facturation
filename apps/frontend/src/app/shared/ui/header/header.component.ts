@@ -15,10 +15,9 @@ import { IApiResponse } from '@models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  currentUser$: Observable<IApiResponse | null> = this.authService.currentUser$
+  currentUser$: Observable<IApiResponse | null> = this.authService.currentUser$;
 
   logout() {
     this.authService.logout();

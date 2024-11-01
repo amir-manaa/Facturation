@@ -1,13 +1,14 @@
-import * as express from "express";
-import { RequestValidator } from "../utils";
-import { UserService } from "../services";
-import { IUser } from "../shared/interfaces";
-import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from "../constants";
-import { isAuth } from "../middleware";
+import * as express from 'express';
+import { RequestValidator } from '../utils';
+import { UserService } from '../services';
+import { IUser } from '../shared/interfaces';
+import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from '../constants';
+import { isAuth } from '../middleware';
 
 export class UserController {
-  #path = "/api/v1";
+  #path = '/api/v1';
   #router = express.Router();
+
   constructor() {
     this.initRoutes();
   }
@@ -26,140 +27,181 @@ export class UserController {
     return this.#router;
   }
 
-  async #authenticateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async #authenticateUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
-      const reqBody = req.body as Pick<IUser, "email" | "password">;
+      const reqBody = req.body as Pick<IUser, 'email' | 'password'>;
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
-        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
       }
       const userAuth = await UserService.authenticateUser(reqBody);
-      res.cookie('accessToken', userAuth, { maxAge: 900000, httpOnly: false});
+      res.cookie('accessToken', userAuth, { maxAge: 900000, httpOnly: false });
       return res
-        .status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
           RequestValidator.createAPIResponse(
             true,
             HTTP_RESPONSE_CODE.SUCCESS_200,
             APP_ERROR_MESSAGE.userAuthenticated,
             userAuth
           )
-        )
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async #getUserById(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const id = req.params.id;
-      const user = await UserService.getUserById(id);
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.userReturned,
-          user
-        )
-      )
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async #getUserByEmail(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const reqBody = req.body as IUser;
-      const error = RequestValidator.validUserRequest(reqBody);
-      if (Object.keys(error).length) {
-        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
-      }
-      const email: string = req.body.email;
-      const user = await UserService.getUserByEmail(email);
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.userReturned,
-          user
-        )
-      )
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async #getUsers(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const users = await UserService.getUsers();
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.usersReturned,
-          users
-        )
-      )
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async #createUser(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const reqBody = req.body as Omit<IUser, "id">;
-      const error = RequestValidator.validUserRequest(reqBody);
-      if (Object.keys(error).length) {
-        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
-      }
-      const user = await UserService.create(reqBody);
-      const userToJson = user.toJSON();
-      return res.status(HTTP_RESPONSE_CODE.CREATED_201).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.CREATED_201,
-          APP_ERROR_MESSAGE.createdUser_201,
-          { userToJson }
-        )
-      )
+        );
     } catch (error) {
       next(error);
     }
   }
 
-  async #updateUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async #getUserById(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
-      const reqBody = req.body as Omit<IUser, "id">;
-      const error = RequestValidator.validUserRequest(reqBody);
-      if (Object.keys(error).length) {
-        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error })
-      }
       const id = req.params.id;
-      const user = UserService.updateUser(id, reqBody);
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.userReturned,
-          user
-        )
-      )
-    } catch(error) {
-      next(error)
+      const user = await UserService.getUserById(id);
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.userReturned,
+            user
+          )
+        );
+    } catch (error) {
+      next(error);
     }
   }
 
-  async #deleteUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async #getUserByEmail(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      const reqBody = req.body as IUser;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
+      }
+      const email: string = req.body.email;
+      const user = await UserService.getUserByEmail(email);
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.userReturned,
+            user
+          )
+        );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #getUsers(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      const users = await UserService.getUsers();
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.usersReturned,
+            users
+          )
+        );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #createUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      const reqBody = req.body as Omit<IUser, 'id'>;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
+      }
+      const user = await UserService.create(reqBody);
+      const userToJson = user.toJSON();
+      return res
+        .status(HTTP_RESPONSE_CODE.CREATED_201)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.CREATED_201,
+            APP_ERROR_MESSAGE.createdUser_201,
+            { userToJson }
+          )
+        );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #updateUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      const reqBody = req.body as Omit<IUser, 'id'>;
+      const error = RequestValidator.validUserRequest(reqBody);
+      if (Object.keys(error).length) {
+        return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
+      }
+      const id = req.params.id;
+      const user = UserService.updateUser(id, reqBody);
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.userReturned,
+            user
+          )
+        );
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #deleteUser(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     try {
       const id = req.params.id;
       const user = await UserService.deleteUser(id);
-      return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json(
-        RequestValidator.createAPIResponse(
-          true,
-          HTTP_RESPONSE_CODE.SUCCESS_200,
-          APP_ERROR_MESSAGE.usersDeleted,
-          user
-        )
-      )
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(
+          RequestValidator.createAPIResponse(
+            true,
+            HTTP_RESPONSE_CODE.SUCCESS_200,
+            APP_ERROR_MESSAGE.usersDeleted,
+            user
+          )
+        );
     } catch (error) {
       next(error);
     }

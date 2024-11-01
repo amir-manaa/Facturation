@@ -10,9 +10,10 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-
   private readonly platform = inject(PLATFORM_ID);
-  readonly onBrowser: Signal<boolean> = signal<boolean>(isPlatformBrowser(this.platform));
+  readonly onBrowser: Signal<boolean> = signal<boolean>(
+    isPlatformBrowser(this.platform)
+  );
 
   title = 'frontend';
 }
