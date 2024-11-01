@@ -1,73 +1,104 @@
 import { Model } from 'sequelize';
 import { HttpException } from '../exceptions';
-import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE} from '../constants';
+import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE } from '../constants';
 import { Security, RequestValidator } from '../utils';
-import { Admin } from "../models";
-import { IAdmin } from "../shared/interfaces";
-
+import { Admin } from '../models';
+import { IAdmin } from '../shared/interfaces';
 
 export class AdminService {
-
   private static async checkIfAdminExists(email: string): Promise<boolean> {
-    const user = await Admin.findOne({ where: { email }});
+    const user = await Admin.findOne({ where: { email } });
     return user ? true : false;
   }
 
-  static async create(props: Omit<IAdmin, "id">): Promise<Model<IAdmin>> {
+  static async create(props: Omit<IAdmin, 'id'>): Promise<Model<IAdmin>> {
     const { email, name, password, role } = props;
     const userExists = await this.checkIfAdminExists(email);
     if (userExists) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.userAlreadyExists)
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.BAD_REQUEST_400,
+        APP_ERROR_MESSAGE.userAlreadyExists
+      );
     }
     const hashPassword = await Security.hashPassword(password);
     const createdUser = await Admin.create({
       email,
       name,
       password: hashPassword,
-      role
+      role,
     });
     return createdUser;
   }
 
-  static async authenticateAdmin(props: Pick<IAdmin, "email" | "password">) {
+  static async authenticateAdmin(props: Pick<IAdmin, 'email' | 'password'>) {
     const { email, password } = props;
     const validEmail = RequestValidator.isEmail(email);
     if (!validEmail) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.invalidEmail);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.BAD_REQUEST_400,
+        APP_ERROR_MESSAGE.invalidEmail
+      );
     }
     const admin: Model<IAdmin> = await Admin.findOne({
-      where: { email }
+      where: { email },
     });
     if (!admin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
-    const validatePassword = await Security.matchPassword(password, admin.dataValues.password);
+    const validatePassword = await Security.matchPassword(
+      password,
+      admin.dataValues.password
+    );
     if (!validatePassword) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.invalidCredentials);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.BAD_REQUEST_400,
+        APP_ERROR_MESSAGE.invalidCredentials
+      );
     }
-    const isMatchedPassword = await Security.matchPassword(password, admin.dataValues.password);
+    const isMatchedPassword = await Security.matchPassword(
+      password,
+      admin.dataValues.password
+    );
     if (!isMatchedPassword) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.invalidCredentials);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.BAD_REQUEST_400,
+        APP_ERROR_MESSAGE.invalidCredentials
+      );
     }
-    const accessToken = Security.generateAccessToken(email, admin.dataValues.role);
-    return {...admin.toJSON(), accessToken}
+    const accessToken = Security.generateAccessToken(
+      email,
+      admin.dataValues.role
+    );
+    return { ...admin.toJSON(), accessToken };
   }
 
   static async getAdminById(id: string): Promise<Model<IAdmin>> {
     if (!id) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.serverError_500);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.serverError_500
+      );
     }
     const admin = await Admin.findByPk(parseInt(id));
     if (!admin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
-    return admin
+    return admin;
   }
 
   static async getAdminByEmail(email: string): Promise<Model<IAdmin>> {
-    const admin = await Admin.findOne({ where: { email }});
+    const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
     return admin;
   }
@@ -75,33 +106,51 @@ export class AdminService {
   static async getAdmins(): Promise<Model<IAdmin>[]> {
     const admins = await Admin.findAll();
     if (!admins) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
     return admins;
   }
 
   static async deleteAdmin(id: string): Promise<number> {
-    const admin = Admin.findOne({ where: { id: parseInt(id) }});
+    const admin = Admin.findOne({ where: { id: parseInt(id) } });
     if (!admin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
-    const deletedAdmin = Admin.destroy({ where: { id: parseInt(id) }});
+    const deletedAdmin = Admin.destroy({ where: { id: parseInt(id) } });
     return deletedAdmin;
   }
 
-  static async updateAdmin(id: string, props: Omit<IAdmin, "id" | "password">): Promise<[number]> {
+  static async updateAdmin(
+    id: string,
+    props: Omit<IAdmin, 'id' | 'password'>
+  ): Promise<[number]> {
     const admin = await Admin.findByPk(parseInt(id));
     if (!admin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND_404, APP_ERROR_MESSAGE.userDoesntExist);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
     }
     const { email, name, role } = props;
-    const updateAdmin = Admin.update({
-      email,
-      name,
-      role
-    }, { where: { id : parseInt(id) }});
+    const updateAdmin = Admin.update(
+      {
+        email,
+        name,
+        role,
+      },
+      { where: { id: parseInt(id) } }
+    );
     if (!updateAdmin) {
-      throw new HttpException(HTTP_RESPONSE_CODE.BAD_REQUEST_400, APP_ERROR_MESSAGE.serverError_500);
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.BAD_REQUEST_400,
+        APP_ERROR_MESSAGE.serverError_500
+      );
     }
     return updateAdmin;
   }

@@ -1,12 +1,23 @@
-import { Component, OnInit, inject, DestroyRef, ChangeDetectionStrategy, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  DestroyRef,
+  ChangeDetectionStrategy,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import {
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+} from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '@services';
 import { ILoginForm } from '@models';
 import { validator } from 'sequelize/types/utils/validator-extras';
-
 
 @Component({
   selector: 'app-login',
@@ -14,10 +25,9 @@ import { validator } from 'sequelize/types/utils/validator-extras';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-
   loginForm!: FormGroup;
   submitedForm = signal(false);
   private readonly authService = inject(AuthService);
@@ -30,32 +40,39 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.submitedForm.set(true)
+    this.submitedForm.set(true);
     if (this.loginForm.invalid) {
       return;
     }
 
     const email: string = this.form['email'].value;
     const password: string = this.form['password'].value;
-    this.authService.login(email, password)
+    this.authService
+      .login(email, password)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         complete: () => {
-          this.router.navigateByUrl('/')
+          this.router.navigateByUrl('/');
         },
-      })
+      });
   }
 
-  get form()   {
+  get form() {
     return this.loginForm.controls;
   }
 
   private initLoginForm(): void {
     this.redirectIfLogged();
     this.loginForm = new FormGroup<ILoginForm>({
-      email: new FormControl<string>('', {nonNullable: true, validators: [Validators.required, Validators.email]}),
-      password: new FormControl<string>('', {nonNullable: true, validators: [Validators.required]}),
-    })
+      email: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.email],
+      }),
+      password: new FormControl<string>('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+    });
   }
 
   private redirectIfLogged() {

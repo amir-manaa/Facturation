@@ -1,8 +1,10 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../utils";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../utils';
 import { Role } from '../shared/enums';
 
-export const User = sequelize.define("user", {
+export const User = sequelize.define(
+  'user',
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -32,12 +34,12 @@ export const User = sequelize.define("user", {
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: Role.user
+      defaultValue: Role.user,
     },
-  },
+  }
   // {
   //   defaultScope: {
   //     attributes: { exclude: ['password'] },
   //   }
-  // } 
+  // }
 );

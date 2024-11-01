@@ -1,12 +1,12 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../../utils";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../../utils';
 
-export const InvoiceItem = sequelize.define("invoiceItem", {
+export const InvoiceItem = sequelize.define('invoiceItem', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     allowNull: false,
-    primaryKey: true
+    primaryKey: true,
   },
   quantity: {
     type: DataTypes.SMALLINT,
@@ -14,15 +14,15 @@ export const InvoiceItem = sequelize.define("invoiceItem", {
   },
   description: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   cost: {
     type: DataTypes.FLOAT,
     allowNull: false,
-    defaultValue: 0.0
+    defaultValue: 0.0,
   },
   invoiceId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
 });

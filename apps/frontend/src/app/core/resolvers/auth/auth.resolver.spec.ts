@@ -5,7 +5,7 @@ import { authResolver } from './auth.resolver';
 
 describe('authResolver', () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-      TestBed.runInInjectionContext(() => authResolver(...resolverParameters));
+    TestBed.runInInjectionContext(() => authResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

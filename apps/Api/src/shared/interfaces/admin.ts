@@ -5,5 +5,5 @@ export interface IAdmin {
   email: string;
   name: string;
   password: string;
-  role: Role
+  role: Role;
 }

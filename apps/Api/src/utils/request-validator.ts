@@ -1,4 +1,4 @@
-import { Role } from "../shared/enums";
+import { Role } from '../shared/enums';
 import { APP_ERROR_MESSAGE } from '../constants';
 
 interface IError {
@@ -9,10 +9,9 @@ interface IError {
 }
 
 export class RequestValidator {
-
   static isEmail(prop: string): boolean {
     const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return prop.match(regex) ? true : false
+    return prop.match(regex) ? true : false;
   }
 
   static validUserRequest(prop): IError {
@@ -22,15 +21,15 @@ export class RequestValidator {
       return error;
     }
     Object.entries(prop).forEach(([key, value]) => {
-      if (key === "email" && !this.isEmail(value as string)) {
+      if (key === 'email' && !this.isEmail(value as string)) {
         error.email = APP_ERROR_MESSAGE.invalidEmail;
       }
-      if (key === "password" && (value as string).length < 5) {
+      if (key === 'password' && (value as string).length < 5) {
         error.password = APP_ERROR_MESSAGE.invalidPassword;
       }
 
-      if (key === "role" && value !== Role ) {
-        error.role = "Provide a valid role";
+      if (key === 'role' && value !== Role) {
+        error.role = 'Provide a valid role';
       }
     });
     return error;
@@ -46,7 +45,7 @@ export class RequestValidator {
       success,
       code,
       message,
-      data
+      data,
     };
   }
 }

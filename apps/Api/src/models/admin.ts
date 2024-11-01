@@ -1,7 +1,9 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../utils";
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../utils';
 
-export const Admin = sequelize.define("admin", {
+export const Admin = sequelize.define(
+  'admin',
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -11,7 +13,7 @@ export const Admin = sequelize.define("admin", {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -24,14 +26,14 @@ export const Admin = sequelize.define("admin", {
     role: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
   },
   {
     defaultScope: {
       attributes: { exclude: ['password'] },
     },
     scopes: {
-      withPassword: {}
-    }
+      withPassword: {},
+    },
   }
 );
