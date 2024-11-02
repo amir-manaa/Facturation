@@ -4,8 +4,8 @@ import { ResolveFn } from '@angular/router';
 import { authResolver } from './auth.resolver';
 
 describe('authResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) => 
-      TestBed.runInInjectionContext(() => authResolver(...resolverParameters));
+  const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() => authResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

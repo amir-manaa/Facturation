@@ -2,16 +2,22 @@
   "name": "Api-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "implicitDependencies": ["Api"],
+  "implicitDependencies": [
+    "Api"
+  ],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{e2eProjectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/Api-e2e/jest.config.ts",
         "passWithNoTests": true
       },
-      "dependsOn": ["Api:build"]
+      "dependsOn": [
+        "Api:build"
+      ]
     }
   }
 }

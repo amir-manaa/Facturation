@@ -3,5 +3,5 @@ export interface IInvoiceItem {
   quantity: number;
   description: string;
   cost: number;
-  invoiceId: number
+  invoiceId: number;
 }

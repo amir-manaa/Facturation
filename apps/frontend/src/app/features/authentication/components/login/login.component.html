@@ -1,33 +1,54 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()" class="w-96 rounded-md border border-slate-300 m-auto bg-slate-50 p-4 mt-20">
-  
-  
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img class="mx-auto h-10 w-auto" src="img/logo.png" alt="Login">
+    <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">S'identifier
+    </h2>
+  </div>
 
-  <div class="flex flex-col">
-    <label for="email">Email</label>
-    <input 
-        pInputText 
-        id="email" 
-        formControlName="email"
-        aria-describedby="email-help" />
-    <small id="email-help">
-        Enter your username to reset your password.
-    </small>
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-5 bg-gray-100 border-2 border-grey-300 rounded-md">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-6">
+      <div class="form-group">
+        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">E-mail</label>
+        <div class="mt-2">
+          <input id="email" formControlName="email" type="email" autocomplete="email" required
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pr-4 pl-4">
+          @if (submitedForm()) {
+            @if (form["email"].hasError("required")) {
+              <small class="text-red-700">Veuillez saisir votre adresse e-mail</small>
+            } @else if (form["email"].hasError("email")) {
+              <small class="text-red-700">Adresse e-mail est invalide</small>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="flex items-center justify-between">
+          <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de passe</label>
+          <div class="text-sm">
+            <a href="#" class="hidden font-semibold text-blue-500">Forgot password?</a>
+          </div>
+        </div>
+        <div class="mt-2">
+          <input id="password" formControlName="password" type="password" autocomplete="current-password" required
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pr-4 pl-4">
+          @if (submitedForm() && form["password"].invalid) {
+            <small class="text-red-700">Veuillez saisir votre mot de passe</small>
+          }
+        </div>
+      </div>
+
+      <div>
+        <button type="submit"
+                class="flex w-full justify-center rounded-md bg-green-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+          Sign in
+        </button>
+      </div>
+    </form>
+
+    <p class="hidden mt-10 text-center text-sm text-gray-500">
+      Not a member?
+      <a href="#" class="font-semibold leading-6 text-blue-500">Start a 14 day free trial</a>
+    </p>
+  </div>
 </div>
-
-
-<div class="flex flex-col">
-  <label for="password">Mot de passe</label>
-  <input 
-      pInputText 
-      id="password" 
-      formControlName="password"
-      aria-describedby="password-help" />
-  <small id="password-help">
-      Enter your username to reset your password.
-  </small>
-</div>
-
-
-
-  <button type="submit">Submit</button>
-</form>

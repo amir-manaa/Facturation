@@ -10,12 +10,25 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@models":    ["src/app/core/models"],
-      "@services":  ["src/app/core/services"],
-      "@guards":    ["src/app/core/guards"],
-      "@resolvers": ["src/app/core/resolvers"],
-      "*":          ["node_modules/*"]
-    },
+      "@models": [
+        "src/app/core/models"
+      ],
+      "@services": [
+        "src/app/core/services"
+      ],
+      "@guards": [
+        "src/app/core/guards"
+      ],
+      "@resolvers": [
+        "src/app/core/resolvers"
+      ],
+      "@features": [
+        "src/app/features"
+      ],
+      "*": [
+        "node_modules/*"
+      ]
+    }
   },
   "files": [],
   "include": [],

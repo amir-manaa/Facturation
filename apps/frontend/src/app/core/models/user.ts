@@ -6,5 +6,5 @@ export interface IUser {
   address: string;
   role: number;
   createdAt: Date;
-  updatedAt: Date
+  updatedAt: Date;
 }
