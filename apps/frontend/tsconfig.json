@@ -22,6 +22,9 @@
       "@resolvers": [
         "src/app/core/resolvers"
       ],
+      "@features": [
+        "src/app/features"
+      ],
       "*": [
         "node_modules/*"
       ]

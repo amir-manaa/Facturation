@@ -12,4 +12,22 @@ import { SidebarComponent } from '../../shared/ui/sidebar/sidebar.component';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {}
+export class HomeComponent {
+  dashboardRoutes = [
+    {
+      label: 'dashboard',
+      path: 'dashboard',
+      icon: 'dashboard'
+    },
+    {
+      label: 'customers',
+      path: 'customers',
+      icon: 'person_search'
+    },
+    {
+      label: 'invoices',
+      path: 'invoices',
+      icon: 'receipt_long'
+    },
+  ]
+}
