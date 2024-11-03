@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { Invoice, User, InvoiceItem } from './models';
+import { Invoice, User, InvoiceItem, Customer } from './models';
 import { sequelize } from './utils';
 import { errorHandlerMiddleware, get404Middleware } from './middleware';
 
@@ -36,8 +36,8 @@ export class App {
   }
 
   #DbAssociation(): void {
-    Invoice.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
-    User.hasMany(Invoice);
+    Invoice.belongsTo(Customer, { constraints: true, onDelete: 'CASCADE' });
+    Customer.hasMany(Invoice);
 
     InvoiceItem.belongsTo(Invoice, { constraints: true, onDelete: 'CASCADE' });
     Invoice.hasMany(InvoiceItem);
@@ -46,7 +46,7 @@ export class App {
   #connectDB(): void {
     sequelize
       .sync()
-      // .sync({ force: true })
+      //.sync({ force: true })
       .then((result) => {
         console.log('DB connected successfully');
       })
