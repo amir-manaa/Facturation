@@ -28,6 +28,9 @@
       "@httpInterceptor": [
         "src/app/core/http"
       ],
+      "@utils": [
+        "src/app/shared/utils"
+      ],
       "*": [
         "node_modules/*"
       ]

@@ -10,7 +10,7 @@ export class CustomerService {
     return !!customer;
   }
 
-  static async create(props: Omit<ICustomer, 'id'>): Promise<Model<ICustomer>> {
+  static async create(props: Omit<ICustomer, 'id' | 'role'>): Promise<Model<ICustomer>> {
     const { email, name, phone, address } = props;
     const customerExists = await this.checkIfUserExists(name);
     if (customerExists) {

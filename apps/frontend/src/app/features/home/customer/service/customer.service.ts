@@ -11,4 +11,8 @@ export class CustomerService {
   getAll(): Observable<any> {
     return this.http.get('/api/v1/customers');
   }
+
+  add(newCustomer: any): Observable<any> {
+    return this.http.post<any>('/api/v1/customer', newCustomer);
+  }
 }

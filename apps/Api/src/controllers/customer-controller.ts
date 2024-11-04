@@ -100,11 +100,15 @@ export class CustomerController {
     next: express.NextFunction
   ) {
     try {
-      const reqBody = req.body as Omit<ICustomer, 'id'>;
+      const reqBody = req.body as Omit<ICustomer, 'id' | 'role'>;
+      /************************************************
+        Form Customer Email is not Mandatory, so no validUserRequest
+       ***********************************************/
+      /*
       const error = RequestValidator.validUserRequest(reqBody);
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
-      }
+      }*/
       const customer = await CustomerService.create(reqBody);
       return res
         .status(HTTP_RESPONSE_CODE.CREATED_201)

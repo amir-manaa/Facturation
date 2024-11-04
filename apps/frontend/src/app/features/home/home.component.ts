@@ -15,17 +15,22 @@ import { SidebarComponent } from '../../shared/ui/sidebar/sidebar.component';
 export class HomeComponent {
   dashboardRoutes = [
     {
-      label: 'dashboard',
+      label: 'Dashboard',
       path: 'dashboard',
       icon: 'dashboard'
     },
     {
-      label: 'customers',
+      label: 'Clients',
       path: 'customers',
       icon: 'person_search'
     },
     {
-      label: 'invoices',
+      label: 'Ajouter un client',
+      path: '/customers/add',
+      icon: 'person_add'
+    },
+    {
+      label: 'Factures',
       path: 'invoices',
       icon: 'receipt_long'
     },

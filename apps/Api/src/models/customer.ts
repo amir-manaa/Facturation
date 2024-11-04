@@ -24,7 +24,7 @@ export const Customer = sequelize.define(
       allowNull: true,
     },
     address: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
       allowNull: true,
     },
     role: {
