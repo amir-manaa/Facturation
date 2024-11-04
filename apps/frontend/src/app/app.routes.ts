@@ -17,5 +17,5 @@ export const appRoutes: Route[] = [
       import('./features/home/home.routes').then((m) => m.homeRoutes),
     canActivate: [authGuard],
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];

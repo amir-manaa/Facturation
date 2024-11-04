@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         complete: () => {
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('/dashboard');
         },
       });
   }
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   private redirectIfLogged() {
     const isAuth = this.activateRoute.snapshot.data['isAuth'];
     if (!isAuth) {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/dashboard');
       return;
     }
   }

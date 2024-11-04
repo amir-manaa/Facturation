@@ -25,6 +25,9 @@
       "@features": [
         "src/app/features"
       ],
+      "@httpInterceptor": [
+        "src/app/core/http"
+      ],
       "*": [
         "node_modules/*"
       ]

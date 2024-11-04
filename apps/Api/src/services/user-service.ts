@@ -59,13 +59,15 @@ export class UserService {
         APP_ERROR_MESSAGE.invalidCredentials
       );
     }
-    const accessToken = Security.generateAccessToken(
+    const token = Security.generateAccessToken(
       email,
       user.dataValues.role
     );
+    delete user.dataValues.id;
     delete user.dataValues.password;
-    // return {...user.toJSON(), accessToken}
-    return { user: user.dataValues, accessToken };
+    delete user.dataValues.role;
+    user.dataValues['token'] = token;
+    return user
   }
 
   static async getUserById(id: string): Promise<Model<IUser>> {

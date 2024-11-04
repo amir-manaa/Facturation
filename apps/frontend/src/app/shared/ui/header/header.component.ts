@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
-import { IApiResponse } from '@models';
+import { IUser, IUserApiResponse } from '@models';
 
 @Component({
   selector: 'ui-header',
@@ -26,7 +26,7 @@ import { IApiResponse } from '@models';
 export class HeaderComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  currentUser$: Observable<IApiResponse | null> = this.authService.currentUser$;
+  currentUser$: Observable<IUser | null> = this.authService.currentUser$;
 
   logout() {
     this.authService.logout();

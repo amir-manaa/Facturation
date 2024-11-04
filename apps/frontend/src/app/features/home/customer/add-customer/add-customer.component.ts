@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-customers',
+  selector: 'app-add-customer',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './customers.component.html',
-  styleUrl: './customers.component.scss',
+  templateUrl: './add-customer.component.html',
+  styleUrl: './add-customer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomersComponent {}
+export class AddCustomerComponent {}

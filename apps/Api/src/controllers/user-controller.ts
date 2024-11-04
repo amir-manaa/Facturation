@@ -42,14 +42,7 @@ export class UserController {
       res.cookie('accessToken', userAuth, { maxAge: 900000, httpOnly: false });
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
-        .json(
-          RequestValidator.createAPIResponse(
-            true,
-            HTTP_RESPONSE_CODE.SUCCESS_200,
-            APP_ERROR_MESSAGE.userAuthenticated,
-            userAuth
-          )
-        );
+        .json({ user: userAuth });
     } catch (error) {
       next(error);
     }

@@ -1,3 +1,3 @@
 export { IUser } from './user';
-export { IApiResponse } from './api-response';
+export { IUserApiResponse } from './user-api-response';
 export { ILoginForm } from './login-form';
