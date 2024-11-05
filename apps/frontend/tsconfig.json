@@ -31,6 +31,9 @@
       "@utils": [
         "src/app/shared/utils"
       ],
+      "@class": [
+        "src/app/core/class"
+      ],
       "*": [
         "node_modules/*"
       ]
