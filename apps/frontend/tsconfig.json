@@ -34,6 +34,9 @@
       "@class": [
         "src/app/core/class"
       ],
+      "@sharedComponents": [
+        "src/app/shared/components"
+      ],
       "*": [
         "node_modules/*"
       ]

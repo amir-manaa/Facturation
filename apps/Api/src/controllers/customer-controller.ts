@@ -14,12 +14,12 @@ export class CustomerController {
   }
 
   initRoutes() {
-    this.#router.get(`${this.#path}/customer/:id`, isAuth, this.#getCustomerById);
-    this.#router.get(`${this.#path}/customer`, isAuth, this.#getCustomerByName);
+    this.#router.get(`${this.#path}/customers/:id`, isAuth, this.#getCustomerById);
+      this.#router.get(`${this.#path}/customers/name`, isAuth, this.#getCustomerByName);
     this.#router.get(`${this.#path}/customers`, isAuth, this.#getCustomers);
-    this.#router.post(`${this.#path}/customer`, isAuth, this.#createCustomer);
-    this.#router.put(`${this.#path}/customer/:id`, isAuth, this.#updateCustomer);
-    this.#router.delete(`${this.#path}/customer/:id`, isAuth, this.#deleteCustomer);
+    this.#router.post(`${this.#path}/customers`, isAuth, this.#createCustomer);
+    this.#router.put(`${this.#path}/customers/:id`, isAuth, this.#updateCustomer);
+    this.#router.delete(`${this.#path}/customers/:id`, isAuth, this.#deleteCustomer);
   }
 
   get routers() {
@@ -56,7 +56,7 @@ export class CustomerController {
   ) {
     try {
       const name: string = req.body.name;
-      const customer = await CustomerService.getUserByName(name);
+      const customer = await CustomerService.getCustomerByName(name);
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
         .json(
@@ -81,14 +81,7 @@ export class CustomerController {
       const customers = await CustomerService.getCustomers();
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
-        .json(
-          RequestValidator.createAPIResponse(
-            true,
-            HTTP_RESPONSE_CODE.SUCCESS_200,
-            APP_ERROR_MESSAGE.usersReturned,
-            customers
-          )
-        );
+        .json(customers);
     } catch (error) {
       next(error);
     }
@@ -112,14 +105,7 @@ export class CustomerController {
       const customer = await CustomerService.create(reqBody);
       return res
         .status(HTTP_RESPONSE_CODE.CREATED_201)
-        .json(
-          RequestValidator.createAPIResponse(
-            true,
-            HTTP_RESPONSE_CODE.CREATED_201,
-            APP_ERROR_MESSAGE.createdUser_201,
-            customer
-          )
-        );
+        .json(customer);
     } catch (error) {
       next(error);
     }
@@ -160,17 +146,10 @@ export class CustomerController {
   ) {
     try {
       const id = req.params.id;
-      const customer = await CustomerService.deleteUCustomer(id);
+      const deletionNbr = await CustomerService.deleteUCustomer(id);
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
-        .json(
-          RequestValidator.createAPIResponse(
-            true,
-            HTTP_RESPONSE_CODE.SUCCESS_200,
-            APP_ERROR_MESSAGE.usersDeleted,
-            customer
-          )
-        );
+        .json(deletionNbr > 0);
     } catch (error) {
       next(error);
     }

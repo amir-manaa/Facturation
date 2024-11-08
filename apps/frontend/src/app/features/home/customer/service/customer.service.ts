@@ -1,18 +1,34 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { concatMap, Observable, shareReplay } from 'rxjs';
+import { ICustomer } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+  private readonly API_URL = '/api/v1/customers';
   private readonly http = inject(HttpClient);
 
-  getAll(): Observable<any> {
-    return this.http.get('/api/v1/customers');
+  /*
+  private customerIdSubject = new BehaviorSubject<number|null>(null);
+  customerId$ = this.customerIdSubject.asObservable();
+
+   */
+
+  getAll() {
+    return this.http.get<ICustomer[]>(`${this.API_URL}`).pipe(shareReplay(1));
   }
 
-  add(newCustomer: any): Observable<any> {
-    return this.http.post<any>('/api/v1/customer', newCustomer);
+  add(newCustomer: Partial<ICustomer>): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}`, newCustomer);
+  }
+
+  delete(id: number): Observable<ICustomer[]> {
+    return this.http.delete(`${this.API_URL}/${id}`).pipe(
+      concatMap(res => {
+        return this.getAll()
+      })
+    );
   }
 }

@@ -18,10 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     importProvidersFrom(
       MatSnackBar
-    ),
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler
+    ), {
+      provide: ErrorHandler, useClass: GlobalErrorHandler,
     }
   ],
 };

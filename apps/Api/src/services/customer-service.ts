@@ -45,7 +45,7 @@ export class CustomerService {
     return customer;
   }
 
-  static async getUserByName(name: string): Promise<Model<ICustomer>> {
+  static async getCustomerByName(name: string): Promise<Model<ICustomer>> {
     const customer = await Customer.findOne({ where: { name } });
     if (!customer) {
       throw new HttpException(
@@ -57,7 +57,7 @@ export class CustomerService {
   }
 
   static async getCustomers(): Promise<Model<ICustomer>[]> {
-    const customers = await Customer.findAll();
+    const customers = await Customer.findAll({order: [['updatedAt', 'DESC']]});
     if (!customers) {
       throw new HttpException(
         HTTP_RESPONSE_CODE.NOT_FOUND_404,

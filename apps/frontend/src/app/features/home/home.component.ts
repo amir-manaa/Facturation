@@ -10,7 +10,7 @@ import { SidebarComponent } from '../../shared/ui/sidebar/sidebar.component';
   imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class HomeComponent {
   dashboardRoutes = [
