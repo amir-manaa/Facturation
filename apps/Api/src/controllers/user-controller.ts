@@ -17,7 +17,7 @@ export class UserController {
     this.#router.post(`${this.#path}/user/auth`, this.#authenticateUser);
     this.#router.get(`${this.#path}/user/:id`, isAuth, this.#getUserById);
     this.#router.get(`${this.#path}/user`, isAuth, this.#getUserByEmail);
-    this.#router.get(`${this.#path}/users`, this.#getUsers);
+    this.#router.get(`${this.#path}/users`, isAuth, this.#getUsers);
     this.#router.post(`${this.#path}/user`, isAuth, this.#createUser);
     this.#router.put(`${this.#path}/user/:id`, isAuth, this.#updateUser);
     this.#router.delete(`${this.#path}/user/:id`, isAuth, this.#deleteUser);

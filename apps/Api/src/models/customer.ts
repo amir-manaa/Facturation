@@ -6,25 +6,26 @@ export const Customer = sequelize.define(
   'customer',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    address: {
+      type: DataTypes.TEXT('long'),
+      allowNull: true,
+    },
     phone: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    address: {
-      type: DataTypes.TEXT('long'),
+    email: {
+      type: DataTypes.STRING,
       allowNull: true,
     },
     role: {
