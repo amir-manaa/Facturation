@@ -72,8 +72,7 @@ export class CustomerController {
     next: express.NextFunction
   ) {
     try {
-      const params = req.query;
-      const { count, customers } = await CustomerService.getCustomers(params);
+      const { count, customers } = await CustomerService.getCustomers(req);
       return res.status(HTTP_RESPONSE_CODE.SUCCESS_200).json({ totalCount: count, customers });
     } catch (error) {
       next(error);
@@ -86,7 +85,7 @@ export class CustomerController {
     next: express.NextFunction
   ) {
     try {
-      const reqBody = req.body as Omit<ICustomer, 'id' | 'role'>;
+      const props = req.body as Omit<ICustomer, 'id' | 'role'>;
       /************************************************
         Form Customer Email is not Mandatory, so no validUserRequest
        ***********************************************/
@@ -95,12 +94,11 @@ export class CustomerController {
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
       }*/
-      const customer = await CustomerService.create(reqBody);
+      const customer = await CustomerService.create(req, props);
       return res
         .status(HTTP_RESPONSE_CODE.CREATED_201)
         .json(customer);
     } catch (error) {
-      console.log(error.message)
       next(error);
     }
   }

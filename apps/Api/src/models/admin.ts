@@ -5,10 +5,11 @@ export const Admin = sequelize.define(
   'admin',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,

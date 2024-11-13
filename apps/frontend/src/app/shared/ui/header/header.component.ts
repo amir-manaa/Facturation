@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from '@services';
+import { AuthService, UserService } from '@services';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
-import { IUser, IUserApiResponse } from '@models';
+import { IUser } from '@models';
 
 @Component({
   selector: 'ui-header',
@@ -25,11 +25,11 @@ import { IUser, IUserApiResponse } from '@models';
 })
 export class HeaderComponent {
   private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
   private readonly router = inject(Router);
-  currentUser$: Observable<IUser | null> = this.authService.currentUser$;
+  currentUser$: Observable<IUser | null> = this.userService.currentUser$;
 
   logout() {
     this.authService.logout();
-    window.location.href = '/login';
   }
 }

@@ -36,6 +36,9 @@ export class App {
   }
 
   #DbAssociation(): void {
+    Customer.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+    User.hasMany(Customer);
+
     Invoice.belongsTo(Customer, { constraints: true, onDelete: 'CASCADE' });
     Customer.hasMany(Invoice);
 

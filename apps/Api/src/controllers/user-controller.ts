@@ -16,9 +16,10 @@ export class UserController {
   initRoutes() {
     this.#router.post(`${this.#path}/user/auth`, this.#authenticateUser);
     this.#router.get(`${this.#path}/user/:id`, isAuth, this.#getUserById);
-    this.#router.get(`${this.#path}/user`, isAuth, this.#getUserByEmail);
+    //this.#router.get(`${this.#path}/user`, isAuth, this.#getUserByEmail);
     this.#router.get(`${this.#path}/users`, isAuth, this.#getUsers);
-    this.#router.post(`${this.#path}/user`, isAuth, this.#createUser);
+    this.#router.get(`${this.#path}/user`, isAuth, this.#getUserProfile);
+    this.#router.post(`${this.#path}/user`, this.#createUser);
     this.#router.put(`${this.#path}/user/:id`, isAuth, this.#updateUser);
     this.#router.delete(`${this.#path}/user/:id`, isAuth, this.#deleteUser);
   }
@@ -38,11 +39,11 @@ export class UserController {
       if (Object.keys(error).length) {
         return res.status(HTTP_RESPONSE_CODE.BAD_REQUEST_400).json({ error });
       }
-      const userAuth = await UserService.authenticateUser(reqBody);
-      res.cookie('accessToken', userAuth, { maxAge: 900000, httpOnly: false });
+      const user = await UserService.authenticateUser(reqBody);
+      //res.cookie('accessToken', user, { maxAge: 60*60*24, httpOnly: false });
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
-        .json({ user: userAuth });
+        .json(user);
     } catch (error) {
       next(error);
     }
@@ -54,18 +55,26 @@ export class UserController {
     next: express.NextFunction
   ) {
     try {
-      const id = req.params.id;
+      const id: string = req.params.id;
       const user = await UserService.getUserById(id);
       return res
         .status(HTTP_RESPONSE_CODE.SUCCESS_200)
-        .json(
-          RequestValidator.createAPIResponse(
-            true,
-            HTTP_RESPONSE_CODE.SUCCESS_200,
-            APP_ERROR_MESSAGE.userReturned,
-            user
-          )
-        );
+        .json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async #getUserProfile(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
+    try {
+      const user = await UserService.getUserProfile(req);
+      return res
+        .status(HTTP_RESPONSE_CODE.SUCCESS_200)
+        .json(user);
     } catch (error) {
       next(error);
     }

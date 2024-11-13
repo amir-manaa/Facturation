@@ -3,3 +3,4 @@ export { IUser } from './user';
 export { IInvoice } from './invoice';
 export { IInvoiceItem } from './invoice-item';
 export { ICustomer } from './customer';
+export { IDecodeToken } from './decode-token';

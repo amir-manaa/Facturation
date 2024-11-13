@@ -1,8 +1,10 @@
 import { Model } from 'sequelize';
+import * as express from 'express';
 import { HttpException } from '../exceptions';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE } from '../constants';
 import { Customer } from '../models';
-import { ICustomer } from '../shared/interfaces';
+import { ICustomer, IDecodeToken } from '../shared/interfaces';
+import * as utils from '../utils';
 
 export class CustomerService {
   private static async checkIfUserExists(name: string): Promise<boolean> {
@@ -10,7 +12,7 @@ export class CustomerService {
     return !!customer;
   }
 
-  static async create(props: Omit<ICustomer, 'id' | 'role'>): Promise<Model<ICustomer>> {
+  static async create(req, props: Omit<ICustomer, 'id' | 'role'>): Promise<Model<ICustomer>> {
     const { name, address, phone, email } = props;
     const customerExists = await this.checkIfUserExists(name);
     if (customerExists) {
@@ -19,11 +21,13 @@ export class CustomerService {
         APP_ERROR_MESSAGE.userAlreadyExists
       );
     }
+    const decode: IDecodeToken = utils.Security.decodeToken(req);
     const createdCustomer = await Customer.create({
       name,
       address,
       phone,
-      email
+      email,
+      userId: decode.id
     });
     return createdCustomer;
   }
@@ -56,7 +60,9 @@ export class CustomerService {
     return customer;
   }
 
-  static async getCustomers(params): Promise<{ count: number, customers: Model<ICustomer, ICustomer>[] }> {
+  static async getCustomers(req: express.Request): Promise<{ count: number, customers: Model<ICustomer, ICustomer>[] }> {
+
+    const params = req.query;
     /*****************************************
       Fiter
     *****************************************/
@@ -70,6 +76,15 @@ export class CustomerService {
     filter['order'] = [['updatedAt', 'DESC']];
     /*****************************************
      Fiter End
+     *****************************************/
+
+    /*****************************************
+     Where
+     *****************************************/
+    const decode: IDecodeToken = utils.Security.decodeToken(req);
+    filter['where'] = { userId: decode.id };
+    /*****************************************
+     Where End
      *****************************************/
     const { count, rows:customers } = await Customer.findAndCountAll(filter);
     if (!customers) {

@@ -4,6 +4,13 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { CustomerService } from '../service/customer.service';
 import { customValidator } from '@utils';
+import { IUser } from '@models';
+import { map } from 'rxjs';
+
+
+
+
+import { HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-add-customer',
@@ -18,6 +25,9 @@ export class AddCustomerComponent implements OnInit {
   submitedForm = signal(false);
   customerService = inject(CustomerService);
   router = inject(Router);
+
+
+  http = inject(HttpClient);
 
   ngOnInit() {
     this.initForm();
@@ -56,7 +66,5 @@ export class AddCustomerComponent implements OnInit {
       phone: new FormControl<number | null>(null, [customValidator.validatePhone()]),
       email: new FormControl<string>('', [customValidator.validateEmail()]),
     });
-
-    this.addForm.valueChanges.subscribe(console.log)
   }
 }
