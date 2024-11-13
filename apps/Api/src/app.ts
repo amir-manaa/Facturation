@@ -48,8 +48,9 @@ export class App {
 
   #connectDB(): void {
     sequelize
-      .sync()
+      //.sync()
       //.sync({ force: true })
+      .sync({ alter: true })
       .then((result) => {
         console.log('DB connected successfully');
       })
