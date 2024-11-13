@@ -17,14 +17,14 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '@services';
 import { ILoginForm } from '@models';
-import { validator } from 'sequelize/types/utils/validator-extras';
+import { customValidator } from '@utils';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         complete: () => {
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('/dashboard');
         },
       });
   }
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = new FormGroup<ILoginForm>({
       email: new FormControl<string>('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, customValidator.validateEmail()],
       }),
       password: new FormControl<string>('', {
         nonNullable: true,
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
   private redirectIfLogged() {
     const isAuth = this.activateRoute.snapshot.data['isAuth'];
     if (!isAuth) {
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/dashboard');
       return;
     }
   }

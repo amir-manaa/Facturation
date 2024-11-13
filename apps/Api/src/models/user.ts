@@ -6,10 +6,11 @@ export const User = sequelize.define(
   'user',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
+      unique: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -37,9 +38,4 @@ export const User = sequelize.define(
       defaultValue: Role.user,
     },
   }
-  // {
-  //   defaultScope: {
-  //     attributes: { exclude: ['password'] },
-  //   }
-  // }
 );

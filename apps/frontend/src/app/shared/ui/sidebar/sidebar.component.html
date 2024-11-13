@@ -1,17 +1,20 @@
-<aside id="logo-sidebar"
-       class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-       aria-label="Sidebar">
-  <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-    <ul class="space-y-2 font-medium">
+<!-- sidebar -->
+<div class="hidden h-full md:flex flex-col w-64 bg-gray-800">
+  <div class="flex items-center justify-center h-16">
+    <div class="flex flex-shrink-0 items-center">
+      <a routerLink="/dashboard"><img class="h-8 w-auto cursor-pointer" src="img/logo.png" alt="Logo"></a>
+    </div>
+  </div>
+  <div class="flex flex-col flex-1 overflow-y-auto">
+    <nav class="flex-1 px-2 py-4 bg-gray-800">
       @for (route of dashboardRoutes; track route) {
-        <li>
+
           <a routerLink="{{route.path}}"
-             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
+             class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
             <mat-icon>{{route.icon}}</mat-icon>
             <span class="ms-3">{{route.label}}</span>
           </a>
-        </li>
       }
-    </ul>
+    </nav>
   </div>
-</aside>
+</div>

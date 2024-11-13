@@ -1,0 +1,48 @@
+<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+  <h1 class="text-3xl font-bold tracking-tight text-gray-900">Ajouter un nouveau client</h1>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="onSubmit()" class="max-w-xl mx-auto">
+  <!-- Name -->
+  <div class="mb-5">
+    <label for="customer-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom de client</label>
+    <input type="text" id="customer-name" formControlName="name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+    @if (submitedForm() || (addForm.get('name')?.errors && (addForm.get('name')?.touched || addForm.get('name')?.dirty))) {
+      @if (form["name"].hasError("required")) {
+        <small class="text-red-700">Veuillez saisir votre adresse e-mail</small>
+      }
+    }
+  </div>
+  <!-- address -->
+  <div class="mb-5">
+    <label for="customer-address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adresse</label>
+    <textarea id="customer-address" formControlName="address" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"></textarea>
+    @if (submitedForm() || (addForm.get('address')?.errors && (addForm.get('address')?.touched || addForm.get('address')?.dirty))) {
+      @if (form["address"].hasError("required")) {
+        <small class="text-red-700">Veuillez saisir votre l'adresse</small>
+      }
+    }
+  </div>
+  <!-- Phone -->
+  <div class="mb-5">
+    <label for="customer-phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de téléphone</label>
+    <input type="number" id="customer-phone" formControlName="phone" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+    @if ((submitedForm() && form["phone"].value !== null) || (form["phone"].value !== null && (addForm.get('phone')?.touched || addForm.get('phone')?.dirty))) {
+      @if (addForm.get('phone')?.hasError("invalidPhone")) {
+        <small class="text-red-700">Numéro de téléphone est invalide</small>
+      }
+    }
+  </div>
+  <!-- Email -->
+  <div class="mb-5">
+    <label for="customer-email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adresse e-mail</label>
+    <input type="text" id="customer-email" formControlName="email" (keydown.space)="$event.preventDefault();" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="adresse@email.com" required />
+    @if ((submitedForm() && form["email"].value) || (form["email"].value && (addForm.get('email')?.touched || addForm.get('email')?.dirty))) {
+      @if (addForm.get('email')?.hasError("invalidEmail")) {
+        <small class="text-red-700">Adresse e-mail est invalide</small>
+      }
+    }
+  </div>
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <button (click)="resetForm()" type="button" class="text-sm/6 font-semibold text-gray-900">Annuler</button>
+    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Enregistrer</button>
+  </div></form>

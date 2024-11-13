@@ -25,6 +25,18 @@
       "@features": [
         "src/app/features"
       ],
+      "@httpInterceptor": [
+        "src/app/core/http"
+      ],
+      "@utils": [
+        "src/app/shared/utils"
+      ],
+      "@class": [
+        "src/app/core/class"
+      ],
+      "@sharedComponents": [
+        "src/app/shared/components"
+      ],
       "*": [
         "node_modules/*"
       ]

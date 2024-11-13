@@ -1,48 +1,42 @@
 import {
   Injectable,
-  inject,
-  afterNextRender,
-  Injector,
-  signal,
-  PLATFORM_ID,
+  inject, WritableSignal, signal
 } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { IUser, IApiResponse } from '@models';
-import { LocalStorageService } from '@services';
-import { isPlatformBrowser } from '@angular/common';
+import { IUser } from '@models';
+import { LocalStorageService, UserService } from '@services';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly platform = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly localStorageService = inject(LocalStorageService);
-  private readonly localStorageKeyName = 'fact_currentUser_development';
 
-  private readonly currentUserSubject =
-    new BehaviorSubject<IApiResponse | null>(null);
-  currentUser$ = this.currentUserSubject.asObservable();
+  private readonly localStorageKeyName = 'fact_currentUser_development';
+  private readonly API_URL = '/api/v1';
+  private profileLoaded: WritableSignal<boolean> = signal(false);
+
+  private readonly currentUserSubject = new BehaviorSubject<Partial<IUser> | null>(null);
+  currentUser$: Observable<Partial<IUser>|null> = this.currentUserSubject.asObservable();
 
   login(email: string, password: string): Observable<IUser> {
     return this.http
-      .post<IApiResponse>('/api/v1/user/auth', {
+      .post<IUser>(`${this.API_URL}/user/auth`, {
         email: email,
         password: password,
       })
       .pipe(
-        map((response) => {
-          const user = response.data.user;
-          const accessToken = response.data.accessToken;
-          if (user && accessToken) {
+        map((user) => {
+          if (user) {
             this.localStorageService
-              .setItem(
-                this.localStorageKeyName,
-                JSON.stringify({ ...user, accessToken })
-              )
+              .setItem(this.localStorageKeyName, user)
               .then(() => {
-                this.currentUserSubject.next(response);
+                this.currentUserSubject.next(user);
+                this.profileLoaded.set(true);
               });
           }
           return user;
@@ -53,13 +47,43 @@ export class AuthService {
   logout(): void {
     this.currentUserSubject.next(null);
     this.localStorageService.removeItem(this.localStorageKeyName);
+    window.location.href = '/login';
+  }
+
+  refreshUserProfile(): Observable<Partial<IUser>> {
+    if (this.isUserLoggedIn()) {
+      return this.http.get<Partial<IUser>>(`${this.API_URL}/user`).pipe(
+        map((user) => {
+          console.log(user)
+          this.profileLoaded.set(true);
+          this.currentUserSubject.next(user)
+          return user
+        }),
+      )
+    } else {
+      this.currentUserSubject.next(null);
+      return of({});
+    }
+  }
+
+  getAccessToken(): string | null {
+    const currentUser = this.getCurrentUser();
+    if (currentUser) {
+      return currentUser.token;
+    }
+    return null;
+  }
+
+  isProfileLoaded(): boolean {
+    return this.profileLoaded();
   }
 
   isUserLoggedIn(): boolean {
     return this.getCurrentUser() !== null;
   }
 
-  getCurrentUser(): any {
-    return this.localStorageService.getItem(this.localStorageKeyName);
+  getCurrentUser(): IUser {
+    let localStorageItem = this.localStorageService.getItem(this.localStorageKeyName) as string;
+    return JSON.parse(localStorageItem);
   }
 }

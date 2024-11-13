@@ -7,6 +7,7 @@ const app = new App(
     new controllers.AdminController(),
     new controllers.InvoiceController(),
     new controllers.InvoiceItemController(),
+    new controllers.CustomerController(),
   ],
   parseInt(process.env.APP_PORT)
 );

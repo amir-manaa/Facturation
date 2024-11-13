@@ -4,6 +4,7 @@ import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE } from '../constants';
 import { Security, RequestValidator } from '../utils';
 import { User } from '../models';
 import { IUser } from '../shared/interfaces';
+import * as utils from '../utils';
 
 export class UserService {
   private static async checkIfUserExists(email: string): Promise<boolean> {
@@ -59,13 +60,15 @@ export class UserService {
         APP_ERROR_MESSAGE.invalidCredentials
       );
     }
-    const accessToken = Security.generateAccessToken(
+    const token = Security.generateAccessToken(
+      user.dataValues.id,
       email,
       user.dataValues.role
     );
     delete user.dataValues.password;
-    // return {...user.toJSON(), accessToken}
-    return { user: user.dataValues, accessToken };
+    delete user.dataValues.role;
+    user.dataValues['token'] = token;
+    return user
   }
 
   static async getUserById(id: string): Promise<Model<IUser>> {
@@ -75,13 +78,30 @@ export class UserService {
         APP_ERROR_MESSAGE.serverError_500
       );
     }
-    const user = await User.findByPk(parseInt(id));
+    const user = await User.findByPk(id);
     if (!user) {
       throw new HttpException(
         HTTP_RESPONSE_CODE.NOT_FOUND_404,
         APP_ERROR_MESSAGE.userDoesntExist
       );
     }
+    return user;
+  }
+
+  static async getUserProfile(req): Promise<Model<Partial<IUser>>> {
+    const decode = utils.Security.decodeToken(req);
+    const email: string = decode.email;
+    const user: Model<IUser> = await User.findOne({
+      where: { email }
+    });
+    if (!user) {
+      throw new HttpException(
+        HTTP_RESPONSE_CODE.NOT_FOUND_404,
+        APP_ERROR_MESSAGE.userDoesntExist
+      );
+    }
+    delete user.dataValues.password;
+    delete user.dataValues.role;
     return user;
   }
 
@@ -123,7 +143,7 @@ export class UserService {
     id: string,
     props: Omit<IUser, 'id'>
   ): Promise<[number]> {
-    const user = await User.findByPk(parseInt(id));
+    const user = await User.findByPk(id);
     if (!user) {
       throw new HttpException(
         HTTP_RESPONSE_CODE.NOT_FOUND_404,

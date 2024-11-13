@@ -69,6 +69,7 @@ export class AdminService {
       );
     }
     const accessToken = Security.generateAccessToken(
+      admin.dataValues.id,
       email,
       admin.dataValues.role
     );

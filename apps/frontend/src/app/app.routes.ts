@@ -1,8 +1,14 @@
 import { Route } from '@angular/router';
-import { authGuard } from '@guards';
+import { authGuard, initGuard } from '@guards';
 import { authResolver } from '@resolvers';
+import { LoadingPageComponent } from '@sharedComponents';
 
 export const appRoutes: Route[] = [
+  {
+    path: 'loading',
+    component: LoadingPageComponent,
+    canActivate: [authGuard],
+  },
   {
     path: 'login',
     loadComponent: () =>
@@ -15,7 +21,7 @@ export const appRoutes: Route[] = [
     path: '',
     loadChildren: () =>
       import('./features/home/home.routes').then((m) => m.homeRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, initGuard],
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];

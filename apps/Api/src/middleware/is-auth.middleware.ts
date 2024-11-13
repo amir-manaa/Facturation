@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE } from '../constants';
+import * as utils from './../utils';
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = utils.Security.getTokenFromRequest(req);
 
   if (token == null)
     return res
