@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
@@ -13,9 +13,15 @@ import {MatExpansionModule} from '@angular/material/expansion';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
+  readonly panelOpenState = signal(false);
   @Input({ required: true }) dashboardRoutes!: {
-    path: string;
+    path?: string;
     label: string;
     icon: string;
+    children?: {
+      path: string;
+      label: string;
+      icon: string;
+    }[];
   }[];
 }
