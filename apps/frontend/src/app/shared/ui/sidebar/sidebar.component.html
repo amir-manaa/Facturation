@@ -103,11 +103,6 @@
 
 
     <nav class="flex-1 px-2 py-4 bg-gray-800">
-      <a routerLink="/"
-         class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700">
-        <mat-icon>Home</mat-icon>
-        <span class="ms-3">home</span>
-      </a>
       <mat-accordion displayMode="flat">
         @for (route of dashboardRoutes; track route) {
           <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)"
@@ -133,7 +128,7 @@
             @if (route.children) {
               @for (childRoute of route.children; track childRoute) {
                 <a routerLink="{{childRoute.path}}"
-                   class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 text-white pl-4 pb-1">
+                   class="flex items-center px-4 py-2 hover:bg-gray-700 text-white pl-4 pb-1">
                   <mat-icon>{{childRoute.icon}}</mat-icon>
                   <span class="ms-3">{{childRoute.label}}</span>
                 </a>

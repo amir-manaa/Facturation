@@ -18,10 +18,10 @@ export const appRoutes: Route[] = [
     resolve: { isAuth: authResolver },
   },
   {
-    path: '',
+    path: 'dashboard',
     loadChildren: () =>
       import('./features/home/home.routes').then((m) => m.homeRoutes),
     canActivate: [authGuard, initGuard],
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
