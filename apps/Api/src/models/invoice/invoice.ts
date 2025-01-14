@@ -3,10 +3,11 @@ import { sequelize } from '../../utils';
 
 export const Invoice = sequelize.define('invoice', {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
     primaryKey: true,
+    unique: true,
   },
   totalNoTax: {
     type: DataTypes.FLOAT,

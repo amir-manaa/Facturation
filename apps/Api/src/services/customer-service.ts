@@ -40,7 +40,7 @@ export class CustomerService {
       );
     }
     const customer = await Customer.findByPk(id);
-    if (!Customer) {
+    if (!customer) {
       throw new HttpException(
         HTTP_RESPONSE_CODE.NOT_FOUND_404,
         APP_ERROR_MESSAGE.userDoesntExist

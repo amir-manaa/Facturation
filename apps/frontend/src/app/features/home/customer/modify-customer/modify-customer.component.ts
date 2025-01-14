@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal, inject, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CustomerService } from '../service/customer.service';
 import { customValidator } from '@utils';
 import { ICustomer } from '../models';
@@ -9,7 +9,7 @@ import { ICustomer } from '../models';
 @Component({
   selector: 'app-modify-customer',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './modify-customer.component.html',
   styleUrl: './modify-customer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +19,7 @@ export class ModifyCustomerComponent {
   router = inject(Router);
 
   modifyForm!: FormGroup;
-  id: string   = inject(ActivatedRoute).snapshot.params['id'];
+  id: string = inject(ActivatedRoute).snapshot.params['id'];
   submitedForm: WritableSignal<boolean> = signal(false);
   customer!: ICustomer;
 
@@ -75,14 +75,17 @@ export class ModifyCustomerComponent {
   }
 
   private getCustomer(id: string): void {
-    this.customerService.getOne(id).subscribe(customer => {
-      this.customer = customer;
-      this.modifyForm.setValue({
-        name: customer.name,
-        address: customer.address,
-        phone: customer.phone,
-        email: customer.email,
-      });
-    })
+    this.customerService.getOne(id).subscribe({
+      next: (customer: ICustomer) => {
+        this.customer = customer;
+        this.modifyForm.setValue({
+          name: customer.name,
+          address: customer.address,
+          phone: customer.phone,
+          email: customer.email,
+        });
+      },
+      error: () => this.router.navigateByUrl('/customers'),
+    });
   }
 }

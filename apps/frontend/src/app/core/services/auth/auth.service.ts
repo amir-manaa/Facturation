@@ -54,7 +54,6 @@ export class AuthService {
     if (this.isUserLoggedIn()) {
       return this.http.get<Partial<IUser>>(`${this.API_URL}/user`).pipe(
         map((user) => {
-          console.log(user)
           this.profileLoaded.set(true);
           this.currentUserSubject.next(user)
           return user
