@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { ISidebarRouter } from './sidebar-routes.model';
 
 @Component({
   selector: 'ui-sidebar',
@@ -14,14 +15,5 @@ import {MatExpansionModule} from '@angular/material/expansion';
 })
 export class SidebarComponent {
   readonly panelOpenState = signal(false);
-  @Input({ required: true }) dashboardRoutes!: {
-    path?: string;
-    label: string;
-    icon: string;
-    children?: {
-      path: string;
-      label: string;
-      icon: string;
-    }[];
-  }[];
+  @Input({ required: true }) dashboardRoutes!: ISidebarRouter[];
 }

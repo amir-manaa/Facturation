@@ -37,8 +37,19 @@ export class HomeComponent {
     },
     {
       label: 'Factures',
-      path: 'invoices',
-      icon: 'receipt_long'
+      icon: 'receipt_long',
+      children: [
+        {
+          label: 'Listes des factures',
+          path: '/invoices',
+          icon: 'person_add'
+        },
+        {
+          label: 'Ajouter une facture',
+          path: '/invoices/add',
+          icon: 'person_add'
+        }
+      ]
     },
   ]
 }
