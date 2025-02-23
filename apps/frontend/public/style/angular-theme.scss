@@ -1,0 +1,12 @@
+html {
+  --mat-expansion-container-background-color: rgb(31 41 55);
+  --mat-expansion-header-text-color: white;
+  --mat-expansion-header-indicator-color: white;
+}
+
+.mat-expansion-panel-header {
+  padding: 0 20px 0 0  !important;
+}
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: none !important;
+}

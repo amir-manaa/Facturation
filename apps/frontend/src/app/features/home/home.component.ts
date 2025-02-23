@@ -21,18 +21,35 @@ export class HomeComponent {
     },
     {
       label: 'Clients',
-      path: 'customers',
-      icon: 'person_search'
-    },
-    {
-      label: 'Ajouter un client',
-      path: '/customers/add',
-      icon: 'person_add'
+      icon: 'person_search',
+      children: [
+        {
+          label: 'Listes des clients',
+          path: '/customers',
+          icon: 'person_add'
+        },
+        {
+          label: 'Ajouter un client',
+          path: '/customers/add',
+          icon: 'person_add'
+        }
+      ]
     },
     {
       label: 'Factures',
-      path: 'invoices',
-      icon: 'receipt_long'
+      icon: 'receipt_long',
+      children: [
+        {
+          label: 'Listes des factures',
+          path: '/invoices',
+          icon: 'person_add'
+        },
+        {
+          label: 'Ajouter une facture',
+          path: '/invoices/add',
+          icon: 'person_add'
+        }
+      ]
     },
   ]
 }

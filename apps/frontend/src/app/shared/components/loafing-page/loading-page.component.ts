@@ -7,7 +7,7 @@ import { AuthService } from '@services';
   selector: 'app-loading-page',
   standalone: true,
   imports: [CommonModule],
-  template: `<p>loading-page works!</p>`,
+  template: ``,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
