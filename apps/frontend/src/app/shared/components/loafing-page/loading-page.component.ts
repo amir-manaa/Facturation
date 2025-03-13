@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@services';
 
 @Component({
-  selector: 'app-loading-page',
-  standalone: true,
-  imports: [CommonModule],
-  template: ``,
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-loading-page',
+    imports: [CommonModule],
+    template: ``,
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingPageComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);

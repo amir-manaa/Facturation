@@ -13,12 +13,11 @@ import { helper } from '@utils';
 
 
 @Component({
-  selector: 'app-customer',
-  standalone: true,
-  imports: [CommonModule, MatTooltipModule, PaginatorComponent, RouterLink],
-  templateUrl: './customers.component.html',
-  styleUrl: './customers.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-customer',
+    imports: [CommonModule, MatTooltipModule, PaginatorComponent, RouterLink],
+    templateUrl: './customers.component.html',
+    styleUrl: './customers.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersComponent implements OnInit {
   private readonly customerService = inject(CustomerService);

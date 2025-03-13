@@ -31,6 +31,14 @@
     },
     {
       "cli": "nx",
+      "version": "20.0.0-beta.5",
+      "description": "replace getJestProjects with getJestProjectsAsync",
+      "implementation": "./src/migrations/update-20-0-0/replace-getJestProjects-with-getJestProjectsAsync",
+      "package": "@nx/jest",
+      "name": "replace-getJestProjects-with-getJestProjectsAsync"
+    },
+    {
+      "cli": "nx",
       "version": "20.2.0-beta.2",
       "description": "Update the ModuleFederationConfig import use @nx/module-federation.",
       "factory": "./src/migrations/update-20-2-0/migrate-mf-imports-to-new-package",
@@ -124,14 +132,6 @@
       "factory": "./src/migrations/update-20-5-0/update-angular-cli",
       "package": "@nx/angular",
       "name": "update-angular-cli-version-19-2-0"
-    },
-    {
-      "cli": "nx",
-      "version": "20.0.0-beta.5",
-      "description": "replace getJestProjects with getJestProjectsAsync",
-      "implementation": "./src/migrations/update-20-0-0/replace-getJestProjects-with-getJestProjectsAsync",
-      "package": "@nx/jest",
-      "name": "replace-getJestProjects-with-getJestProjectsAsync"
     },
     {
       "version": "19.0.0",

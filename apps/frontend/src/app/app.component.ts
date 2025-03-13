@@ -4,11 +4,10 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { LoaderComponent } from '@sharedComponents';
 
 @Component({
-  standalone: true,
-  imports: [RouterModule, RouterOutlet, LoaderComponent],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    imports: [RouterModule, RouterOutlet, LoaderComponent],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   private readonly platform = inject(PLATFORM_ID);

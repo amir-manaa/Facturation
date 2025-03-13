@@ -5,12 +5,11 @@ import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { SidebarComponent } from '../../shared/ui/sidebar/sidebar.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+    selector: 'app-home',
+    imports: [CommonModule, RouterOutlet, HeaderComponent, SidebarComponent],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class HomeComponent {
   dashboardRoutes = [
