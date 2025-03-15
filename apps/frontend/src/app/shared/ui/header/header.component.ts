@@ -10,18 +10,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { IUser } from '@models';
 
 @Component({
-  selector: 'ui-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-  ],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ui-header',
+    imports: [
+        CommonModule,
+        RouterLink,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+    ],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
   private readonly authService = inject(AuthService);

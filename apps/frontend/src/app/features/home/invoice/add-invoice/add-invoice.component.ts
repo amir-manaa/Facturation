@@ -6,12 +6,11 @@ import { ICustomerApiResponse } from '../../customer/models';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-add-invoice',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './add-invoice.component.html',
-  styleUrl: './add-invoice.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-add-invoice',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './add-invoice.component.html',
+    styleUrl: './add-invoice.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddInvoiceComponent {
   invoiceService = inject(InvoiceService);

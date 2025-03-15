@@ -7,13 +7,12 @@ import { PaginatorI18n } from './Paginator-i18n';
 import { IUser } from '@models';
 
 @Component({
-  selector: 'app-paginator',
-  standalone: true,
-  imports: [CommonModule, MatPaginatorModule],
-  templateUrl: './paginator.component.html',
-  styleUrl: './paginator.component.scss',
-  providers: [{ provide: MatPaginatorIntl, useClass: PaginatorI18n }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-paginator',
+    imports: [CommonModule, MatPaginatorModule],
+    templateUrl: './paginator.component.html',
+    styleUrl: './paginator.component.scss',
+    providers: [{ provide: MatPaginatorIntl, useClass: PaginatorI18n }],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginatorComponent implements OnInit {
   @Input({ required: true }) length!: number;

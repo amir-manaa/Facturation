@@ -13,12 +13,11 @@ import {MatIconModule} from '@angular/material/icon';
 import { HttpClient} from '@angular/common/http';
 
 @Component({
-  selector: 'app-add-customer',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, RouterLink],
-  templateUrl: './add-customer.component.html',
-  styleUrl: './add-customer.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-add-customer',
+    imports: [CommonModule, ReactiveFormsModule, MatIconModule, RouterLink],
+    templateUrl: './add-customer.component.html',
+    styleUrl: './add-customer.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddCustomerComponent implements OnInit {
   addForm!: FormGroup;
