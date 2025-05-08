@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService, UserService } from '@services';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { IUser } from '@models';
     selector: 'ui-header',
     imports: [
         CommonModule,
-        RouterLink,
+        RouterModule,
         MatButtonModule,
         MatMenuModule,
         MatIconModule,
