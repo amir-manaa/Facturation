@@ -7,12 +7,11 @@ import { customValidator } from '@utils';
 import { ICustomer } from '../models';
 
 @Component({
-  selector: 'app-modify-customer',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './modify-customer.component.html',
-  styleUrl: './modify-customer.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-modify-customer',
+    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    templateUrl: './modify-customer.component.html',
+    styleUrl: './modify-customer.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModifyCustomerComponent {
   customerService = inject(CustomerService);
