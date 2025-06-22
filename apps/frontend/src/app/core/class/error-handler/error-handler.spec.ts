@@ -1,7 +1,7 @@
-import { ErrorHandler } from './error-handler';
+import { GlobalErrorHandler } from './error-handler';
 
-describe('ErrorHandler', () => {
+describe('GlobalErrorHandler', () => {
   it('should create an instance', () => {
-    expect(new ErrorHandler()).toBeTruthy();
+    expect(new GlobalErrorHandler()).toBeTruthy();
   });
 });

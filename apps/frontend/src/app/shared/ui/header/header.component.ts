@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService, UserService } from '@services';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +12,6 @@ import { IUser } from '@models';
     selector: 'ui-header',
     imports: [
         CommonModule,
-        RouterModule,
         MatButtonModule,
         MatMenuModule,
         MatIconModule,
@@ -25,7 +23,6 @@ import { IUser } from '@models';
 export class HeaderComponent {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
-  private readonly router = inject(Router);
   currentUser$: Observable<IUser | null> = this.userService.currentUser$;
 
   logout() {
