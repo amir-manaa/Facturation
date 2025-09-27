@@ -6,8 +6,8 @@ import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE } from '../constants';
 import { isAuth, isAdmin } from '../middleware';
 
 export class AdminController {
-  #path = '/api/v1';
-  #router = express.Router();
+  readonly #path = '/api/v1';
+  readonly #router = express.Router();
 
   constructor() {
     this.initRoutes();

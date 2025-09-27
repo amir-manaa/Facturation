@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {MatPaginatorIntl, PageEvent, MatPaginatorModule} from '@angular/material/paginator';
 import { GlobalConstants } from '@utils';
 import { PaginatorI18n } from './Paginator-i18n';
-import { IUser } from '@models';
 
 @Component({
     selector: 'app-paginator',
@@ -15,8 +14,8 @@ import { IUser } from '@models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginatorComponent implements OnInit {
-  @Input({ required: true }) length!: number;
-  @Output() pageEvent = new EventEmitter<PageEvent>();
+  length = input.required<number>();
+  pageEvent = output<PageEvent>();
 
   private readonly cd = inject(ChangeDetectorRef)
   private readonly activatedRoute = inject(ActivatedRoute);

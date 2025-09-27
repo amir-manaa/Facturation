@@ -62,7 +62,7 @@ export class CustomersComponent implements OnInit {
     });
   }
 
-  private getAll() {
+  public getAll() {
     this.activatedRoute.queryParams
       .pipe(
         switchMap((params) => {

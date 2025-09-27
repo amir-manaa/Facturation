@@ -7,8 +7,8 @@ import { sequelize } from './utils';
 import { errorHandlerMiddleware, get404Middleware } from './middleware';
 
 export class App {
-  #app: express.Express;
-  #port: number;
+  readonly #app: express.Express;
+  readonly #port: number;
 
   constructor(controllers: unknown, port: number) {
     this.#app = express();
