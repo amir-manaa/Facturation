@@ -2,7 +2,9 @@
   "name": "@./source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "lintfront": "nx lint frontend"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "19.2.2",

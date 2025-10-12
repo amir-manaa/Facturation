@@ -34,4 +34,79 @@
       "rules": {}
     }
   ]
+//  "overrides": [
+//    {
+//      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+//      "rules": {
+//        "@nx/enforce-module-boundaries": [
+//          "error",
+//          {
+//            "enforceBuildableLibDependency": true,
+//            "allow": [],
+//            "depConstraints": [
+//              {
+//                "sourceTag": "*",
+//                "onlyDependOnLibsWithTags": ["*"]
+//              }
+//            ]
+//          }
+//        ],
+//        "no-restricted-imports": [
+//          "error",
+//          {
+//            "patterns": [
+//              {
+//                "group": ["@sample-app/**/src"],
+//                "message": "Imports from /src are not allowed. Export deps from the /src/index.ts instead."
+//              }
+//            ]
+//          }
+//        ],
+//        "no-console": ["warn", { "allow": ["warn", "error"] }]
+//      }
+//    },
+//    {
+//      "files": ["*.ts", "*.tsx"],
+//      "extends": ["plugin:@nx/typescript"],
+//      "rules": {
+//        "@typescript-eslint/explicit-function-return-type": ["warn", { "allowExpressions": true }],
+//        "@typescript-eslint/no-unused-vars": [
+//          "error",
+//          {
+//            "args": "all",
+//            "argsIgnorePattern": "^_",
+//            "caughtErrors": "all",
+//            "caughtErrorsIgnorePattern": "^_",
+//            "destructuredArrayIgnorePattern": "^_"
+//          }
+//        ],
+//        "@typescript-eslint/explicit-member-accessibility": [
+//          "warn",
+//          { "accessibility": "no-public" }
+//        ]
+//      }
+//    },
+//    {
+//      "files": ["*.js", "*.jsx"],
+//      "extends": ["plugin:@nx/javascript"],
+//      "rules": {
+//        "no-unused-vars": "warn"
+//      }
+//    },
+//    {
+//      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
+//      "env": {
+//        "jest": true
+//      },
+//      "rules": {}
+//    },
+//    {
+//      "files": ["*.html"],
+//      "extends": ["plugin:@nx/angular-template"],
+//      "rules": {
+//        "@angular-eslint/template/prefer-ngsrc": "error",
+//        "@angular-eslint/template/attributes-order": "warn"
+//      }
+//    }
+//  ]
 }
