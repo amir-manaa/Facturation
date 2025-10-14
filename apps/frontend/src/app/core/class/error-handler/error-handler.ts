@@ -17,7 +17,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       return;
     }
     if (error instanceof HttpErrorResponse) {
-      this.openSnackBar(error);
+      return this.openSnackBar(error);
     }
   }
 
