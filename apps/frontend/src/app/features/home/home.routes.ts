@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { authGuard } from '@guards';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { CustomersComponent } from './customer/customers/customers.component';
-import { ModifyCustomerComponent } from './customer/modify-customer/modify-customer.component';
-import { InvoicesComponent } from './invoice/invoices/invoices.component';
-import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
-import { AddInvoiceComponent } from './invoice/add-invoice/add-invoice.component';
+import { DashboardComponent } from '../dashboard/dashboard.component';
+import { CustomersComponent } from '../customer/customers/customers.component';
+import { ModifyCustomerComponent } from '../customer/modify-customer/modify-customer.component';
+import { InvoicesComponent } from '../invoice/invoices/invoices.component';
+import { AddCustomerComponent } from '../customer/add-customer/add-customer.component';
+import { AddInvoiceComponent } from '../invoice/add-invoice/add-invoice.component';
 
 export const homeRoutes: Route[] = [
   {
