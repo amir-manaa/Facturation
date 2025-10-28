@@ -34,3 +34,5 @@ export const APP_ERROR_MESSAGE = {
   emptyReqBody: 'The request body cannot be empty',
   accessDenied: 'Access denied',
 };
+
+export const LIST_DEFAULT_LIMIT = 7;

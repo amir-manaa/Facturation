@@ -1,15 +1,14 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit, signal, WritableSignal, ViewChild } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, WritableSignal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CustomerService } from '../service/customer.service';
 import { ICustomer } from '../models';
 import { ConfirmDialogComponent, PaginatorComponent } from '@sharedComponents';
 import { PageEvent } from '@angular/material/paginator';
-import { GlobalConstants } from '@utils';
-import { switchMap } from 'rxjs';
 import { helper } from '@utils';
+import { CustomersFacade } from '../facade/customers.facade';
 
 
 @Component({
@@ -17,21 +16,18 @@ import { helper } from '@utils';
     imports: [CommonModule, MatTooltipModule, PaginatorComponent, RouterLink],
     templateUrl: './customers.component.html',
     styleUrl: './customers.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [CustomersFacade],
 })
-export class CustomersComponent implements OnInit {
+export class CustomersComponent {
   private readonly customerService = inject(CustomerService);
   private readonly dialog = inject(MatDialog);
-  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  protected readonly customersFacade = inject(CustomersFacade);
 
   @ViewChild(PaginatorComponent) pagenator!: PaginatorComponent;
   customers: WritableSignal<ICustomer[]> = signal([]);
   totalCount: WritableSignal<number> = signal(0);
-
-  ngOnInit() {
-    this.getAll();
-  }
 
   onPageChanged(event: PageEvent) {
     const urlWithoutParams = helper.urlWithoutParams(this.router);
@@ -60,20 +56,5 @@ export class CustomersComponent implements OnInit {
         });
       }
     });
-  }
-
-  public getAll() {
-    this.activatedRoute.queryParams
-      .pipe(
-        switchMap((params) => {
-          const limit = params['limit'] || GlobalConstants.pageSize;
-          const apiParams = { limit, ...params };
-          return this.customerService.getAll(apiParams);
-        })
-      )
-      .subscribe((response) => {
-        this.totalCount.set(response.totalCount);
-        this.customers.set(response.customers);
-      });
   }
 }
