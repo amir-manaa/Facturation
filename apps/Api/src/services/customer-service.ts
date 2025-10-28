@@ -1,7 +1,7 @@
 import { Model } from 'sequelize';
 import * as express from 'express';
 import { HttpException } from '../exceptions';
-import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE } from '../constants';
+import { HTTP_RESPONSE_CODE, APP_ERROR_MESSAGE, LIST_DEFAULT_LIMIT } from '../constants';
 import { Customer } from '../models';
 import { ICustomer, IDecodeToken } from '../shared/interfaces';
 import * as utils from '../utils';
@@ -63,15 +63,15 @@ export class CustomerService {
   static async getCustomers(req: express.Request): Promise<{ count: number, customers: Model<ICustomer, ICustomer>[] }> {
 
     const params = req.query;
+    console.log('back :', Number(params.limit) * Number(params.pageIndex));
     /*****************************************
       Fiter
     *****************************************/
     const filter =  {};
-    if (params.limit) {
-      filter['limit'] = Number(params.limit);
-    }
+    filter['limit'] = Number(params.limit) || LIST_DEFAULT_LIMIT;
+
     if (params.pageIndex) {
-      filter['offset'] = Number(params.limit) * Number(params.pageIndex);
+      filter['offset'] = (Number(params.limit) || LIST_DEFAULT_LIMIT) * Number(params.pageIndex);
     }
     filter['order'] = [['updatedAt', 'DESC']];
     /*****************************************
