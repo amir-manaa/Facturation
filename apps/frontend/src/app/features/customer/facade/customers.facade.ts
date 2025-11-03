@@ -1,11 +1,11 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { customersStore } from '../../../shared/stores/customers/customers.store';
+import { CustomersStore } from '../../../shared/stores/customers/customers.store';
 import { GetCustomersPayload } from '../models';
 
 @Injectable()
 export class CustomersFacade {
-  private readonly customersStore = inject(customersStore);
+  private readonly customersStore = inject(CustomersStore);
 
   private readonly route = inject(ActivatedRoute);
 

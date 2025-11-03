@@ -26,7 +26,7 @@ export const initialState: ICustomersState = {
   customers: [],
 };
 
-export const customersStore = signalStore(
+export const CustomersStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withStorageSync({

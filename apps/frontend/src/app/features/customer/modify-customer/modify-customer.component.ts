@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { CustomerService } from '../service/customer.service';
 import { customValidator } from '@utils';
 import { ICustomer } from '../models';
+import { CustomersStore } from '../../../shared/stores/customers/customers.store';
 
 @Component({
     selector: 'app-modify-customer',
@@ -15,6 +16,7 @@ import { ICustomer } from '../models';
 })
 export class ModifyCustomerComponent {
   customerService = inject(CustomerService);
+  customersStore = inject(CustomersStore);
   router = inject(Router);
 
   modifyForm!: FormGroup;
