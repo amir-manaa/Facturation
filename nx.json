@@ -39,7 +39,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/Api-e2e/**/*"]
+      "exclude": ["apps/Api-e2e/**/*", "apps/nest-api-e2e/**/*"]
     },
     {
       "plugin": "@nx/storybook/plugin",
@@ -48,6 +48,17 @@
         "buildStorybookTargetName": "build-storybook",
         "testStorybookTargetName": "test-storybook",
         "staticStorybookTargetName": "static-storybook"
+      }
+    },
+    {
+      "plugin": "@nx/webpack/plugin",
+      "options": {
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "previewTargetName": "preview",
+        "buildDepsTargetName": "build-deps",
+        "watchDepsTargetName": "watch-deps",
+        "serveStaticTargetName": "serve-static"
       }
     }
   ],
