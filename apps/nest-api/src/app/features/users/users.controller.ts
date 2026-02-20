@@ -24,7 +24,7 @@ export class UsersController {
 
   @Get()
   findAll() {
-    return this.usersService.findAll()gi;
+    return this.usersService.findAll();
     //throw new NotFoundException('Aucun utilisateur trouvé');
   }
 
