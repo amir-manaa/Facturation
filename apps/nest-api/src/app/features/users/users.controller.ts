@@ -5,7 +5,9 @@ import {
   NotFoundException,
   Param,
   ParseIntPipe,
+  ParseUUIDPipe,
   Post,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,30 +18,35 @@ import {
 } from '@users/schemas/user-response.schema';
 import { ZodValidationPipe } from '@common/pipes/zod-validation.pipe';
 import { ConfigService } from '@nestjs/config';
-
+import { ForbiddenException } from '@common/exceptions/forbidden.exception';
+import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
+import { UserResponseDto } from '@users/dto/user-response.dto';
+import { CreateUserDto } from '@users/dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService, private configService: ConfigService) {}
+  constructor(
+    private usersService: UsersService,
+    private configService: ConfigService
+  ) {}
 
   @Get()
-  findAll() {
+  // we can use filter here with UserFilters, it's like @Catch
+  // @UseFilters(new HttpExceptionFilter())
+  findAll(): Promise<UserResponseDto[]> {
     return this.usersService.findAll();
-    //throw new NotFoundException('Aucun utilisateur trouvé');
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.usersService.findOne(id);
-    //throw new NotFoundException('Aucun utilisateur trouvé');
   }
 
   @Post()
+  // or just create(@Body() userParams: CreateUserDto) ... dto validation, not zod validation
   @UsePipes(new ZodValidationPipe(userParamsSchema))
-  create(@Body() userParams: UserParams) {
-    console.log('controller : ', userParams);
-    console.log('controller : ', typeof  userParams.phone);
-    console.log('controller : ', this.configService.get('DB_HOST'));
-    this.usersService.createOne(userParams);
+  async create(@Body() userParams: CreateUserDto): Promise<CreateUserDto> {
+    // console.log('controller : ', this.configService.get('DB_HOST'));
+    return await this.usersService.createOne(userParams);
   }
 }

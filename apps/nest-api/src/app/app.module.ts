@@ -11,6 +11,8 @@ import { UsersModule } from '@users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbModule } from '@common/modules/db.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
 
 @Module({
   imports: [
@@ -22,7 +24,15 @@ import { DbModule } from '@common/modules/db.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [
+    AppService,
+    ConfigService,
+    // here we also add filter globally
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

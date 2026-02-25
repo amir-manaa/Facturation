@@ -1,4 +1,4 @@
-import { UserRole } from '@common/models/enums/user-role.enum';
+import { Role } from '@common/models/enums/role.enum';
 
 export interface IUser {
   id: string;
@@ -8,5 +8,5 @@ export interface IUser {
   address: string;
   phone: string;
   password: string;
-  role: UserRole;
+  role: Role;
 }

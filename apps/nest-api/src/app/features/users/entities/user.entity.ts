@@ -1,6 +1,6 @@
 // src/users/entities/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { UserRole } from '@common/models/enums/user-role.enum';
+import { Role } from '@common/models/enums/role.enum';
 
 @Entity('users')
 export class UserEntity {
@@ -25,7 +25,7 @@ export class UserEntity {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ default: UserRole.USER })
+  @Column({ default: Role.USER })
   role: string;
 }
 

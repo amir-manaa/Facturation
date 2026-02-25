@@ -9,8 +9,11 @@ import { IUser } from '@users/models/user';
 import { UserEntity } from '@users/entities/user.entity';
 import { UserParams } from '@users/schemas/user-response.schema';
 import { Repository} from 'typeorm';
-import { UserRole } from '@common/models/enums/user-role.enum';
+import { Role } from '@common/models/enums/role.enum';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from '@users/dto/create-user.dto';
+import { UserResponseDto } from '@users/dto/user-response.dto';
+import { toUserResponse, toUsersResponse } from '@users/mappers/user.mapper';
 
 @Injectable()
 export class UsersService {
@@ -19,14 +22,14 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  async findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<UserResponseDto[]> {
     const users = await this.userRepository.find();
 
     if (!users) {
       throw new NotFoundException();
     }
 
-    return users;
+    return toUsersResponse(users);
 
     //to test error
     //throw new HttpException('test Error', HttpStatus.NOT_FOUND);
@@ -39,20 +42,48 @@ export class UsersService {
     //throw new BadRequestException() ...
   }
 
-  async findOne(id: string): Promise<Omit<UserEntity, 'password'>> {
-    try {
-      const user = await this.userRepository.findOneByOrFail({
-        id,
-      });
-      const { password, ...safeUser } = user;
-      return safeUser;
-    } catch (error) {
-      console.log(error.message);
+  async findOne(id: string): Promise<UserResponseDto> {
+    const user = await this.userRepository.findOne({
+      where: { id }
+    });
+
+    if (!user) {
       throw new NotFoundException('User not found');
     }
+
+    return toUserResponse(user);
   }
 
-  createOne(body: UserParams) {
-    return body;
+  // async createOne(body: UserParams);
+  async createOne(body: CreateUserDto): Promise<UserResponseDto> {
+    const email = body.email;
+    const isEmailExists = await this.emailExists(email);
+
+    if (isEmailExists) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const user = this.userRepository.create(body);
+    const savedUser = await this.userRepository.save(user);
+    return toUserResponse(savedUser);
+
+    // try {
+    //   const user = this.userRepository.create(body);
+    //   return await this.userRepository.save(user);
+    // } catch (error) {
+    //   if (error.code === '23505') {
+    //     throw new BadRequestException({
+    //       message: 'Email already exists',
+    //       error: 'Bad Request',
+    //     });
+    //   }
+    //   throw error;
+    // }
+  }
+
+  private async emailExists(email: string): Promise<boolean> {
+    return await this.userRepository.exists({
+      where: { email },
+    });
   }
 }

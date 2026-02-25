@@ -1,31 +1,16 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
-import { UserRole } from '@common/models/enums/user-role.enum';
-import { IsEmail, IsString, MinLength } from 'class-validator';
-
+import { Role } from '@common/models/enums/role.enum';
+import { IsEmail, IsEnum, IsString, MinLength } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
 export class UserResponseDto {
-  @IsString()
-  id: string;
+  @Expose() id: string;
+  @Expose() email: string;
+  @Expose() firstName: string;
+  @Expose() lastName: string;
+  @Expose() address: string;
+  @Expose() phone: string;
+  @Expose() role: string;
 
-  @IsEmail()
-  @MinLength(8)
-  email: string;
-
-  @IsString()
-  firstName: string;
-
-  @IsString()
-  lastName: string;
-
-  @IsString()
-  address: string;
-
-  @IsString()
-  phone: string;
-
-  @IsString()
-  password: string;
-
-  @IsString()
-  role: string;
+  @Exclude() password: string;
 }
