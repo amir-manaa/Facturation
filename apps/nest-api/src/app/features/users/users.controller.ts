@@ -22,6 +22,7 @@ import { ForbiddenException } from '@common/exceptions/forbidden.exception';
 import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
 import { UserResponseDto } from '@users/dto/user-response.dto';
 import { CreateUserDto } from '@users/dto/create-user.dto';
+import { UuidValidationPipe } from '@common/pipes/uuid-validation.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -38,7 +39,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+  findOne(@Param('id', new UuidValidationPipe()) id: string) {
     return this.usersService.findOne(id);
   }
 
