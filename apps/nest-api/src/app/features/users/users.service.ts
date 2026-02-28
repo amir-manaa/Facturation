@@ -13,7 +13,7 @@ import { Role } from '@common/models/enums/role.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { UserResponseDto } from '@users/dto/user-response.dto';
-import { toUserResponse, toUsersResponse } from '@users/mappers/user.mapper';
+import { toDtoResponse } from '@common/mappers/dto.mapper';
 
 @Injectable()
 export class UsersService {
@@ -29,17 +29,7 @@ export class UsersService {
       throw new NotFoundException();
     }
 
-    return toUsersResponse(users);
-
-    //to test error
-    //throw new HttpException('test Error', HttpStatus.NOT_FOUND);
-    /*
-    throw new BadRequestException('Something bad happened', {
-      cause: new Error(),
-      description: 'Something bad happened',
-    });
-    */
-    //throw new BadRequestException() ...
+    return users.map(toDtoResponse);
   }
 
   async findOne(id: string): Promise<UserResponseDto> {
@@ -51,7 +41,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return toUserResponse(user);
+    return toDtoResponse(user);
   }
 
   // async createOne(body: UserParams);
@@ -65,7 +55,7 @@ export class UsersService {
 
     const user = this.userRepository.create(body);
     const savedUser = await this.userRepository.save(user);
-    return toUserResponse(savedUser);
+    return toDtoResponse(savedUser);
 
     // try {
     //   const user = this.userRepository.create(body);

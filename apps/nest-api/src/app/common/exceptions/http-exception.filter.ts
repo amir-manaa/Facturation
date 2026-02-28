@@ -4,6 +4,7 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -19,10 +20,29 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const httpResponse =
-      exception instanceof HttpException
-        ? exception.message
-        : 'Bad Request';
+    let httpResponse: any;
+    if (exception instanceof HttpException) {
+      const res = exception.getResponse();
+      // getResponse() peut être string ou { message: string | string[] }
+      if (typeof res === 'string') {
+        httpResponse = res;
+      } else if (typeof res === 'object' && res['message']) {
+        httpResponse = res['message'];
+      } else {
+        httpResponse = 'Unknown error';
+      }
+    } else {
+      httpResponse = 'Internal server error';
+    }
+
+    // Log uniquement les erreurs serveur 500+
+    // if (httpStatus >= 500) {
+      Logger.error(
+        `
+        HTTP Status: [ ${httpStatus} ]
+        Error: [ ${JSON.stringify(httpResponse)} ]`
+      );
+    // }
 
     // const status = exception.getStatus(); / for exception: HttpException
 

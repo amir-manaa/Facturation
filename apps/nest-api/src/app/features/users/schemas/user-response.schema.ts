@@ -6,7 +6,7 @@ export const userParamsSchema = z.object({
   lastName: z.string(),
   email: z.string(),
   address: z.string(),
-  password: z.string(),
+  password: z.string().min(8),
   phone: z.coerce.number(),
 });
 

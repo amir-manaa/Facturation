@@ -44,8 +44,10 @@ export class UsersController {
   }
 
   @Post()
-  // or just create(@Body() userParams: CreateUserDto) ... dto validation, not zod validation
-  @UsePipes(new ZodValidationPipe(userParamsSchema))
+  // create(@Body() userParams: CreateUserDto) ... dto validation, not zod validation
+  // or
+  // @UsePipes(new ZodValidationPipe(userParamsSchema))
+  // async create(@Body() userParams: CreateUserDto): Promise<CreateUserDto> {
   async create(@Body() userParams: CreateUserDto): Promise<CreateUserDto> {
     // console.log('controller : ', this.configService.get('DB_HOST'));
     return await this.usersService.createOne(userParams);

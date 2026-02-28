@@ -1,16 +1,18 @@
 // src/users/entities/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Role } from '@common/models/enums/role.enum';
+import { IsDefined } from 'class-validator';
 
 @Entity('users')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   email: string;
 
   @Column({ nullable: false })
+  @IsDefined()
   firstName: string;
 
   @Column({ nullable: false })
@@ -19,7 +21,7 @@ export class UserEntity {
   @Column({ nullable: true })
   address: string;
 
-  @Column()
+  @Column({ nullable: false })
   phone: string;
 
   @Column({ nullable: false })
