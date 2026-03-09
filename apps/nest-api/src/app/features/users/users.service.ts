@@ -5,15 +5,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { IUser } from '@users/models/user';
-import { UserEntity } from '@users/entities/user.entity';
-import { UserParams } from '@users/schemas/user-response.schema';
+import { IUser } from '@api/users/models/user';
+import { UserEntity } from '@api/users/entities/user.entity';
+import { UserParams } from '@api/users/schemas/user-response.schema';
 import { Repository} from 'typeorm';
-import { Role } from '@common/models/enums/role.enum';
+import { Role } from '@api/common/models/enums/role.enum';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from '@users/dto/create-user.dto';
-import { UserResponseDto } from '@users/dto/user-response.dto';
-import { toDtoResponse } from '@common/mappers/dto.mapper';
+import { CreateUserDto } from '@api/users/dto/create-user.dto';
+import { UserResponseDto } from '@api/users/dto/user-response.dto';
+import { toDtoResponse } from '@api/common/mappers/dto.mapper';
+import { ERROR_CODES } from '@org/error-catalog';
+import { AppHttpException } from '@api/common/exceptions/app-http-exception';
 
 @Injectable()
 export class UsersService {
@@ -26,7 +28,7 @@ export class UsersService {
     const users = await this.userRepository.find();
 
     if (!users) {
-      throw new NotFoundException();
+      throw new AppHttpException(ERROR_CODES.USERS_NOT_FOUND);
     }
 
     return users.map(toDtoResponse);
@@ -38,7 +40,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new AppHttpException(ERROR_CODES.USER_NOT_FOUND);
     }
 
     return toDtoResponse(user);
@@ -50,25 +52,12 @@ export class UsersService {
     const isEmailExists = await this.emailExists(email);
 
     if (isEmailExists) {
-      throw new BadRequestException('Email already exists');
+      throw new AppHttpException(ERROR_CODES.USER_ALREADY_EXISTS);
     }
 
     const user = this.userRepository.create(body);
     const savedUser = await this.userRepository.save(user);
     return toDtoResponse(savedUser);
-
-    // try {
-    //   const user = this.userRepository.create(body);
-    //   return await this.userRepository.save(user);
-    // } catch (error) {
-    //   if (error.code === '23505') {
-    //     throw new BadRequestException({
-    //       message: 'Email already exists',
-    //       error: 'Bad Request',
-    //     });
-    //   }
-    //   throw error;
-    // }
   }
 
   private async emailExists(email: string): Promise<boolean> {

@@ -23,6 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     let httpResponse: any;
     if (exception instanceof HttpException) {
       const res = exception.getResponse();
+
       // getResponse() peut être string ou { message: string | string[] }
       if (typeof res === 'string') {
         httpResponse = res;
@@ -42,9 +43,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         HTTP Status: [ ${httpStatus} ]
         Error: [ ${JSON.stringify(httpResponse)} ]`
       );
-    // }
-
-    // const status = exception.getStatus(); / for exception: HttpException
 
     response.status(httpStatus).json({
       success: false,

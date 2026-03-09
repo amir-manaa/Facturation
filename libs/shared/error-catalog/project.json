@@ -1,0 +1,19 @@
+{
+  "name": "error-catalog",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/error-catalog/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/error-catalog",
+        "main": "libs/shared/error-catalog/src/index.ts",
+        "tsConfig": "libs/shared/error-catalog/tsconfig.lib.json",
+        "assets": ["libs/shared/error-catalog/*.md"]
+      }
+    }
+  },
+  "tags": []
+}

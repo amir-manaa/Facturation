@@ -1,5 +1,5 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Role } from '@common/models/enums/role.enum';
+import { Role } from '@api/common/models/enums/role.enum';
 import {
   IsEmail,
   IsEnum,

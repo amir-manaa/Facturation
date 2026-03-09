@@ -7,7 +7,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { HttpExceptionFilter } from './app/common/exceptions/http-exception.filter';
-import { LoggerMiddleware } from '@common/middlewares/logger.middleware';
+import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -1,5 +1,5 @@
-import { UserEntity } from '@users/entities/user.entity';
-import { UserResponseDto } from '@users/dto/user-response.dto';
+import { UserEntity } from '@api/users/entities/user.entity';
+import { UserResponseDto } from '@api/users/dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
 
 export function toDtoResponse(user: UserEntity): UserResponseDto {
