@@ -1,4 +1,4 @@
-import { Role } from '@common/models/enums/role.enum';
+import { Role } from '@api/common/models/enums/role.enum';
 
 export interface IUser {
   id: string;

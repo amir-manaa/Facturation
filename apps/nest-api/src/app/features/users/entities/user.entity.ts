@@ -1,6 +1,6 @@
 // src/users/entities/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { Role } from '@common/models/enums/role.enum';
+import { Role } from '@api/common/models/enums/role.enum';
 import { IsDefined } from 'class-validator';
 
 @Entity('users')

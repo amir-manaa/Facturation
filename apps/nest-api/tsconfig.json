@@ -12,11 +12,11 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "baseUrl": "./",
-    "paths": {
-      "@app/*": ["src/app/*"],
-      "@users/*": ["src/app/features/users/*"],
-      "@common/*": ["src/app/common/*"]
-    }
+//    "baseUrl": "./",
+//    "paths": {
+//      "@app/*": ["src/app/*"],
+//      "@users/*": ["src/app/features/users/*"],
+//      "@common/*": ["src/app/common/*"]
+//    }
   }
 }

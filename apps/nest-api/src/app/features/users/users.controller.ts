@@ -11,18 +11,18 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { UsersService } from '@users//users.service';
+import { UsersService } from '@api/users/users.service';
 import {
   userParamsSchema,
   UserParams,
-} from '@users/schemas/user-response.schema';
-import { ZodValidationPipe } from '@common/pipes/zod-validation.pipe';
+} from '@api/users/schemas/user-response.schema';
+import { ZodValidationPipe } from '@api/common/pipes/zod-validation.pipe';
 import { ConfigService } from '@nestjs/config';
-import { ForbiddenException } from '@common/exceptions/forbidden.exception';
-import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
-import { UserResponseDto } from '@users/dto/user-response.dto';
-import { CreateUserDto } from '@users/dto/create-user.dto';
-import { UuidValidationPipe } from '@common/pipes/uuid-validation.pipe';
+import { ForbiddenException } from '@api/common/exceptions/forbidden.exception';
+import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
+import { UserResponseDto } from '@api/users/dto/user-response.dto';
+import { CreateUserDto } from '@api/users/dto/create-user.dto';
+import { UuidValidationPipe } from '@api/common/pipes/uuid-validation.pipe';
 
 @Controller('users')
 export class UsersController {

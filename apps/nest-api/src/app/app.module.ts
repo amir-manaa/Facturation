@@ -6,13 +6,13 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LoggerMiddleware } from '@common/middlewares/logger.middleware';
-import { UsersModule } from '@users/users.module';
+import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
+import { UsersModule } from '@api/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DbModule } from '@common/modules/db.module';
+import { DbModule } from '@api/common/modules/db.module';
 import { APP_FILTER } from '@nestjs/core';
-import { HttpExceptionFilter } from '@common/exceptions/http-exception.filter';
+import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
 
 @Module({
   imports: [

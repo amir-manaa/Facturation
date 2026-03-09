@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@org/error-catalog": ["libs/shared/error-catalog/src/index.ts"],
+      "@api/app/*": ["apps/nest-api/src/app/*"],
+      "@api/users/*": ["apps/nest-api/src/app/features/users/*"],
+      "@api/common/*": ["apps/nest-api/src/app/common/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
