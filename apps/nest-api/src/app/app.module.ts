@@ -8,25 +8,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
 import { UsersModule } from '@api/users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { DbModule } from '@api/common/modules/db.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
+import { AuthModule } from '@api/app/features/auth/auth.module';
 
 @Module({
   imports: [
-    DbModule,
-    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
+    DbModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    ConfigService,
+    // ConfigService,
     // here we also add filter globally
     {
       provide: APP_FILTER,

@@ -12,5 +12,6 @@ export class UserResponseDto {
   @Expose() phone: string;
   @Expose() role: string;
 
+  @Exclude() refreshToken: string;
   @Exclude() password: string;
 }

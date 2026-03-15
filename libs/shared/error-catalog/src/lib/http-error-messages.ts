@@ -43,4 +43,9 @@ export const HTTP_ERROR_CATALOG: Record<ErrorCodes, HttpErrorDefinition> = {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     message: 'Une erreur interne est survenue.',
   },
+  [ERROR_CODES.REFRESH_TOKEN_INVALID_OR_EXPIRED]: {
+    code: ERROR_CODES.REFRESH_TOKEN_INVALID_OR_EXPIRED,
+    status: HttpStatus.UNAUTHORIZED,
+    message: 'Le token est invalide ou a expiré..',
+  },
 };

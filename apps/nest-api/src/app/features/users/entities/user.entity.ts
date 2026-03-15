@@ -19,12 +19,15 @@ export class UserEntity {
   lastName: string;
 
   @Column({ nullable: true })
-  address: string;
+  address: string | null;
 
   @Column({ nullable: false })
   phone: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
+  refreshToken: string | null = null;
+
+  @Column({ nullable: true })
   password: string;
 
   @Column({ default: Role.USER })

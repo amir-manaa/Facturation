@@ -13,7 +13,8 @@
             "allow": [
               "@api/app/",
               "@api/common/",
-              "@api/users/"
+              "@api/users/",
+              "@api/auth/"
             ],
             "depConstraints": [
               {
