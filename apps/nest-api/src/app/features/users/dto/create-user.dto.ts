@@ -10,6 +10,7 @@ import {
 
 export class CreateUserDto {
   @IsEmail({}, { message: 'Invalid email address' })
+  @IsNotEmpty({ message: 'Invalid email address' })
   email: string;
 
   @IsString()
@@ -20,7 +21,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Invalid last name' })
   lastName: string;
 
-  @IsString({ message: 'Invalid password' })
+  @IsString({ message: 'Invalid address' })
   address: string;
 
   @IsString()
@@ -31,6 +32,6 @@ export class CreateUserDto {
   password: string;
 
   @IsString()
-  @IsEnum(Role, { message: 'Role must be admin or user' })
+  @IsEnum(Role, { message: `Role must be ${Role.ADMIN} or ${Role.USER}` })
   role: string;
 }

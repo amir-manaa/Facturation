@@ -6,11 +6,17 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
-import { HttpExceptionFilter } from './app/common/exceptions/http-exception.filter';
-import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: 'http://localhost:4200', // 👈 ton domaine Angular
+    credentials: true, // 👈 autorise l'envoi des cookies
+  });
+
+  app.use(cookieParser());
 
   //Here we add global filter exception
   // app.useGlobalFilters(new HttpExceptionFilter());
