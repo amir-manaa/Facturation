@@ -24,7 +24,7 @@ import { UsersModule } from '@api/users/users.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, HashService],
+  providers: [AuthService , HashService],
   exports: [AuthService],
 })
 export class AuthModule {}

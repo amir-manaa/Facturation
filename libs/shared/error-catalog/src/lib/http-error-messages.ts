@@ -48,4 +48,10 @@ export const HTTP_ERROR_CATALOG: Record<ErrorCodes, HttpErrorDefinition> = {
     status: HttpStatus.UNAUTHORIZED,
     message: 'Le token est invalide ou a expiré..',
   },
+
+  [ERROR_CODES.USER_CREATION_FAILED]: {
+    code: ERROR_CODES.USER_CREATION_FAILED,
+    status: HttpStatus.UNAUTHORIZED,
+    message: 'Une erreur dans la création de l\'utilisateur',
+  },
 };
