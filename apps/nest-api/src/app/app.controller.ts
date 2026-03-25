@@ -10,15 +10,12 @@ import {
   Res,
   HttpException,
   HttpStatus,
-  UseFilters,
   NotFoundException,
   ParseIntPipe,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { AppService } from './app.service';
 import { CreateCatDto } from './create-cat.dto';
-import { ForbiddenException } from './common/exceptions/forbidden.exception';
-import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { ValidationPipe } from './common/pipes/validation.pipe';
 
 @Controller()

@@ -13,6 +13,9 @@ import { DbModule } from '@api/common/modules/db.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
 import { AuthModule } from '@api/app/features/auth/auth.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { RediseCacheModule } from '@api/users/cache/cache.module';
+import { LoggerModule } from '@api/common/modules/logger.module';
 
 @Module({
   imports: [
@@ -20,9 +23,12 @@ import { AuthModule } from '@api/app/features/auth/auth.module';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
     }),
+    CacheModule.register(),
+    RediseCacheModule,
     DbModule,
     AuthModule,
     UsersModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [
