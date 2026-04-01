@@ -20,7 +20,7 @@
       "@api/users/*": ["apps/nest-api/src/app/features/users/*"],
       "@api/auth/*": ["apps/nest-api/src/app/features/auth/*"],
       "@api/common/*": ["apps/nest-api/src/app/common/*"],
-      "@org/ui": ["libs/ui/src/index.ts"]
+      "@story/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

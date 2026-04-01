@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'lib-ui',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './ui.html',
   styleUrl: './ui.scss',
 })
-export class Ui {}
+export class UiComponent {
+  @Input() variant: 'primary' | 'secondary' | 'danger' = 'primary';
+  @Input() disabled = false;
+}

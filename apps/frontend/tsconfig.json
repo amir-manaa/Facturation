@@ -37,6 +37,9 @@
       "@sharedComponents": [
         "src/app/shared/components"
       ],
+      "@story/ui": [
+        "../../libs/ui/src/index.ts"
+      ],
       "*": [
         "node_modules/*"
       ]
