@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import {
   ReactiveFormsModule,
@@ -20,11 +20,11 @@ import { ILoginForm } from '@models';
 import { customValidator } from '@utils';
 
 @Component({
-    selector: 'app-login',
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-login',
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
