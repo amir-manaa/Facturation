@@ -91,7 +91,7 @@ export class UsersService {
       throw new AppHttpException(ERROR_CODES.USER_NOT_FOUND);
     }
 
-    const userDTO = toDtoResponse(user);
+    const userDTO = toDto(user, UserResponseDto);
 
     try {
       await this.cacheManager.set(cacheKey, userDTO, this.TTL.USER);
