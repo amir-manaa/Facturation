@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn { padding: 8px 16px; border: none; border-radius: 6px;
+  font-size: 14px; cursor: pointer; }
+.btn--primary   { @apply flex w-full justify-center rounded-md bg-green-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600;}
+.btn--secondary { background: #eee; color: #333; }
+.btn:disabled   { opacity: 0.4; cursor: not-allowed; }

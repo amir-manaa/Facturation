@@ -18,11 +18,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '@services';
 import { ILoginForm } from '@models';
 import { customValidator } from '@utils';
-import { UiComponent } from '@story/ui';
+import { UiComponent, Button } from '@story/ui';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, UiComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NgOptimizedImage,
+    UiComponent,
+    Button,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
