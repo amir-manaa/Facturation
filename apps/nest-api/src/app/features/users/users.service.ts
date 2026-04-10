@@ -11,6 +11,8 @@ import { HashService } from '@api/common/services/hash.service';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { LoggerDevService } from '@api/common/services/logger-dev.service';
+import { QueueService} from '@api/app/infrastructure/queue/queue.service';
+import { JobName } from '@api/app/infrastructure/queue/jobs/job.interface';
 
 @Injectable()
 export class UsersService {
@@ -33,7 +35,8 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private hashService: HashService,
-    private logger: LoggerDevService
+    private logger: LoggerDevService,
+    private queueService: QueueService,
   ) {}
 
   async findAll(): Promise<UserResponseDto[]> {
@@ -156,6 +159,11 @@ export class UsersService {
     } catch (error) {
       this.logger.warn(`Failed to invalidate cache: ${error.message}`);
     }
+
+    await this.queueService.addJob(JobName.WELCOME_EMAIL, {
+      email: createUserDto.email,
+      name: `${createUserDto.firstName} ${createUserDto.lastName}`,
+    });
 
     return toDtoResponse(savedUser);
   }

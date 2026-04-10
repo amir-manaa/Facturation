@@ -19,7 +19,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           host: config.get('REDIS_HOST') ?? 'localhost',
           port: config.get('REDIS_PORT') ?? 6379,
         },
-        password: config.get('REDIS_PASSWORD'),
+        password: config.get('REDIS_PASSWORD') ?? undefined,
 
         // TTL default: 60 seconds
         ttl: 60 * 1000,

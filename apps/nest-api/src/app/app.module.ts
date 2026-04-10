@@ -9,13 +9,14 @@ import { AppService } from './app.service';
 import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
 import { UsersModule } from '@api/users/users.module';
 import { ConfigModule } from '@nestjs/config';
-import { DbModule } from '@api/common/modules/db.module';
+import { DbModule } from '@api/app/infrastructure/database/db.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
 import { AuthModule } from '@api/app/features/auth/auth.module';
 import { CacheModule } from '@nestjs/cache-manager';
-import { RediseCacheModule } from '@api/users/cache/cache.module';
+import { RediseCacheModule } from '@api/app/infrastructure/cache/cache.module';
 import { LoggerModule } from '@api/common/modules/logger.module';
+import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { LoggerModule } from '@api/common/modules/logger.module';
     AuthModule,
     UsersModule,
     LoggerModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [
