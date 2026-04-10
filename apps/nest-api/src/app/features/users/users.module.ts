@@ -4,10 +4,11 @@ import { UsersService } from '@api/users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from '@api/users/entities/user.entity';
 import { HashService } from '@api/common/services/hash.service';
-import { TestCacheController } from '@api/users/cache/test-cache.controller';
+import { TestCacheController } from '@api/app/infrastructure/cache/test-cache.controller';
+import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity]), QueueModule],
   controllers: [TestCacheController, UsersController],
   providers: [UsersService, HashService],
   exports: [UsersService],

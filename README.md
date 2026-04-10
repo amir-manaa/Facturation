@@ -94,3 +94,9 @@ nx g @nx/angular:component libs/ui/src/lib/button/button --style=scss --dry-run
 ```sh
 nx g @nx/angular:stories --dry-run
 ```
+
+## Run Redis service container [docker-compose.yml]
+
+```sh
+docker compose up -d
+```
