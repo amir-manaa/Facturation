@@ -17,7 +17,7 @@ export class AuthService {
   private readonly localStorageService = inject(LocalStorageService);
 
   private readonly localStorageKeyName = 'fact_currentUser_development';
-  private readonly API_URL = '/api/v1';
+  private readonly API_URL = '/api';
   private profileLoaded: WritableSignal<boolean> = signal(false);
 
   private readonly currentUserSubject = new BehaviorSubject<Partial<IUser> | null>(null);
@@ -25,9 +25,9 @@ export class AuthService {
 
   login(email: string, password: string): Observable<IUser> {
     return this.http
-      .post<IUser>(`${this.API_URL}/user/auth`, {
-        email: email,
-        password: password,
+      .post<IUser>(`${this.API_URL}/auth/login`, {
+        email,
+        password,
       })
       .pipe(
         map((user) => {
@@ -52,13 +52,13 @@ export class AuthService {
 
   refreshUserProfile(): Observable<Partial<IUser>> {
     if (this.isUserLoggedIn()) {
-      return this.http.get<Partial<IUser>>(`${this.API_URL}/user`).pipe(
+      return this.http.get<Partial<IUser>>(`${this.API_URL}/auth/me`).pipe(
         map((user) => {
           this.profileLoaded.set(true);
-          this.currentUserSubject.next(user)
-          return user
-        }),
-      )
+          this.currentUserSubject.next(user);
+          return user;
+        })
+      );
     } else {
       this.currentUserSubject.next(null);
       return of({});

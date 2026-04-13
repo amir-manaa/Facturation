@@ -13,6 +13,7 @@ import { Cache } from 'cache-manager';
 import { LoggerDevService } from '@api/common/services/logger-dev.service';
 import { QueueService} from '@api/app/infrastructure/queue/queue.service';
 import { JobName } from '@api/app/infrastructure/queue/jobs/job.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +38,7 @@ export class UsersService {
     private hashService: HashService,
     private logger: LoggerDevService,
     private queueService: QueueService,
+    private jwtService: JwtService
   ) {}
 
   async findAll(): Promise<UserResponseDto[]> {
@@ -64,9 +66,7 @@ export class UsersService {
       this.logger.debug(`Users cached successfully`);
     } catch (error) {
       // Utiliser le logger pour la cohérence (au lieu de console.log)
-      this.logger.warn(
-        `Failed to set cache for all users: ${error.message}`
-      );
+      this.logger.warn(`Failed to set cache for all users: ${error.message}`);
     }
 
     return usersDto;
