@@ -10,11 +10,16 @@ import { SignInDto } from '@api/auth/dto/sign-in.dto';
 import { ConfigService } from '@nestjs/config';
 import { setRefreshTokenCookie } from '@api/auth/helpers/set-auth-cookies.helper';
 import { Response } from 'express';
-
+import { UserEntity } from '@api/users/entities/user.entity';
+import { toDto } from '@api/common/mappers/dto.mapper';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
     private usersService: UsersService,
     private hashService: HashService,
     private jwtService: JwtService,
@@ -23,7 +28,7 @@ export class AuthService {
 
   async signIn(
     signInDto: SignInDto,
-    res: Response,
+    res: Response
   ): Promise<{ access_token: string }> {
     const user = await this.usersService.findOneByEmail(signInDto.email);
     if (!user) {
@@ -83,6 +88,7 @@ export class AuthService {
 
     const [access_token, refresh_token] = await Promise.all([
       this.jwtService.signAsync(payload, {
+        secret: this.configService.get('JWT_SECRET'),
         expiresIn: this.configService.get('JWT_EXPIRES'),
       }),
       this.jwtService.signAsync(payload, {
@@ -113,5 +119,29 @@ export class AuthService {
     // };
 
     return this.usersService.createOne(bocreateUserDtody);
+  }
+
+  async findOneByRefreshToken(refreshToken: string): Promise<UserEntity> {
+    if (!refreshToken) {
+      throw new AppHttpException(ERROR_CODES.AUTH_UNAUTHORIZED);
+    }
+
+    const decode = (await this.jwtService.decode(refreshToken)) as {
+      sub: string;
+      email: string;
+    };
+
+    if (!decode || !decode.sub) {
+      throw new AppHttpException(ERROR_CODES.AUTH_UNAUTHORIZED);
+    }
+    const user = await this.userRepository.findOne({
+      where: { id: decode.sub },
+    });
+
+    if (!user) {
+      throw new AppHttpException(ERROR_CODES.USER_NOT_FOUND);
+    }
+
+    return toDto(user, UserResponseDto);
   }
 }

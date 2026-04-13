@@ -18,7 +18,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '@services';
 import { ILoginForm } from '@models';
 import { customValidator } from '@utils';
-import { UiComponent, Button } from '@story/ui';
+import { Button } from '@story/ui';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +26,6 @@ import { UiComponent, Button } from '@story/ui';
     CommonModule,
     ReactiveFormsModule,
     NgOptimizedImage,
-    UiComponent,
     Button,
   ],
   templateUrl: './login.component.html',

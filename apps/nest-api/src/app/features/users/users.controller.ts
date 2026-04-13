@@ -2,37 +2,22 @@ import {
   Body,
   Controller,
   Get,
+  Req,
   NotFoundException,
   Param,
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
-  UseFilters,
-  UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from '@api/users/users.service';
-import {
-  userParamsSchema,
-  UserParams,
-} from '@api/users/schemas/user-response.schema';
-import { ZodValidationPipe } from '@api/common/pipes/zod-validation.pipe';
-import { ConfigService } from '@nestjs/config';
-import { ForbiddenException } from '@api/common/exceptions/forbidden.exception';
-import { HttpExceptionFilter } from '@api/common/exceptions/http-exception.filter';
 import { UserResponseDto } from '@api/users/dto/user-response.dto';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { UuidValidationPipe } from '@api/common/pipes/uuid-validation.pipe';
-import { AuthGuard } from '@api/common/guards/auth.guard';
+import { Request } from 'express';
 
 @Controller('users')
- @UseGuards(AuthGuard)
 export class UsersController {
-  constructor(
-    private usersService: UsersService,
-    private configService: ConfigService
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   @Get()
   // we can use filter here with UserFilters, it's like @Catch
@@ -42,8 +27,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new UuidValidationPipe()) id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id', new UuidValidationPipe()) id: string) {
+    return await this.usersService.findOne(id);
   }
 
   @Post()

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, Res, Req } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Res, Req, Get } from '@nestjs/common';
 import { AuthService } from '@api/app/features/auth/auth.service';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { AuthGuard } from '@api/common/guards/auth.guard';
@@ -15,18 +15,21 @@ export class AuthController {
     @Body() signInDto: SignInDto,
     @Res({ passthrough: true }) res: Response
   ): Promise<{ access_token: string }> {
-    const { access_token } = await this.authService.signIn(
-      signInDto,
-      res,
-    );
+    const { access_token } = await this.authService.signIn(signInDto, res);
 
     return { access_token };
   }
 
   @Post('refresh')
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const refreshToken = req.cookies['refresh_token'];
-    const { access_token } = await this.authService.refreshToken(refreshToken, res);
+    const { access_token } = await this.authService.refreshToken(
+      refreshToken,
+      res
+    );
 
     return { access_token };
   }
@@ -35,5 +38,11 @@ export class AuthController {
   @UseGuards(AuthGuard)
   Register(@Body() userParams: CreateUserDto) {
     return this.authService.register(userParams);
+  }
+
+  @Get('me')
+  async getMe(@Req() req: Request) {
+    const refreshToken = req.cookies['refresh_token'];
+    return await this.authService.findOneByRefreshToken(refreshToken);
   }
 }
