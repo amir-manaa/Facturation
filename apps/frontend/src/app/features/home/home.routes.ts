@@ -7,6 +7,7 @@ import { ModifyCustomerComponent } from '../customer/modify-customer/modify-cust
 import { InvoicesComponent } from '../invoice/invoices/invoices.component';
 import { AddCustomerComponent } from '../customer/add-customer/add-customer.component';
 import { AddInvoiceComponent } from '../invoice/add-invoice/add-invoice.component';
+import { ChatComponent } from '../chat/chat.component';
 
 export const homeRoutes: Route[] = [
   {
@@ -43,6 +44,11 @@ export const homeRoutes: Route[] = [
         path: 'invoices/add',
         component: AddInvoiceComponent,
         title: 'Ajouter une facture'
+      },
+      {
+        path: 'chat',
+        component: ChatComponent,
+        title: 'Chat'
       }
     ]
   },

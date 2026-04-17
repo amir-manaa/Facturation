@@ -17,6 +17,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { RediseCacheModule } from '@api/app/infrastructure/cache/cache.module';
 import { LoggerModule } from '@api/common/modules/logger.module';
 import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
+import { SocketModule } from '@api/app/infrastructure/socket/socket.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
     UsersModule,
     LoggerModule,
     QueueModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [
