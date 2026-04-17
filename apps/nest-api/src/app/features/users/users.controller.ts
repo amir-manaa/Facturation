@@ -8,14 +8,17 @@ import {
   ParseIntPipe,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '@api/users/users.service';
 import { UserResponseDto } from '@api/users/dto/user-response.dto';
 import { CreateUserDto } from '@api/users/dto/create-user.dto';
 import { UuidValidationPipe } from '@api/common/pipes/uuid-validation.pipe';
 import { Request } from 'express';
+import { AuthGuard } from '@api/common/guards/auth.guard';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 

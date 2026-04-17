@@ -1,0 +1,14 @@
+<p>chat works!</p>
+
+
+
+<div>
+  @for (msg of messages; track msg.id) {
+    <div>
+      <strong>{{ msg.username }}</strong>: {{ msg.text }}
+    </div>
+  }
+
+  <input [(ngModel)]="newMessage" (keyup.enter)="send()" placeholder="Ton message..." />
+  <button (click)="send()">Envoyer</button>
+</div>
