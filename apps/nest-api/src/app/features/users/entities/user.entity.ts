@@ -1,5 +1,11 @@
 // src/users/entities/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn
+} from 'typeorm';
 import { Role } from '@api/common/models/enums/role.enum';
 import { IsDefined } from 'class-validator';
 
@@ -32,5 +38,11 @@ export class UserEntity {
 
   @Column({ default: Role.USER })
   role: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
 
