@@ -11,6 +11,8 @@ export class UserResponseDto {
   @Expose() address: string;
   @Expose() phone: string;
   @Expose() role: string;
+  @Expose() createdAt: Date;
+  @Expose() updatedAt: Date;
 
   @Exclude() refreshToken: string;
   @Exclude() password: string;
