@@ -39,10 +39,10 @@ export class UserEntity {
   @Column({ default: Role.USER })
   role: string;
 
-  @CreateDateColumn({ nullable: false })
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn({ nullable: false })
+  @UpdateDateColumn()
   updatedAt: Date;
 }
 
