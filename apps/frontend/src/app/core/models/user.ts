@@ -5,5 +5,4 @@ export interface IUser {
   address: string;
   createdAt: Date;
   updatedAt: Date;
-  token: string;
 }

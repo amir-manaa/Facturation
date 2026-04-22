@@ -7,6 +7,7 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '@models';
 import { LocalStorageService, UserService } from '@services';
+import { ISavedToken } from '../../models/saved-token';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,10 @@ export class AuthService {
   private readonly API_URL = '/api';
   private profileLoaded: WritableSignal<boolean> = signal(false);
 
-  private readonly currentUserSubject = new BehaviorSubject<Partial<IUser> | null>(null);
-  currentUser$: Observable<Partial<IUser>|null> = this.currentUserSubject.asObservable();
+  private readonly currentUserSubject =
+    new BehaviorSubject<Partial<IUser> | null>(null);
+  currentUser$: Observable<Partial<IUser> | null> =
+    this.currentUserSubject.asObservable();
 
   login(email: string, password: string): Observable<IUser> {
     return this.http
@@ -65,12 +68,13 @@ export class AuthService {
     }
   }
 
-  getAccessToken(): string | null {
-    const currentUser = this.getCurrentUser();
-    if (currentUser) {
-      return currentUser.token;
+  getAccessToken(): ISavedToken | null {
+    const access_token = this.getCurrentUser();
+
+    if (!access_token) {
+      return null;
     }
-    return null;
+    return access_token;
   }
 
   isProfileLoaded(): boolean {
@@ -81,8 +85,10 @@ export class AuthService {
     return this.getCurrentUser() !== null;
   }
 
-  getCurrentUser(): IUser {
-    let localStorageItem = this.localStorageService.getItem(this.localStorageKeyName) as string;
+  getCurrentUser(): ISavedToken {
+    const localStorageItem = this.localStorageService.getItem(
+      this.localStorageKeyName
+    ) as string;
     return JSON.parse(localStorageItem);
   }
 }
