@@ -7,7 +7,6 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { Role } from '@api/common/models/enums/role.enum';
-import { IsDefined } from 'class-validator';
 
 @Entity('users')
 export class UserEntity {
@@ -18,7 +17,6 @@ export class UserEntity {
   email: string;
 
   @Column({ nullable: false })
-  @IsDefined()
   firstName: string;
 
   @Column({ nullable: false })

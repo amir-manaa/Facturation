@@ -2,6 +2,7 @@ import { UserEntity } from '@api/users/entities/user.entity';
 import { UserResponseDto } from '@api/users/dto/user-response.dto';
 import { plainToInstance } from 'class-transformer';
 import { Type } from 'class-transformer';
+import { CustomerEntity } from '@api/app/features/customers/entities/customer.entity';
 
 /**
  * Transforme une entité (ou un objet) en DTO de manière générique.
@@ -52,7 +53,7 @@ export function toDtoArray<T extends object>(
  * @deprecated Utilisez `toDto(user, UserResponseDto)` à la place
  * Cette fonction est conservée pour la compatibilité rétroactive
  */
-export function toDtoResponse(user: UserEntity): UserResponseDto {
+export function toDtoResponse(user: UserEntity | CustomerEntity): UserResponseDto {
   return toDto(user, UserResponseDto);
 }
 

@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from '@api/common/middlewares/logger.middleware';
 import { UsersModule } from '@api/users/users.module';
+import { CustomersModule } from '@api/app/features/customers/customers.module';
 import { ConfigModule } from '@nestjs/config';
 import { DbModule } from '@api/app/infrastructure/database/db.module';
 import { APP_FILTER } from '@nestjs/core';
@@ -30,6 +31,7 @@ import { SocketModule } from '@api/app/infrastructure/socket/socket.module';
     DbModule,
     AuthModule,
     UsersModule,
+    CustomersModule,
     LoggerModule,
     QueueModule,
     SocketModule,

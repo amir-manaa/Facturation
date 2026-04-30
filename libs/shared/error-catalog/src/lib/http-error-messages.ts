@@ -48,10 +48,24 @@ export const HTTP_ERROR_CATALOG: Record<ErrorCodes, HttpErrorDefinition> = {
     status: HttpStatus.UNAUTHORIZED,
     message: 'Le token est invalide ou a expiré..',
   },
-
   [ERROR_CODES.USER_CREATION_FAILED]: {
     code: ERROR_CODES.USER_CREATION_FAILED,
     status: HttpStatus.UNAUTHORIZED,
-    message: 'Une erreur dans la création de l\'utilisateur',
+    message: "Une erreur dans la création de l'utilisateur",
+  },
+  [ERROR_CODES.USER_UPDATE_FAILED]: {
+    code: ERROR_CODES.USER_UPDATE_FAILED,
+    status: HttpStatus.UNAUTHORIZED,
+    message: "Une erreur dans la modification de l'utilisateur",
+  },
+  [ERROR_CODES.INVALID_UUID]: {
+    code: ERROR_CODES.INVALID_UUID,
+    status: HttpStatus.BAD_REQUEST,
+    message: 'UUID invalide',
+  },
+  [ERROR_CODES.USER_DELETION_FAILED]: {
+    code: ERROR_CODES.USER_DELETION_FAILED,
+    status: HttpStatus.BAD_REQUEST,
+    message: "Echec de la suppression de l'utilisateur",
   },
 };
