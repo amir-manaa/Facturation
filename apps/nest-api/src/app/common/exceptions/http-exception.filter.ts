@@ -4,12 +4,16 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { LoggerDevService } from '../services/logger-dev.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+
+  constructor(private readonly loggerDevService: LoggerDevService) {
+  }
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -38,11 +42,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     // Log uniquement les erreurs serveur 500+
     // if (httpStatus >= 500) {
-      Logger.error(
-        `
+    this.loggerDevService.error(`
         HTTP Status: [ ${httpStatus} ]
-        Error: [ ${JSON.stringify(httpResponse)} ]`
-      );
+        Error: [ ${JSON.stringify(httpResponse)} ]`);
 
     response.status(httpStatus).json({
       success: false,
@@ -52,44 +54,4 @@ export class HttpExceptionFilter implements ExceptionFilter {
       message: httpResponse,
     });
   }
-
-  //@Catch(HttpException)
-  //looking for exceptions of type HttpException and nothing else.
-
-  //we can apply filter exception
-
-  //on controller :
-  // @Controller()
-  // @UseFilters(new HttpExceptionFilter())
-
-  //on methode
-  //@Post()
-  //@UseFilters(HttpExceptionFilter)
-
-  //global on maint.ts
-  //app.useGlobalFilters(new HttpExceptionFilter());
-
-  //on module
-  /*
-  roviders: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-  ],
-   */
-
-
-
-
-
-
-
-
-  /*@Catch()
-  export class AllExceptionsFilter extends BaseExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
-    super.catch(exception, host);
-  }*/
-
 }
