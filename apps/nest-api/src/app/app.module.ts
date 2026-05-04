@@ -19,6 +19,7 @@ import { RediseCacheModule } from '@api/app/infrastructure/cache/cache.module';
 import { LoggerModule } from '@api/common/modules/logger.module';
 import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
 import { SocketModule } from '@api/app/infrastructure/socket/socket.module';
+import { InvoicesModule } from '@api/app/features/invoices/invoices.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { SocketModule } from '@api/app/infrastructure/socket/socket.module';
     AuthModule,
     UsersModule,
     CustomersModule,
+    InvoicesModule,
     LoggerModule,
     QueueModule,
     SocketModule,
