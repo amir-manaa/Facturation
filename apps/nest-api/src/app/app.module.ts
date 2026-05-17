@@ -20,9 +20,11 @@ import { LoggerModule } from '@api/common/modules/logger.module';
 import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
 import { SocketModule } from '@api/app/infrastructure/socket/socket.module';
 import { InvoicesModule } from '@api/app/features/invoices/invoices.module';
+import { GraphqlModule } from '@api/app/infrastructure/graphql/graphql.module';
 
 @Module({
   imports: [
+    GraphqlModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,

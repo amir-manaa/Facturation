@@ -21,14 +21,21 @@ export class InvoiceEntity {
   @Column({ unique: true })
   invoiceNumber: string;
 
-  @Column()
+  @Column({ name: 'customer_id' })
   customerId: string;
 
   @ManyToOne(() => CustomerEntity, (customer) => customer.invoices, {
     onDelete: 'CASCADE',
+    nullable: false
   })
-  @JoinColumn({ name: 'customerId' })
+  @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
+
+  @OneToMany(() => InvoiceItemEntity, (item) => item.invoice, {
+    cascade: true,
+    nullable: true
+  })
+  invoiceItems: InvoiceItemEntity[];
 
   @Column()
   issueDate: Date;
@@ -87,14 +94,9 @@ export class InvoiceEntity {
   })
   balanceDue: number;
 
-  @OneToMany(() => InvoiceItemEntity, (item) => item.invoice, {
-    cascade: true,
-  })
-  items: InvoiceItemEntity[];
-
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

@@ -7,17 +7,30 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LoggerDevService } from '../services/logger-dev.service';
+import { GqlContextType, GqlArgumentsHost } from '@nestjs/graphql';
+import { GraphQLError } from 'graphql';
 
 @Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter<T> implements ExceptionFilter {
 
   constructor(private readonly loggerDevService: LoggerDevService) {
   }
 
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: T, host: ArgumentsHost) {
+    const type = host.getType<GqlContextType>();
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
+
+    console.log('type: ', type);
+
+    if (type === 'graphql') {
+      const gqlCtx = GqlArgumentsHost.create(host);
+      // logique GraphQL...
+      throw new GraphQLError(exception['message'], {
+        extensions: { code: 'INTERNAL_SERVER_ERRssOR' },
+      });
+    }
 
     const httpStatus =
       exception instanceof HttpException

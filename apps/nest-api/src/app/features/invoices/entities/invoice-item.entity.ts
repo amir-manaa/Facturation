@@ -14,13 +14,13 @@ export class InvoiceItemEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ name: 'invoice_id' })
   invoiceId: string;
 
-  @ManyToOne(() => InvoiceEntity, (invoice) => invoice.items, {
+  @ManyToOne(() => InvoiceEntity, (invoice) => invoice.invoiceItems, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'invoiceId' })
+  @JoinColumn({ name: 'invoice_id' })
   invoice: InvoiceEntity;
 
   @Column()
@@ -43,9 +43,9 @@ export class InvoiceItemEntity {
   })
   total: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

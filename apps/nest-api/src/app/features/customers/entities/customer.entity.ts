@@ -39,12 +39,15 @@ export class CustomerEntity {
   @Column({ nullable: true })
   phone?: string;
 
-  @OneToMany(() => InvoiceEntity, (invoice) => invoice.customer)
+  @OneToMany(() => InvoiceEntity, (invoice) => invoice.customer, {
+    cascade: true,
+    nullable: true,
+  })
   invoices: InvoiceEntity[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
