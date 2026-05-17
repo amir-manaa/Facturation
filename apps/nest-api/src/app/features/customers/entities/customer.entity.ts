@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  Check
+  Check,
+  OneToMany,
 } from 'typeorm';
 import { CustomerTypeEnum } from '../models/enums/customer-type.enum';
+import { InvoiceEntity } from '@api/app/features/invoices/entities/invoice.entity';
 
 @Entity('customers')
 @Check(`
@@ -37,9 +39,15 @@ export class CustomerEntity {
   @Column({ nullable: true })
   phone?: string;
 
-  @CreateDateColumn()
+  @OneToMany(() => InvoiceEntity, (invoice) => invoice.customer, {
+    cascade: true,
+    nullable: true,
+  })
+  invoices: InvoiceEntity[];
+
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

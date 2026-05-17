@@ -229,4 +229,8 @@ export class CustomersService {
       where: condition,
     });
   }
+
+  async findCustomerById(customerId: string) {
+    return await this.customerRepository.findOne({ where: { id: customerId } });
+  }
 }

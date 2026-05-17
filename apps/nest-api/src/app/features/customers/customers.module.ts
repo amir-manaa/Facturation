@@ -10,6 +10,6 @@ import { QueueModule } from '@api/app/infrastructure/queue/queue.module';
   imports: [TypeOrmModule.forFeature([CustomerEntity]), QueueModule],
   controllers: [CustomersController],
   providers: [CustomersService, HashService],
-  // exports: [CustomersService],
+  exports: [CustomersService],
 })
 export class CustomersModule {}
