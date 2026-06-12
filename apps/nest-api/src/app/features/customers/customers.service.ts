@@ -16,8 +16,7 @@ import { CustomerEntity } from './entities/customer.entity';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerResponseDto } from './dto/customer-response.dto';
 import { CustomerTypeEnum } from './models/enums/customer-type.enum';
-import { CustomersController } from '@api/customers/customers.controller';
-import { UpdateCustomerDto } from '@api/customers/dto/update-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomersService {

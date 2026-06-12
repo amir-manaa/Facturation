@@ -140,11 +140,11 @@ export class UsersService {
       throw new AppHttpException(ERROR_CODES.USER_ALREADY_EXISTS);
     }
 
-    const passwordHash = await this.hashService.hash(createUserDto.password);
+    const passwordHash = await this.hashService.hash(createUserDto.passwordHash);
 
     const userToCreate = this.userRepository.create({
       ...createUserDto,
-      password: passwordHash,
+      passwordHash: passwordHash,
     });
 
     let savedUser: UserEntity | null = null;

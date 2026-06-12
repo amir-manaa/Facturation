@@ -33,6 +33,7 @@ export class InvoiceItemEntity {
     precision: 10,
     scale: 2,
     transformer: { to: (value) => value, from: (value) => parseFloat(value) },
+    name: 'unit_price'
   })
   unitPrice: number;
 

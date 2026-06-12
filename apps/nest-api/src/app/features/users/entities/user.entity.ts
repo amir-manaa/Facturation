@@ -16,10 +16,10 @@ export class UserEntity {
   @Column({ nullable: false, unique: true })
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'first_name' })
   firstName: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, name: 'last_name' })
   lastName: string;
 
   @Column({ nullable: true })
@@ -28,19 +28,19 @@ export class UserEntity {
   @Column({ nullable: false })
   phone: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'refresh_token' })
   refreshToken: string | null = null;
 
-  @Column({ nullable: true })
-  password: string;
+  @Column({ nullable: true, name: 'password_hash' })
+  passwordHash: string;
 
   @Column({ default: Role.USER })
   role: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at'})
   updatedAt: Date;
 }
 

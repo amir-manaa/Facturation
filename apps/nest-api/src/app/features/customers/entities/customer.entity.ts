@@ -30,7 +30,7 @@ export class CustomerEntity {
   @Column({ nullable: true })
   name?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'company_name' })
   companyName?: string;
 
   @Column({ nullable: false })
