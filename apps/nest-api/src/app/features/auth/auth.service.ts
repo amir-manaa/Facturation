@@ -36,7 +36,7 @@ export class AuthService {
     }
 
     const isValid = await this.hashService.verify(
-      user.password,
+      user.passwordHash,
       signInDto.password
     );
     if (!isValid) {

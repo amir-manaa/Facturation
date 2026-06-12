@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { authGuard, initGuard } from '@guards';
 import { authResolver } from '@resolvers';
 import { LoadingPageComponent } from '@sharedComponents';
+import { INVOCE_ROUTES } from './domains/invoices/presentation/invoice.routes';
 
 export const appRoutes: Route[] = [
   {
@@ -23,5 +24,5 @@ export const appRoutes: Route[] = [
       import('./features/home/home.routes').then((m) => m.homeRoutes),
     canActivate: [authGuard, initGuard],
   },
-  { path: '**', redirectTo: '/', pathMatch: 'full' }
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];

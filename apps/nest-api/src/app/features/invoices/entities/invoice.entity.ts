@@ -18,7 +18,7 @@ export class InvoiceEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, name: 'invoice_number' })
   invoiceNumber: string;
 
   @Column({ name: 'customer_id' })
@@ -26,21 +26,21 @@ export class InvoiceEntity {
 
   @ManyToOne(() => CustomerEntity, (customer) => customer.invoices, {
     onDelete: 'CASCADE',
-    nullable: false
+    nullable: false,
   })
   @JoinColumn({ name: 'customer_id' })
   customer: CustomerEntity;
 
   @OneToMany(() => InvoiceItemEntity, (item) => item.invoice, {
     cascade: true,
-    nullable: true
+    nullable: true,
   })
   invoiceItems: InvoiceItemEntity[];
 
-  @Column()
+  @Column({ name: 'issue_date' })
   issueDate: Date;
 
-  @Column()
+  @Column({ name: 'due_date' })
   dueDate: Date;
 
   @Column({
@@ -61,6 +61,7 @@ export class InvoiceEntity {
     precision: 5,
     scale: 4,
     transformer: { to: (value) => value, from: (value) => parseFloat(value) },
+    name: 'tax_rate'
   })
   taxRate: number;
 
@@ -68,6 +69,7 @@ export class InvoiceEntity {
     precision: 10,
     scale: 2,
     transformer: { to: (value) => value, from: (value) => parseFloat(value) },
+    name: 'tax_amount'
   })
   taxAmount: number;
 
@@ -83,6 +85,7 @@ export class InvoiceEntity {
     precision: 10,
     scale: 2,
     transformer: { to: (value) => value, from: (value) => parseFloat(value) },
+    name: 'paid_amount'
   })
   paidAmount: number;
 
@@ -91,6 +94,7 @@ export class InvoiceEntity {
     precision: 10,
     scale: 2,
     transformer: { to: (value) => value, from: (value) => parseFloat(value) },
+    name: 'balance_due'
   })
   balanceDue: number;
 

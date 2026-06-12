@@ -8,7 +8,7 @@ import { GlobalConstants } from '@utils';
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly API_URL = '/api/v1/customers';
+  private readonly API_URL = '/api/customers';
   private readonly http = inject(HttpClient);
 
   /*

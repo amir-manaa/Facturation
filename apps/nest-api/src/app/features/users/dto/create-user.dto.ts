@@ -29,7 +29,7 @@ export class CreateUserDto {
 
   @IsString({ message: 'Invalid password' })
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
-  password: string;
+  passwordHash: string;
 
   @IsString()
   @IsEnum(Role, { message: `Role must be ${Role.ADMIN} or ${Role.USER}` })

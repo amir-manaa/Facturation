@@ -13,7 +13,7 @@ import { UuidValidationPipe } from '@api/common/pipes/uuid-validation.pipe';
 import { AuthGuard } from '@api/common/guards/auth.guard';
 import { CustomerResponseDto } from './dto/customer-response.dto';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from '@api/customers/dto/update-customer.dto';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
 @UseGuards(AuthGuard)

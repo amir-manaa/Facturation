@@ -12,5 +12,5 @@ export class UserResponseDto {
   @Expose() updatedAt: Date;
 
   @Exclude() refreshToken: string;
-  @Exclude() password: string;
+  @Exclude() passwordHash: string;
 }

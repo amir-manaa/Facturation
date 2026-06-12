@@ -18,38 +18,46 @@ export const homeRoutes: Route[] = [
       {
         path: '',
         component: DashboardComponent,
-        title: 'Dashboard'
+        title: 'Dashboard',
       },
       {
         path: 'customers',
         component: CustomersComponent,
-        title: 'Listes des clients'
+        title: 'Listes des clients',
       },
       {
         path: 'customers/add',
         component: AddCustomerComponent,
-        title: 'Ajouter un client'
+        title: 'Ajouter un client',
       },
       {
         path: 'customers/profile/:id',
         component: ModifyCustomerComponent,
-        title: 'Modifier le client'
+        title: 'Modifier le client',
       },
       {
         path: 'invoices',
-        component: InvoicesComponent,
-        title: 'Factures'
+        loadChildren: () =>
+          import('../../domains/invoices/presentation/invoice.routes').then(
+            (m) => m.INVOCE_ROUTES
+          ),
+        canActivate: [authGuard],
       },
+      // {
+      //   path: 'invoices',
+      //   component: InvoicesComponent,
+      //   title: 'Factures'
+      // },
       {
         path: 'invoices/add',
         component: AddInvoiceComponent,
-        title: 'Ajouter une facture'
+        title: 'Ajouter une facture',
       },
       {
         path: 'chat',
         component: ChatComponent,
-        title: 'Chat'
-      }
-    ]
+        title: 'Chat',
+      },
+    ],
   },
 ];
