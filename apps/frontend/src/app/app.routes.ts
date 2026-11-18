@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { authGuard, initGuard } from '@guards';
+import { authGuard, guestGuard, initGuard } from '@guards';
 import { authResolver } from '@resolvers';
 import { LoadingPageComponent } from '@sharedComponents';
 import { INVOCE_ROUTES } from './domains/invoices/presentation/invoice.routes';
@@ -16,7 +16,8 @@ export const appRoutes: Route[] = [
       import('./features/authentication/components/login/login.component').then(
         (c) => c.LoginComponent
       ),
-    resolve: { isAuth: authResolver },
+    canActivate: [guestGuard],
+    // resolve: { isAuth: authResolver },
   },
   {
     path: '',

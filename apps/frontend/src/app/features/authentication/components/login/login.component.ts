@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
   }
 
   private initLoginForm(): void {
-    this.redirectIfLogged();
+    // this.redirectIfLogged();
     this.loginForm = new FormGroup<ILoginForm>({
       email: new FormControl<string>('', {
         nonNullable: true,
@@ -80,11 +80,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private redirectIfLogged() {
-    const isAuth = this.activateRoute.snapshot.data['isAuth'];
-    if (!isAuth) {
-      this.router.navigateByUrl('/dashboard');
-      return;
-    }
-  }
+  // private redirectIfLogged() {
+  //   const isAuth = this.activateRoute.snapshot.data['isAuth'];
+  //   if (!isAuth) {
+  //     this.router.navigateByUrl('/dashboard');
+  //     return;
+  //   }
+  // }
 }
