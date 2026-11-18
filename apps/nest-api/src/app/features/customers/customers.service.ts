@@ -43,6 +43,7 @@ export class CustomersService {
   ) {}
 
   async findAll(): Promise<CustomerResponseDto[]> {
+    console.log('findall service back called');
     const cacheKey = this.CACHE_KEYS.ALL_CUSTOMERS;
 
     try {

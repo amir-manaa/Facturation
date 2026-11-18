@@ -11,15 +11,15 @@ export class CustomersFacade {
 
   public customersList = computed(() => this.customersStore.customers());
 
-  public customersCount = computed(() => this.customersStore.totalCount());
+  public customersCount = computed(() => this.customersStore.total());
 
   constructor() {
-    this.getCustomers();
+    // this.getCustomers();
   }
 
-  public getCustomers(): void {
-    this.route.queryParams.subscribe((params: GetCustomersPayload) => {
-      this.customersStore.getCustomers(params);
-    });
-  }
+  // public getCustomers(): void {
+  //   this.route.queryParams.subscribe((params: GetCustomersPayload) => {
+  //     this.customersStore.getCustomers(params);
+  //   });
+  // }
 }

@@ -6,7 +6,8 @@ import {
   Post,
   UseGuards,
   Delete,
-  Put
+  Put,
+  Query
 } from '@nestjs/common';
 import { CustomersService } from '@api/app/features/customers/customers.service';
 import { UuidValidationPipe } from '@api/common/pipes/uuid-validation.pipe';
@@ -16,15 +17,17 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Controller('customers')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
 
   @Get()
   // we can use filter here with UserFilters, it's like @Catch
   // @UseFilters(new HttpExceptionFilter())
-  findAll(): Promise<CustomerResponseDto[]> {
-    return this.customersService.findAll();
+  async findAll(@Query() pageIndex: number, @Query() limit: number): Promise<{ total: number, customers: CustomerResponseDto[] }> {
+    console.log('pageIndex : ', pageIndex, 'limit : ', limit);
+    const customers = await this.customersService.findAll();
+    return { total: customers.length, customers };
   }
 
   @Get(':id')

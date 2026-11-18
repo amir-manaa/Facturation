@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { concatMap, Observable } from 'rxjs';
-import { ICustomerApiResponse, ICustomer } from '../models';
+import { ICustomerApiResponse, ICustomer, GetCustomersPayload } from '../models';
 import { GlobalConstants } from '@utils';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService {
   private readonly API_URL = '/api/customers';
@@ -17,9 +17,14 @@ export class CustomerService {
 
    */
 
-  getAll(apiParams: {}): Observable<ICustomerApiResponse> {
-    const params = { params: apiParams };
-    return this.http.get<ICustomerApiResponse>(`${this.API_URL}`, params);
+  getAll(payload: GetCustomersPayload): Observable<ICustomerApiResponse> {
+    console.log('service apiParams : ', payload);
+    return this.http.get<ICustomerApiResponse>(`${this.API_URL}`, {
+      params: {
+        page: payload.page,
+        limit: payload.limit,
+      },
+    });
   }
 
   getOne(id: string): Observable<ICustomer> {
@@ -37,8 +42,11 @@ export class CustomerService {
 
   delete(id: string): Observable<ICustomerApiResponse> {
     return this.http.delete(`${this.API_URL}/${id}`).pipe(
-      concatMap(res => {
-        return this.getAll(GlobalConstants.pageSize)
+      concatMap((res) => {
+        return this.getAll({
+          page: 0,
+          limit: 5,
+        });
       })
     );
   }
